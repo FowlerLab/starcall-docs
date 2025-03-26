@@ -1,0 +1,390 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module constitch.alignment</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="constitch.html"><font color="#ffffff">constitch</font></a>.alignment</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/nicho/starcall-docs/constitch/alignment.py">/home/nicho/starcall-docs/constitch/alignment.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="cv2.html">cv2</a><br>
+<a href="itertools.html">itertools</a><br>
+</td><td width="25%" valign=top><a href="math.html">math</a><br>
+<a href="numpy.html">numpy</a><br>
+</td><td width="25%" valign=top><a href="numba.html">numba</a><br>
+<a href="skimage.html">skimage</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+<a href="time.html">time</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="constitch.alignment.html#Aligner">Aligner</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="constitch.alignment.html#FFTAligner">FFTAligner</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="constitch.alignment.html#PaddedFFTAligner">PaddedFFTAligner</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="constitch.alignment.html#FeatureAligner">FeatureAligner</a>
+</font></dt><dt><font face="helvetica, arial"><a href="constitch.alignment.html#PCCAligner">PCCAligner</a>
+</font></dt></dl>
+</dd>
+</dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Aligner">class <strong>Aligner</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Abstract&nbsp;class&nbsp;that&nbsp;defines&nbsp;an&nbsp;algorithm&nbsp;for&nbsp;aligning&nbsp;two&nbsp;images&nbsp;onto&nbsp;each&nbsp;other.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Aligner-align"><strong>align</strong></a>(self, constraint, precalc1=None, precalc2=None)</dt><dd><tt>Performs&nbsp;the&nbsp;alignment&nbsp;of&nbsp;two&nbsp;images,&nbsp;finding&nbsp;the&nbsp;pixel&nbsp;offset&nbsp;that&nbsp;best&nbsp;aligns&nbsp;the<br>
+two&nbsp;images.&nbsp;The&nbsp;offset&nbsp;should&nbsp;be&nbsp;from&nbsp;image1&nbsp;to&nbsp;image2.&nbsp;The&nbsp;return&nbsp;value&nbsp;should&nbsp;be&nbsp;a&nbsp;Constraint<br>
+<a href="builtins.html#object">object</a>,&nbsp;with&nbsp;at&nbsp;least&nbsp;the&nbsp;dx,&nbsp;dy&nbsp;fields&nbsp;filled&nbsp;in&nbsp;to&nbsp;represent&nbsp;the&nbsp;offset&nbsp;of&nbsp;image2&nbsp;needed<br>
+to&nbsp;align&nbsp;the&nbsp;two&nbsp;images.&nbsp;If&nbsp;the&nbsp;function&nbsp;finds&nbsp;the&nbsp;images&nbsp;don't&nbsp;overlap,&nbsp;None&nbsp;should&nbsp;be&nbsp;returned.<br>
+If&nbsp;a&nbsp;constraint&nbsp;is&nbsp;specified,&nbsp;this&nbsp;method&nbsp;should&nbsp;only&nbsp;return&nbsp;a&nbsp;constraint&nbsp;that&nbsp;fits&nbsp;within&nbsp;the&nbsp;error<br>
+of&nbsp;given&nbsp;constraint,&nbsp;meaning&nbsp;within&nbsp;constraint.error&nbsp;pixels&nbsp;from&nbsp;the&nbsp;(constraint.dx,&nbsp;constraint.dy)<br>
+offset.</tt></dd></dl>
+
+<dl><dt><a name="Aligner-precalculate"><strong>precalculate</strong></a>(self, image, box)</dt><dd><tt>Performs&nbsp;an&nbsp;arbitrary&nbsp;precalculation&nbsp;step&nbsp;specific&nbsp;to&nbsp;the&nbsp;alignment&nbsp;algorithm.<br>
+This&nbsp;would&nbsp;be&nbsp;a&nbsp;step&nbsp;in&nbsp;the&nbsp;algorithm&nbsp;that&nbsp;only&nbsp;has&nbsp;to&nbsp;be&nbsp;run&nbsp;once&nbsp;per&nbsp;image,<br>
+and&nbsp;can&nbsp;be&nbsp;cached&nbsp;for&nbsp;each&nbsp;calculation&nbsp;done&nbsp;with&nbsp;the&nbsp;same&nbsp;image.&nbsp;The&nbsp;result&nbsp;of<br>
+this&nbsp;function&nbsp;will&nbsp;be&nbsp;passed&nbsp;to&nbsp;the&nbsp;align&nbsp;function&nbsp;as&nbsp;the&nbsp;precalc1&nbsp;or&nbsp;precalc2&nbsp;argument</tt></dd></dl>
+
+<dl><dt><a name="Aligner-precalculate_if_needed"><strong>precalculate_if_needed</strong></a>(self, constraint, precalc1, precalc2)</dt></dl>
+
+<dl><dt><a name="Aligner-resize_if_needed"><strong>resize_if_needed</strong></a>(self, image, box=None, downscale_factor=None, padding=None)</dt><dd><tt>#&nbsp;Helper&nbsp;functions&nbsp;for&nbsp;subclasses:</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="FFTAligner">class <strong>FFTAligner</strong></a>(<a href="constitch.alignment.html#Aligner">Aligner</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#FFTAligner">FFTAligner</a>(num_peaks=2,&nbsp;precalculate_fft=True,&nbsp;downscale_factor=None)<br>
+&nbsp;<br>
+An&nbsp;aligner&nbsp;that&nbsp;uses&nbsp;the&nbsp;phase&nbsp;cross&nbsp;correlation&nbsp;algorithm&nbsp;to&nbsp;estimate&nbsp;the&nbsp;proper&nbsp;alignment&nbsp;of&nbsp;two&nbsp;images.<br>
+The&nbsp;algorithm&nbsp;is&nbsp;the&nbsp;same&nbsp;as&nbsp;described&nbsp;in&nbsp;Kuglin,&nbsp;Charles&nbsp;D.&nbsp;"The&nbsp;phase&nbsp;correlation&nbsp;image&nbsp;alignment&nbsp;method."<br>
+<a href="http://boutigny.free.fr/Astronomie/AstroSources/Kuglin-Hines.pdf">http://boutigny.free.fr/Astronomie/AstroSources/Kuglin-Hines.pdf</a><br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="constitch.alignment.html#FFTAligner">FFTAligner</a></dd>
+<dd><a href="constitch.alignment.html#Aligner">Aligner</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="FFTAligner-__init__"><strong>__init__</strong></a>(self, num_peaks=2, precalculate_fft=True, downscale_factor=None)</dt><dd><tt>num_peaks:&nbsp;int&nbsp;default&nbsp;2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Sets&nbsp;the&nbsp;number&nbsp;of&nbsp;peaks&nbsp;in&nbsp;the&nbsp;resulting&nbsp;phase&nbsp;cross&nbsp;correlation&nbsp;image&nbsp;to&nbsp;be&nbsp;checked.&nbsp;Sometimes&nbsp;the&nbsp;highest<br>
+&nbsp;&nbsp;&nbsp;&nbsp;peak&nbsp;is&nbsp;not&nbsp;actually&nbsp;the&nbsp;best&nbsp;offset&nbsp;for&nbsp;alignment&nbsp;so&nbsp;checking&nbsp;multiple&nbsp;peaks&nbsp;can&nbsp;help&nbsp;find&nbsp;the&nbsp;one&nbsp;that<br>
+&nbsp;&nbsp;&nbsp;&nbsp;has&nbsp;the&nbsp;highest&nbsp;ncc&nbsp;score.&nbsp;Increasing&nbsp;this&nbsp;will&nbsp;also&nbsp;increase&nbsp;processing&nbsp;time,&nbsp;possibly&nbsp;dramatically.<br>
+precalculate_fft:&nbsp;bool&nbsp;default&nbsp;True<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Whether&nbsp;or&nbsp;not&nbsp;the&nbsp;FFT&nbsp;of&nbsp;the&nbsp;images&nbsp;should&nbsp;be&nbsp;precalculated&nbsp;and&nbsp;cached&nbsp;or&nbsp;be&nbsp;calculated&nbsp;every&nbsp;time.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;FFT&nbsp;is&nbsp;able&nbsp;to&nbsp;be&nbsp;precalculated&nbsp;however&nbsp;it&nbsp;does&nbsp;take&nbsp;up&nbsp;a&nbsp;large&nbsp;amount&nbsp;of&nbsp;memory,&nbsp;so&nbsp;if&nbsp;memory<br>
+&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;a&nbsp;limiting&nbsp;factor&nbsp;setting&nbsp;this&nbsp;to&nbsp;False&nbsp;can&nbsp;help<br>
+downscale_factor:&nbsp;int,&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;algorithm&nbsp;is&nbsp;rather&nbsp;slow&nbsp;when&nbsp;calculating&nbsp;large&nbsp;numbers&nbsp;of&nbsp;constraints,&nbsp;and&nbsp;one&nbsp;way&nbsp;to&nbsp;improve<br>
+&nbsp;&nbsp;&nbsp;&nbsp;speed&nbsp;is&nbsp;by&nbsp;downscaling&nbsp;the&nbsp;images&nbsp;before&nbsp;running&nbsp;the&nbsp;algorithm.&nbsp;This&nbsp;will&nbsp;improve&nbsp;runtime&nbsp;at&nbsp;the&nbsp;expense<br>
+&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;precision,&nbsp;the&nbsp;constraints&nbsp;calculated&nbsp;will&nbsp;have&nbsp;a&nbsp;nonzero&nbsp;error&nbsp;value.&nbsp;Also,&nbsp;if&nbsp;the&nbsp;downscale&nbsp;factor<br>
+&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;large&nbsp;enough&nbsp;the&nbsp;algorithm&nbsp;can&nbsp;begin&nbsp;to&nbsp;fail&nbsp;and&nbsp;not&nbsp;find&nbsp;any&nbsp;overlap,&nbsp;in&nbsp;general&nbsp;the&nbsp;largest&nbsp;recommended<br>
+&nbsp;&nbsp;&nbsp;&nbsp;value&nbsp;is&nbsp;around&nbsp;32,&nbsp;but&nbsp;it&nbsp;depends&nbsp;on&nbsp;how&nbsp;large&nbsp;the&nbsp;features&nbsp;in&nbsp;your&nbsp;images&nbsp;are.</tt></dd></dl>
+
+<dl><dt><a name="FFTAligner-align"><strong>align</strong></a>(self, constraint, precalc1=None, precalc2=None)</dt><dd><tt>Performs&nbsp;the&nbsp;alignment&nbsp;of&nbsp;two&nbsp;images,&nbsp;finding&nbsp;the&nbsp;pixel&nbsp;offset&nbsp;that&nbsp;best&nbsp;aligns&nbsp;the<br>
+two&nbsp;images.&nbsp;The&nbsp;offset&nbsp;should&nbsp;be&nbsp;from&nbsp;image1&nbsp;to&nbsp;image2.&nbsp;The&nbsp;return&nbsp;value&nbsp;should&nbsp;be&nbsp;a&nbsp;Constraint<br>
+<a href="builtins.html#object">object</a>,&nbsp;with&nbsp;at&nbsp;least&nbsp;the&nbsp;dx,&nbsp;dy&nbsp;fields&nbsp;filled&nbsp;in&nbsp;to&nbsp;represent&nbsp;the&nbsp;offset&nbsp;of&nbsp;image2&nbsp;needed<br>
+to&nbsp;align&nbsp;the&nbsp;two&nbsp;images.&nbsp;If&nbsp;the&nbsp;function&nbsp;finds&nbsp;the&nbsp;images&nbsp;don't&nbsp;overlap,&nbsp;None&nbsp;should&nbsp;be&nbsp;returned.<br>
+If&nbsp;a&nbsp;constraint&nbsp;is&nbsp;specified,&nbsp;this&nbsp;method&nbsp;should&nbsp;only&nbsp;return&nbsp;a&nbsp;constraint&nbsp;that&nbsp;fits&nbsp;within&nbsp;the&nbsp;error<br>
+of&nbsp;given&nbsp;constraint,&nbsp;meaning&nbsp;within&nbsp;constraint.error&nbsp;pixels&nbsp;from&nbsp;the&nbsp;(constraint.dx,&nbsp;constraint.dy)<br>
+offset.</tt></dd></dl>
+
+<dl><dt><a name="FFTAligner-align_full"><strong>align_full</strong></a>(self, constraint, precalc1=None, precalc2=None)</dt></dl>
+
+<dl><dt><a name="FFTAligner-precalculate"><strong>precalculate</strong></a>(self, image, box=None)</dt><dd><tt>Performs&nbsp;an&nbsp;arbitrary&nbsp;precalculation&nbsp;step&nbsp;specific&nbsp;to&nbsp;the&nbsp;alignment&nbsp;algorithm.<br>
+This&nbsp;would&nbsp;be&nbsp;a&nbsp;step&nbsp;in&nbsp;the&nbsp;algorithm&nbsp;that&nbsp;only&nbsp;has&nbsp;to&nbsp;be&nbsp;run&nbsp;once&nbsp;per&nbsp;image,<br>
+and&nbsp;can&nbsp;be&nbsp;cached&nbsp;for&nbsp;each&nbsp;calculation&nbsp;done&nbsp;with&nbsp;the&nbsp;same&nbsp;image.&nbsp;The&nbsp;result&nbsp;of<br>
+this&nbsp;function&nbsp;will&nbsp;be&nbsp;passed&nbsp;to&nbsp;the&nbsp;align&nbsp;function&nbsp;as&nbsp;the&nbsp;precalc1&nbsp;or&nbsp;precalc2&nbsp;argument</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="constitch.alignment.html#Aligner">Aligner</a>:<br>
+<dl><dt><a name="FFTAligner-precalculate_if_needed"><strong>precalculate_if_needed</strong></a>(self, constraint, precalc1, precalc2)</dt></dl>
+
+<dl><dt><a name="FFTAligner-resize_if_needed"><strong>resize_if_needed</strong></a>(self, image, box=None, downscale_factor=None, padding=None)</dt><dd><tt>#&nbsp;Helper&nbsp;functions&nbsp;for&nbsp;subclasses:</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="constitch.alignment.html#Aligner">Aligner</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="FeatureAligner">class <strong>FeatureAligner</strong></a>(<a href="constitch.alignment.html#Aligner">Aligner</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#FeatureAligner">FeatureAligner</a>(num_features=2000)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="constitch.alignment.html#FeatureAligner">FeatureAligner</a></dd>
+<dd><a href="constitch.alignment.html#Aligner">Aligner</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="FeatureAligner-__init__"><strong>__init__</strong></a>(self, num_features=2000)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="FeatureAligner-align"><strong>align</strong></a>(self, constraint, precalc1=None, precalc2=None)</dt><dd><tt>Performs&nbsp;the&nbsp;alignment&nbsp;of&nbsp;two&nbsp;images,&nbsp;finding&nbsp;the&nbsp;pixel&nbsp;offset&nbsp;that&nbsp;best&nbsp;aligns&nbsp;the<br>
+two&nbsp;images.&nbsp;The&nbsp;offset&nbsp;should&nbsp;be&nbsp;from&nbsp;image1&nbsp;to&nbsp;image2.&nbsp;The&nbsp;return&nbsp;value&nbsp;should&nbsp;be&nbsp;a&nbsp;Constraint<br>
+<a href="builtins.html#object">object</a>,&nbsp;with&nbsp;at&nbsp;least&nbsp;the&nbsp;dx,&nbsp;dy&nbsp;fields&nbsp;filled&nbsp;in&nbsp;to&nbsp;represent&nbsp;the&nbsp;offset&nbsp;of&nbsp;image2&nbsp;needed<br>
+to&nbsp;align&nbsp;the&nbsp;two&nbsp;images.&nbsp;If&nbsp;the&nbsp;function&nbsp;finds&nbsp;the&nbsp;images&nbsp;don't&nbsp;overlap,&nbsp;None&nbsp;should&nbsp;be&nbsp;returned.<br>
+If&nbsp;a&nbsp;constraint&nbsp;is&nbsp;specified,&nbsp;this&nbsp;method&nbsp;should&nbsp;only&nbsp;return&nbsp;a&nbsp;constraint&nbsp;that&nbsp;fits&nbsp;within&nbsp;the&nbsp;error<br>
+of&nbsp;given&nbsp;constraint,&nbsp;meaning&nbsp;within&nbsp;constraint.error&nbsp;pixels&nbsp;from&nbsp;the&nbsp;(constraint.dx,&nbsp;constraint.dy)<br>
+offset.</tt></dd></dl>
+
+<dl><dt><a name="FeatureAligner-precalculate"><strong>precalculate</strong></a>(self, image, box=None)</dt><dd><tt>Performs&nbsp;an&nbsp;arbitrary&nbsp;precalculation&nbsp;step&nbsp;specific&nbsp;to&nbsp;the&nbsp;alignment&nbsp;algorithm.<br>
+This&nbsp;would&nbsp;be&nbsp;a&nbsp;step&nbsp;in&nbsp;the&nbsp;algorithm&nbsp;that&nbsp;only&nbsp;has&nbsp;to&nbsp;be&nbsp;run&nbsp;once&nbsp;per&nbsp;image,<br>
+and&nbsp;can&nbsp;be&nbsp;cached&nbsp;for&nbsp;each&nbsp;calculation&nbsp;done&nbsp;with&nbsp;the&nbsp;same&nbsp;image.&nbsp;The&nbsp;result&nbsp;of<br>
+this&nbsp;function&nbsp;will&nbsp;be&nbsp;passed&nbsp;to&nbsp;the&nbsp;align&nbsp;function&nbsp;as&nbsp;the&nbsp;precalc1&nbsp;or&nbsp;precalc2&nbsp;argument</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="constitch.alignment.html#Aligner">Aligner</a>:<br>
+<dl><dt><a name="FeatureAligner-precalculate_if_needed"><strong>precalculate_if_needed</strong></a>(self, constraint, precalc1, precalc2)</dt></dl>
+
+<dl><dt><a name="FeatureAligner-resize_if_needed"><strong>resize_if_needed</strong></a>(self, image, box=None, downscale_factor=None, padding=None)</dt><dd><tt>#&nbsp;Helper&nbsp;functions&nbsp;for&nbsp;subclasses:</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="constitch.alignment.html#Aligner">Aligner</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PCCAligner">class <strong>PCCAligner</strong></a>(<a href="constitch.alignment.html#Aligner">Aligner</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#PCCAligner">PCCAligner</a>(**kwargs)<br>
+&nbsp;<br>
+An&nbsp;aligner&nbsp;that&nbsp;invokes&nbsp;the&nbsp;skimage.registration.phase_cross_correlation&nbsp;method<br>
+An&nbsp;alternative&nbsp;to&nbsp;the&nbsp;<a href="#FFTAligner">FFTAligner</a>&nbsp;which&nbsp;implements&nbsp;the&nbsp;same&nbsp;algorithm<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="constitch.alignment.html#PCCAligner">PCCAligner</a></dd>
+<dd><a href="constitch.alignment.html#Aligner">Aligner</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="PCCAligner-__init__"><strong>__init__</strong></a>(self, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="PCCAligner-align"><strong>align</strong></a>(self, constraint, precalc1=None, precalc2=None)</dt><dd><tt>Performs&nbsp;the&nbsp;alignment&nbsp;of&nbsp;two&nbsp;images,&nbsp;finding&nbsp;the&nbsp;pixel&nbsp;offset&nbsp;that&nbsp;best&nbsp;aligns&nbsp;the<br>
+two&nbsp;images.&nbsp;The&nbsp;offset&nbsp;should&nbsp;be&nbsp;from&nbsp;image1&nbsp;to&nbsp;image2.&nbsp;The&nbsp;return&nbsp;value&nbsp;should&nbsp;be&nbsp;a&nbsp;Constraint<br>
+<a href="builtins.html#object">object</a>,&nbsp;with&nbsp;at&nbsp;least&nbsp;the&nbsp;dx,&nbsp;dy&nbsp;fields&nbsp;filled&nbsp;in&nbsp;to&nbsp;represent&nbsp;the&nbsp;offset&nbsp;of&nbsp;image2&nbsp;needed<br>
+to&nbsp;align&nbsp;the&nbsp;two&nbsp;images.&nbsp;If&nbsp;the&nbsp;function&nbsp;finds&nbsp;the&nbsp;images&nbsp;don't&nbsp;overlap,&nbsp;None&nbsp;should&nbsp;be&nbsp;returned.<br>
+If&nbsp;a&nbsp;constraint&nbsp;is&nbsp;specified,&nbsp;this&nbsp;method&nbsp;should&nbsp;only&nbsp;return&nbsp;a&nbsp;constraint&nbsp;that&nbsp;fits&nbsp;within&nbsp;the&nbsp;error<br>
+of&nbsp;given&nbsp;constraint,&nbsp;meaning&nbsp;within&nbsp;constraint.error&nbsp;pixels&nbsp;from&nbsp;the&nbsp;(constraint.dx,&nbsp;constraint.dy)<br>
+offset.</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="constitch.alignment.html#Aligner">Aligner</a>:<br>
+<dl><dt><a name="PCCAligner-precalculate"><strong>precalculate</strong></a>(self, image, box)</dt><dd><tt>Performs&nbsp;an&nbsp;arbitrary&nbsp;precalculation&nbsp;step&nbsp;specific&nbsp;to&nbsp;the&nbsp;alignment&nbsp;algorithm.<br>
+This&nbsp;would&nbsp;be&nbsp;a&nbsp;step&nbsp;in&nbsp;the&nbsp;algorithm&nbsp;that&nbsp;only&nbsp;has&nbsp;to&nbsp;be&nbsp;run&nbsp;once&nbsp;per&nbsp;image,<br>
+and&nbsp;can&nbsp;be&nbsp;cached&nbsp;for&nbsp;each&nbsp;calculation&nbsp;done&nbsp;with&nbsp;the&nbsp;same&nbsp;image.&nbsp;The&nbsp;result&nbsp;of<br>
+this&nbsp;function&nbsp;will&nbsp;be&nbsp;passed&nbsp;to&nbsp;the&nbsp;align&nbsp;function&nbsp;as&nbsp;the&nbsp;precalc1&nbsp;or&nbsp;precalc2&nbsp;argument</tt></dd></dl>
+
+<dl><dt><a name="PCCAligner-precalculate_if_needed"><strong>precalculate_if_needed</strong></a>(self, constraint, precalc1, precalc2)</dt></dl>
+
+<dl><dt><a name="PCCAligner-resize_if_needed"><strong>resize_if_needed</strong></a>(self, image, box=None, downscale_factor=None, padding=None)</dt><dd><tt>#&nbsp;Helper&nbsp;functions&nbsp;for&nbsp;subclasses:</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="constitch.alignment.html#Aligner">Aligner</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PaddedFFTAligner">class <strong>PaddedFFTAligner</strong></a>(<a href="constitch.alignment.html#FFTAligner">FFTAligner</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#PaddedFFTAligner">PaddedFFTAligner</a>(num_peaks=2,&nbsp;precalculate_fft=True,&nbsp;downscale_factor=None)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="constitch.alignment.html#PaddedFFTAligner">PaddedFFTAligner</a></dd>
+<dd><a href="constitch.alignment.html#FFTAligner">FFTAligner</a></dd>
+<dd><a href="constitch.alignment.html#Aligner">Aligner</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="PaddedFFTAligner-align"><strong>align</strong></a>(self, constraint, precalc1=None, precalc2=None)</dt><dd><tt>Performs&nbsp;the&nbsp;alignment&nbsp;of&nbsp;two&nbsp;images,&nbsp;finding&nbsp;the&nbsp;pixel&nbsp;offset&nbsp;that&nbsp;best&nbsp;aligns&nbsp;the<br>
+two&nbsp;images.&nbsp;The&nbsp;offset&nbsp;should&nbsp;be&nbsp;from&nbsp;image1&nbsp;to&nbsp;image2.&nbsp;The&nbsp;return&nbsp;value&nbsp;should&nbsp;be&nbsp;a&nbsp;Constraint<br>
+<a href="builtins.html#object">object</a>,&nbsp;with&nbsp;at&nbsp;least&nbsp;the&nbsp;dx,&nbsp;dy&nbsp;fields&nbsp;filled&nbsp;in&nbsp;to&nbsp;represent&nbsp;the&nbsp;offset&nbsp;of&nbsp;image2&nbsp;needed<br>
+to&nbsp;align&nbsp;the&nbsp;two&nbsp;images.&nbsp;If&nbsp;the&nbsp;function&nbsp;finds&nbsp;the&nbsp;images&nbsp;don't&nbsp;overlap,&nbsp;None&nbsp;should&nbsp;be&nbsp;returned.<br>
+If&nbsp;a&nbsp;constraint&nbsp;is&nbsp;specified,&nbsp;this&nbsp;method&nbsp;should&nbsp;only&nbsp;return&nbsp;a&nbsp;constraint&nbsp;that&nbsp;fits&nbsp;within&nbsp;the&nbsp;error<br>
+of&nbsp;given&nbsp;constraint,&nbsp;meaning&nbsp;within&nbsp;constraint.error&nbsp;pixels&nbsp;from&nbsp;the&nbsp;(constraint.dx,&nbsp;constraint.dy)<br>
+offset.</tt></dd></dl>
+
+<dl><dt><a name="PaddedFFTAligner-precalculate"><strong>precalculate</strong></a>(self, image, box=None)</dt><dd><tt>Performs&nbsp;an&nbsp;arbitrary&nbsp;precalculation&nbsp;step&nbsp;specific&nbsp;to&nbsp;the&nbsp;alignment&nbsp;algorithm.<br>
+This&nbsp;would&nbsp;be&nbsp;a&nbsp;step&nbsp;in&nbsp;the&nbsp;algorithm&nbsp;that&nbsp;only&nbsp;has&nbsp;to&nbsp;be&nbsp;run&nbsp;once&nbsp;per&nbsp;image,<br>
+and&nbsp;can&nbsp;be&nbsp;cached&nbsp;for&nbsp;each&nbsp;calculation&nbsp;done&nbsp;with&nbsp;the&nbsp;same&nbsp;image.&nbsp;The&nbsp;result&nbsp;of<br>
+this&nbsp;function&nbsp;will&nbsp;be&nbsp;passed&nbsp;to&nbsp;the&nbsp;align&nbsp;function&nbsp;as&nbsp;the&nbsp;precalc1&nbsp;or&nbsp;precalc2&nbsp;argument</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="constitch.alignment.html#FFTAligner">FFTAligner</a>:<br>
+<dl><dt><a name="PaddedFFTAligner-__init__"><strong>__init__</strong></a>(self, num_peaks=2, precalculate_fft=True, downscale_factor=None)</dt><dd><tt>num_peaks:&nbsp;int&nbsp;default&nbsp;2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Sets&nbsp;the&nbsp;number&nbsp;of&nbsp;peaks&nbsp;in&nbsp;the&nbsp;resulting&nbsp;phase&nbsp;cross&nbsp;correlation&nbsp;image&nbsp;to&nbsp;be&nbsp;checked.&nbsp;Sometimes&nbsp;the&nbsp;highest<br>
+&nbsp;&nbsp;&nbsp;&nbsp;peak&nbsp;is&nbsp;not&nbsp;actually&nbsp;the&nbsp;best&nbsp;offset&nbsp;for&nbsp;alignment&nbsp;so&nbsp;checking&nbsp;multiple&nbsp;peaks&nbsp;can&nbsp;help&nbsp;find&nbsp;the&nbsp;one&nbsp;that<br>
+&nbsp;&nbsp;&nbsp;&nbsp;has&nbsp;the&nbsp;highest&nbsp;ncc&nbsp;score.&nbsp;Increasing&nbsp;this&nbsp;will&nbsp;also&nbsp;increase&nbsp;processing&nbsp;time,&nbsp;possibly&nbsp;dramatically.<br>
+precalculate_fft:&nbsp;bool&nbsp;default&nbsp;True<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Whether&nbsp;or&nbsp;not&nbsp;the&nbsp;FFT&nbsp;of&nbsp;the&nbsp;images&nbsp;should&nbsp;be&nbsp;precalculated&nbsp;and&nbsp;cached&nbsp;or&nbsp;be&nbsp;calculated&nbsp;every&nbsp;time.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;FFT&nbsp;is&nbsp;able&nbsp;to&nbsp;be&nbsp;precalculated&nbsp;however&nbsp;it&nbsp;does&nbsp;take&nbsp;up&nbsp;a&nbsp;large&nbsp;amount&nbsp;of&nbsp;memory,&nbsp;so&nbsp;if&nbsp;memory<br>
+&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;a&nbsp;limiting&nbsp;factor&nbsp;setting&nbsp;this&nbsp;to&nbsp;False&nbsp;can&nbsp;help<br>
+downscale_factor:&nbsp;int,&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;algorithm&nbsp;is&nbsp;rather&nbsp;slow&nbsp;when&nbsp;calculating&nbsp;large&nbsp;numbers&nbsp;of&nbsp;constraints,&nbsp;and&nbsp;one&nbsp;way&nbsp;to&nbsp;improve<br>
+&nbsp;&nbsp;&nbsp;&nbsp;speed&nbsp;is&nbsp;by&nbsp;downscaling&nbsp;the&nbsp;images&nbsp;before&nbsp;running&nbsp;the&nbsp;algorithm.&nbsp;This&nbsp;will&nbsp;improve&nbsp;runtime&nbsp;at&nbsp;the&nbsp;expense<br>
+&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;precision,&nbsp;the&nbsp;constraints&nbsp;calculated&nbsp;will&nbsp;have&nbsp;a&nbsp;nonzero&nbsp;error&nbsp;value.&nbsp;Also,&nbsp;if&nbsp;the&nbsp;downscale&nbsp;factor<br>
+&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;large&nbsp;enough&nbsp;the&nbsp;algorithm&nbsp;can&nbsp;begin&nbsp;to&nbsp;fail&nbsp;and&nbsp;not&nbsp;find&nbsp;any&nbsp;overlap,&nbsp;in&nbsp;general&nbsp;the&nbsp;largest&nbsp;recommended<br>
+&nbsp;&nbsp;&nbsp;&nbsp;value&nbsp;is&nbsp;around&nbsp;32,&nbsp;but&nbsp;it&nbsp;depends&nbsp;on&nbsp;how&nbsp;large&nbsp;the&nbsp;features&nbsp;in&nbsp;your&nbsp;images&nbsp;are.</tt></dd></dl>
+
+<dl><dt><a name="PaddedFFTAligner-align_full"><strong>align_full</strong></a>(self, constraint, precalc1=None, precalc2=None)</dt></dl>
+
+<hr>
+Methods inherited from <a href="constitch.alignment.html#Aligner">Aligner</a>:<br>
+<dl><dt><a name="PaddedFFTAligner-precalculate_if_needed"><strong>precalculate_if_needed</strong></a>(self, constraint, precalc1, precalc2)</dt></dl>
+
+<dl><dt><a name="PaddedFFTAligner-resize_if_needed"><strong>resize_if_needed</strong></a>(self, image, box=None, downscale_factor=None, padding=None)</dt><dd><tt>#&nbsp;Helper&nbsp;functions&nbsp;for&nbsp;subclasses:</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="constitch.alignment.html#Aligner">Aligner</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-calc_pcm"><strong>calc_pcm</strong></a>(fft1, fft2)</dt></dl>
+ <dl><dt><a name="-calculate_offset"><strong>calculate_offset</strong></a> = calculate_offset_slow(image1, image2, shape1=None, shape2=None, fft1=None, fft2=None, num_peaks=2, max_peaks=2, score_threshold=0.1)</dt></dl>
+ <dl><dt><a name="-calculate_offset_fast"><strong>calculate_offset_fast</strong></a>(image1, image2, shape1=None, shape2=None, fft1=None, fft2=None, num_peaks=2)</dt></dl>
+ <dl><dt><a name="-calculate_offset_slow"><strong>calculate_offset_slow</strong></a>(image1, image2, shape1=None, shape2=None, fft1=None, fft2=None, num_peaks=2, max_peaks=2, score_threshold=0.1)</dt></dl>
+ <dl><dt><a name="-extract_overlap_subregion"><strong>extract_overlap_subregion</strong></a>(image, y, x)</dt><dd><tt>Extract&nbsp;the&nbsp;overlapping&nbsp;subregion&nbsp;of&nbsp;the&nbsp;image.<br>
+&nbsp;<br>
+Parameters<br>
+---------<br>
+image&nbsp;:&nbsp;np.ndarray<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;image&nbsp;(the&nbsp;dimension&nbsp;must&nbsp;be&nbsp;2)<br>
+y&nbsp;:&nbsp;Int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;y&nbsp;(second&nbsp;last&nbsp;dim.)&nbsp;position<br>
+x&nbsp;:&nbsp;Int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;x&nbsp;(last&nbsp;dim.)&nbsp;position<br>
+Returns<br>
+-------<br>
+subimage&nbsp;:&nbsp;np.ndarray<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;extracted&nbsp;subimage</tt></dd></dl>
+ <dl><dt><a name="-find_peaks"><strong>find_peaks</strong></a>(fft, image1, image2, num_peaks)</dt></dl>
+ <dl><dt><a name="-find_peaks_estimate"><strong>find_peaks_estimate</strong></a>(fft, image1, image2, num_peaks, estimate, search_range)</dt></dl>
+ <dl><dt><a name="-image_diff_sizes"><strong>image_diff_sizes</strong></a>(image1, image2)</dt></dl>
+ <dl><dt><a name="-interpret_translation"><strong>interpret_translation</strong></a>(image1, image2, yins, xins, ymin, ymax, xmin, xmax, num_peaks=2, max_peaks=None, ncc_threshold=None)</dt><dd><tt>Interpret&nbsp;the&nbsp;translation&nbsp;to&nbsp;find&nbsp;the&nbsp;translation&nbsp;with&nbsp;heighest&nbsp;ncc.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;first&nbsp;image&nbsp;(the&nbsp;dimension&nbsp;must&nbsp;be&nbsp;2)<br>
+yins&nbsp;:&nbsp;IntArray<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;y&nbsp;positions&nbsp;estimated&nbsp;by&nbsp;PCM<br>
+xins&nbsp;:&nbsp;IntArray<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;x&nbsp;positions&nbsp;estimated&nbsp;by&nbsp;PCM<br>
+ymin&nbsp;:&nbsp;Int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;minimum&nbsp;value&nbsp;of&nbsp;y&nbsp;(second&nbsp;last&nbsp;dim.)<br>
+ymax&nbsp;:&nbsp;Int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;maximum&nbsp;value&nbsp;of&nbsp;y&nbsp;(second&nbsp;last&nbsp;dim.)<br>
+xmin&nbsp;:&nbsp;Int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;minimum&nbsp;value&nbsp;of&nbsp;x&nbsp;(last&nbsp;dim.)<br>
+xmax&nbsp;:&nbsp;Int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;maximum&nbsp;value&nbsp;of&nbsp;x&nbsp;(last&nbsp;dim.)<br>
+num_peaks&nbsp;:&nbsp;Int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;number&nbsp;of&nbsp;peaks&nbsp;to&nbsp;check<br>
+max_peaks&nbsp;:&nbsp;Int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;a&nbsp;limit&nbsp;on&nbsp;the&nbsp;number&nbsp;of&nbsp;peaks&nbsp;to&nbsp;check,&nbsp;only&nbsp;used<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;ncc_threshold&nbsp;is&nbsp;declared.<br>
+ncc_threshold&nbsp;:&nbsp;Float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;a&nbsp;threshold&nbsp;of&nbsp;the&nbsp;score&nbsp;of&nbsp;offsets&nbsp;(the&nbsp;ncc)&nbsp;that&nbsp;is&nbsp;needed&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;an&nbsp;offset.&nbsp;If&nbsp;this&nbsp;is&nbsp;specified&nbsp;and&nbsp;after&nbsp;checking<br>
+&nbsp;&nbsp;&nbsp;&nbsp;num_peaks&nbsp;peaks&nbsp;the&nbsp;highest&nbsp;score&nbsp;found&nbsp;is&nbsp;below&nbsp;this&nbsp;value,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;it&nbsp;will&nbsp;continue&nbsp;checking&nbsp;more&nbsp;peaks&nbsp;until&nbsp;the&nbsp;score&nbsp;is&nbsp;above<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;value&nbsp;or&nbsp;max_peaks&nbsp;is&nbsp;reached.<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+_ncc&nbsp;:&nbsp;Float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;highest&nbsp;ncc<br>
+x&nbsp;:&nbsp;Int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;selected&nbsp;x&nbsp;position<br>
+y&nbsp;:&nbsp;Int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;selected&nbsp;y&nbsp;position</tt></dd></dl>
+ <dl><dt><a name="-multi_peak_max"><strong>multi_peak_max</strong></a>(PCM)</dt><dd><tt>Find&nbsp;the&nbsp;first&nbsp;to&nbsp;n&nbsp;th&nbsp;largest&nbsp;peaks&nbsp;in&nbsp;PCM.<br>
+&nbsp;<br>
+Returns:<br>
+poses:&nbsp;np.ndarray,&nbsp;N&nbsp;by&nbsp;2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;indices&nbsp;of&nbsp;the&nbsp;peaks<br>
+values&nbsp;:&nbsp;np.ndarray<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;values&nbsp;of&nbsp;the&nbsp;peaks</tt></dd></dl>
+ <dl><dt><a name="-ncc"><strong>ncc</strong></a> = ncc_slow(image1, image2)</dt><dd><tt>Compute&nbsp;the&nbsp;normalized&nbsp;cross&nbsp;correlation&nbsp;for&nbsp;two&nbsp;images.</tt></dd></dl>
+ <dl><dt><a name="-ncc_fast"><strong>ncc_fast</strong></a>(image1, image2)</dt><dd><tt>Compute&nbsp;the&nbsp;normalized&nbsp;cross&nbsp;correlation&nbsp;for&nbsp;two&nbsp;images.</tt></dd></dl>
+ <dl><dt><a name="-ncc_slow"><strong>ncc_slow</strong></a>(image1, image2)</dt><dd><tt>Compute&nbsp;the&nbsp;normalized&nbsp;cross&nbsp;correlation&nbsp;for&nbsp;two&nbsp;images.</tt></dd></dl>
+ <dl><dt><a name="-pcm"><strong>pcm</strong></a>(image1, image2)</dt><dd><tt>Compute&nbsp;peak&nbsp;correlation&nbsp;matrix&nbsp;for&nbsp;two&nbsp;images.</tt></dd></dl>
+ <dl><dt><a name="-pcm_fft"><strong>pcm_fft</strong></a>(F1, F2)</dt><dd><tt>Compute&nbsp;peak&nbsp;correlation&nbsp;matrix&nbsp;for&nbsp;two&nbsp;images,&nbsp;with&nbsp;the&nbsp;fft&nbsp;already&nbsp;applied</tt></dd></dl>
+ <dl><dt><a name="-score_offset"><strong>score_offset</strong></a>(image1, image2, dx, dy)</dt></dl>
+</td></tr></table>
+</body></html>

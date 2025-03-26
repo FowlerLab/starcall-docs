@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module starcall.utils</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="starcall.html"><font color="#ffffff">starcall</font></a>.utils</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/nicho/starcall-docs/starcall/utils.py">/home/nicho/starcall-docs/starcall/utils.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="collections.html">collections</a><br>
+<a href="itertools.html">itertools</a><br>
+</td><td width="25%" valign=top><a href="math.html">math</a><br>
+<a href="numpy.html">numpy</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+<a href="time.html">time</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-format_time"><strong>format_time</strong></a>(secs)</dt></dl>
+ <dl><dt><a name="-human_readable"><strong>human_readable</strong></a>(number)</dt></dl>
+ <dl><dt><a name="-log_env"><strong>log_env</strong></a>(debug, progress)</dt></dl>
+ <dl><dt><a name="-mark_dot"><strong>mark_dot</strong></a>(image, dot, inner_rad=3, outer_rad=6, color=1)</dt></dl>
+ <dl><dt><a name="-mark_dots"><strong>mark_dots</strong></a>(image, poses)</dt></dl>
+ <dl><dt><a name="-memory_report"><strong>memory_report</strong></a>()</dt></dl>
+ <dl><dt><a name="-percent_normalize"><strong>percent_normalize</strong></a>(image, percent=0.1)</dt></dl>
+ <dl><dt><a name="-read_multicolumn"><strong>read_multicolumn</strong></a>(table, name, length_column=None)</dt><dd><tt>The&nbsp;complement&nbsp;function&nbsp;to&nbsp;write_multicolumn.&nbsp;Finds&nbsp;all&nbsp;columns&nbsp;like&nbsp;name&nbsp;+&nbsp;'_XX'&nbsp;where<br>
+XX&nbsp;is&nbsp;an&nbsp;integer&nbsp;and&nbsp;concatenates&nbsp;the&nbsp;columns&nbsp;to&nbsp;create&nbsp;a&nbsp;2d&nbsp;array.<br>
+If&nbsp;there&nbsp;is&nbsp;also&nbsp;a&nbsp;column&nbsp;name&nbsp;+&nbsp;'_length'&nbsp;it&nbsp;will&nbsp;be&nbsp;used&nbsp;to&nbsp;create&nbsp;a<br>
+ragged&nbsp;array,&nbsp;where&nbsp;each&nbsp;row&nbsp;has&nbsp;a&nbsp;different&nbsp;length.</tt></dd></dl>
+ <dl><dt><a name="-sequence_plot"><strong>sequence_plot</strong></a>(axis, sequences, separate=False)</dt></dl>
+ <dl><dt><a name="-simple_progress"><strong>simple_progress</strong></a>(iterable, total=None)</dt></dl>
+ <dl><dt><a name="-standardize_format"><strong>standardize_format</strong></a>(image, expected_dims)</dt><dd><tt>Converts&nbsp;an&nbsp;input&nbsp;image&nbsp;into&nbsp;the&nbsp;format<br>
+expected,&nbsp;this&nbsp;being:<br>
+(width,&nbsp;height),&nbsp;(channels,&nbsp;width,&nbsp;height),&nbsp;(cycle,&nbsp;channels,&nbsp;width,&nbsp;height)<br>
+depending&nbsp;on&nbsp;the&nbsp;expected_dims.</tt></dd></dl>
+ <dl><dt><a name="-to_rgb8"><strong>to_rgb8</strong></a>(image, percent_norm=0.1, colormap=None)</dt></dl>
+ <dl><dt><a name="-write_multicolumn"><strong>write_multicolumn</strong></a>(table, name, array, length_column=None)</dt><dd><tt>Splits&nbsp;a&nbsp;2d&nbsp;array&nbsp;into&nbsp;multiple&nbsp;columns&nbsp;in&nbsp;a&nbsp;dataframe&nbsp;for&nbsp;saving&nbsp;to&nbsp;csv&nbsp;or<br>
+similar&nbsp;format.&nbsp;Writes&nbsp;N&nbsp;columns&nbsp;with&nbsp;names&nbsp;name&nbsp;+&nbsp;'_0'&nbsp;to&nbsp;name&nbsp;+&nbsp;'_N'&nbsp;where&nbsp;N&nbsp;is&nbsp;array.shape[1].<br>
+Also&nbsp;supports&nbsp;ragged&nbsp;arrays&nbsp;where&nbsp;not&nbsp;every&nbsp;row&nbsp;is&nbsp;the&nbsp;same&nbsp;length,&nbsp;in&nbsp;this&nbsp;case&nbsp;pass<br>
+a&nbsp;list&nbsp;of&nbsp;lists.&nbsp;Writes&nbsp;the&nbsp;different&nbsp;number&nbsp;of&nbsp;items&nbsp;in&nbsp;each&nbsp;row&nbsp;to&nbsp;another&nbsp;column&nbsp;named<br>
+length_column,&nbsp;which&nbsp;defaults&nbsp;to&nbsp;name&nbsp;+&nbsp;'_length'<br>
+The&nbsp;complement&nbsp;function&nbsp;to&nbsp;read_multicolumn&nbsp;which&nbsp;can&nbsp;be&nbsp;used&nbsp;to&nbsp;extract&nbsp;the&nbsp;2d&nbsp;array<br>
+back&nbsp;from&nbsp;the&nbsp;table.</tt></dd></dl>
+</td></tr></table>
+</body></html>

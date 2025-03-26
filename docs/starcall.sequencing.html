@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module starcall.sequencing</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="starcall.html"><font color="#ffffff">starcall</font></a>.sequencing</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/nicho/starcall-docs/starcall/sequencing.py">/home/nicho/starcall-docs/starcall/sequencing.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="dataclasses.html">dataclasses</a><br>
+<a href="math.html">math</a><br>
+</td><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+<a href="matplotlib.pyplot.html">matplotlib.pyplot</a><br>
+</td><td width="25%" valign=top><a href="skimage.html">skimage</a><br>
+<a href="sklearn.html">sklearn</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
+<a href="starcall.utils.html">starcall.utils</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="starcall.sequencing.html#BarcodeLibrary">BarcodeLibrary</a>
+</font></dt><dt><font face="helvetica, arial"><a href="starcall.sequencing.html#NearestNeighbors">NearestNeighbors</a>
+</font></dt><dt><font face="helvetica, arial"><a href="starcall.sequencing.html#TreeNode">TreeNode</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="BarcodeLibrary">class <strong>BarcodeLibrary</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#BarcodeLibrary">BarcodeLibrary</a>(barcodes,&nbsp;distance_function=None,&nbsp;batch_size=50)<br>
+&nbsp;<br>
+Class&nbsp;that&nbsp;efficiently&nbsp;matches&nbsp;reads&nbsp;to&nbsp;a&nbsp;set&nbsp;of&nbsp;barcodes.<br>
+Uses&nbsp;nearest&nbsp;neighbors&nbsp;to&nbsp;avoid&nbsp;comparing&nbsp;every&nbsp;read,&nbsp;barcode&nbsp;pair.<br>
+It&nbsp;can&nbsp;also&nbsp;accept&nbsp;barcode&nbsp;libraries&nbsp;with&nbsp;multiple&nbsp;barcodes,&nbsp;in&nbsp;which&nbsp;case<br>
+a&nbsp;set&nbsp;of&nbsp;reads&nbsp;is&nbsp;matched&nbsp;to&nbsp;a&nbsp;set&nbsp;of&nbsp;barcodes&nbsp;if&nbsp;all&nbsp;barcodes&nbsp;are&nbsp;present&nbsp;in<br>
+said&nbsp;set&nbsp;of&nbsp;reads.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="BarcodeLibrary-__init__"><strong>__init__</strong></a>(self, barcodes, distance_function=None, batch_size=50)</dt><dd><tt>Constructs&nbsp;a&nbsp;barcode&nbsp;library<br>
+&nbsp;<br>
+barcodes:&nbsp;a&nbsp;sequence&nbsp;of&nbsp;strings&nbsp;of&nbsp;characters&nbsp;'GTAC'.&nbsp;Can&nbsp;be&nbsp;a&nbsp;sequence&nbsp;of&nbsp;sets&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;strings&nbsp;if&nbsp;there&nbsp;are&nbsp;multiple&nbsp;barcodes&nbsp;per&nbsp;entry.</tt></dd></dl>
+
+<dl><dt><a name="BarcodeLibrary-nearest"><strong>nearest</strong></a>(self, reads, counts=None, match_threshold=2, second_threshold=None)</dt><dd><tt>Find&nbsp;the&nbsp;best&nbsp;matching&nbsp;barcode&nbsp;for&nbsp;each&nbsp;read.<br>
+&nbsp;<br>
+reads:&nbsp;Same&nbsp;as&nbsp;constructing&nbsp;the&nbsp;library,&nbsp;this&nbsp;can&nbsp;be&nbsp;a&nbsp;sequence&nbsp;of&nbsp;strings<br>
+&nbsp;&nbsp;&nbsp;&nbsp;or&nbsp;an&nbsp;2d&nbsp;array&nbsp;with&nbsp;multiple&nbsp;reads&nbsp;per&nbsp;entry.<br>
+counts:&nbsp;If&nbsp;multiple&nbsp;reads&nbsp;are&nbsp;specified&nbsp;per&nbsp;entry,&nbsp;the&nbsp;counts&nbsp;of&nbsp;each&nbsp;can<br>
+&nbsp;&nbsp;&nbsp;&nbsp;be&nbsp;specified&nbsp;here.&nbsp;This&nbsp;should&nbsp;be&nbsp;the&nbsp;same&nbsp;shape&nbsp;as&nbsp;reads.</tt></dd></dl>
+
+<dl><dt><a name="BarcodeLibrary-permutations"><strong>permutations</strong></a>(self, max_val, num)</dt></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="NearestNeighbors">class <strong>NearestNeighbors</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#NearestNeighbors">NearestNeighbors</a>(n_neighbors=5,&nbsp;metric='euclidean')<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="NearestNeighbors-__init__"><strong>__init__</strong></a>(self, n_neighbors=5, metric='euclidean')</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="NearestNeighbors-closest"><strong>closest</strong></a>(read)</dt></dl>
+
+<dl><dt><a name="NearestNeighbors-fit"><strong>fit</strong></a>(self, X, y=None)</dt></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="TreeNode">class <strong>TreeNode</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#TreeNode">TreeNode</a>(points,&nbsp;indices)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="TreeNode-__init__"><strong>__init__</strong></a>(self, points, indices)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-barcodes_to_vector"><strong>barcodes_to_vector</strong></a>(barcodes)</dt><dd><tt>Helper&nbsp;function&nbsp;to&nbsp;turn&nbsp;an&nbsp;array&nbsp;of&nbsp;strings&nbsp;into<br>
+a&nbsp;array&nbsp;of&nbsp;uint8&nbsp;with&nbsp;an&nbsp;extra&nbsp;dimension&nbsp;of&nbsp;the&nbsp;characters<br>
+of&nbsp;the&nbsp;string</tt></dd></dl>
+ <dl><dt><a name="-calc_barcode_distances"><strong>calc_barcode_distances</strong></a>(reads, library, counts=None, max_edit_distance=None, read_mask=None, dtype=&lt;class 'numpy.float32'&gt;, reads_needed=None)</dt><dd><tt>Calculates&nbsp;a&nbsp;full&nbsp;distance&nbsp;matrix&nbsp;between&nbsp;reads&nbsp;and&nbsp;a&nbsp;barcode&nbsp;library.<br>
+&nbsp;<br>
+reads:&nbsp;array&nbsp;of&nbsp;barcode&nbsp;sequences,&nbsp;or&nbsp;2d&nbsp;array&nbsp;if&nbsp;multiple&nbsp;reads&nbsp;are&nbsp;specified<br>
+&nbsp;&nbsp;&nbsp;&nbsp;per&nbsp;entry<br>
+library:&nbsp;same&nbsp;as&nbsp;reads,&nbsp;array&nbsp;or&nbsp;2d&nbsp;array&nbsp;of&nbsp;barcode&nbsp;sequences<br>
+counts&nbsp;(optional):&nbsp;Integer&nbsp;array&nbsp;same&nbsp;shape&nbsp;as&nbsp;reads,&nbsp;can&nbsp;be&nbsp;used&nbsp;to&nbsp;specify<br>
+&nbsp;&nbsp;&nbsp;&nbsp;counts&nbsp;of&nbsp;each&nbsp;read.</tt></dd></dl>
+ <dl><dt><a name="-call_reads"><strong>call_reads</strong></a>(cells, poses, values, num_reads=8, distance_threshold=None, quality_threshold=None)</dt><dd><tt>Function&nbsp;to&nbsp;collect&nbsp;detected&nbsp;reads&nbsp;into&nbsp;cells<br>
+&nbsp;<br>
+cells:&nbsp;int&nbsp;array&nbsp;of&nbsp;shape&nbsp;(W,&nbsp;H)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;segmentation&nbsp;mask&nbsp;of&nbsp;cells,&nbsp;0&nbsp;is&nbsp;the&nbsp;background&nbsp;and&nbsp;all&nbsp;values&nbsp;N&gt;0&nbsp;correspond<br>
+&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;the&nbsp;mask&nbsp;of&nbsp;cell&nbsp;N.<br>
+poses:&nbsp;int&nbsp;array&nbsp;of&nbsp;shape&nbsp;(N,&nbsp;2)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;positions&nbsp;of&nbsp;the&nbsp;reads&nbsp;found.<br>
+values:&nbsp;float&nbsp;array&nbsp;of&nbsp;shape&nbsp;(N,&nbsp;cycle,&nbsp;channel)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;values&nbsp;of&nbsp;the&nbsp;reads&nbsp;across&nbsp;all&nbsp;cycles&nbsp;and&nbsp;channels.</tt></dd></dl>
+ <dl><dt><a name="-cluster_reads"><strong>cluster_reads</strong></a>(values, distance_threshold=None)</dt><dd><tt>Clusters&nbsp;the&nbsp;values&nbsp;of&nbsp;many&nbsp;reads&nbsp;to&nbsp;determine&nbsp;which&nbsp;reads<br>
+are&nbsp;likely&nbsp;to&nbsp;belong&nbsp;to&nbsp;the&nbsp;same&nbsp;sequence,&nbsp;despite&nbsp;errors<br>
+that&nbsp;may&nbsp;have&nbsp;altered&nbsp;their&nbsp;sequence.</tt></dd></dl>
+ <dl><dt><a name="-edit_distance"><strong>edit_distance</strong></a>(barcode1, barcode2, out=None)</dt><dd><tt>Calculates&nbsp;edit&nbsp;distance&nbsp;of&nbsp;packed&nbsp;barcodes.&nbsp;Limit&nbsp;specifies&nbsp;a&nbsp;limit&nbsp;for&nbsp;the&nbsp;distance,<br>
+if&nbsp;for&nbsp;example&nbsp;you&nbsp;only&nbsp;care&nbsp;about&nbsp;distances&nbsp;lower&nbsp;than&nbsp;2&nbsp;this&nbsp;will&nbsp;limit&nbsp;the&nbsp;computation.</tt></dd></dl>
+ <dl><dt><a name="-euclidean_distance"><strong>euclidean_distance</strong></a>(poses1, poses2)</dt></dl>
+ <dl><dt><a name="-filter_reads"><strong>filter_reads</strong></a>(values, quality_threshold=None)</dt><dd><tt>Filters&nbsp;out&nbsp;reads&nbsp;that&nbsp;are&nbsp;clearly&nbsp;not&nbsp;true&nbsp;reads.</tt></dd></dl>
+ <dl><dt><a name="-make_edit_distance_table"><strong>make_edit_distance_table</strong></a>()</dt></dl>
+ <dl><dt><a name="-match_barcodes"><strong>match_barcodes</strong></a>(reads, counts, library, max_edit_distance=0, return_distances=False, debug=True, progress=False)</dt><dd><tt>Matches&nbsp;each&nbsp;set&nbsp;of&nbsp;reads&nbsp;given&nbsp;with&nbsp;a&nbsp;library&nbsp;barcode&nbsp;or&nbsp;set&nbsp;of&nbsp;barcodes.<br>
+If&nbsp;max_edit_distance&nbsp;is&nbsp;nonzero,&nbsp;it&nbsp;will&nbsp;also&nbsp;try&nbsp;to&nbsp;match&nbsp;barcodes&nbsp;that&nbsp;differ<br>
+in&nbsp;less&nbsp;that&nbsp;or&nbsp;equal&nbsp;to&nbsp;that&nbsp;many&nbsp;bases.</tt></dd></dl>
+ <dl><dt><a name="-match_barcodes_bad"><strong>match_barcodes_bad</strong></a>(reads, counts, library, max_edit_distance=0, debug=True, progress=False)</dt><dd><tt>Matches&nbsp;each&nbsp;set&nbsp;of&nbsp;reads&nbsp;given&nbsp;with&nbsp;a&nbsp;library&nbsp;barcode&nbsp;or&nbsp;set&nbsp;of&nbsp;barcodes.<br>
+If&nbsp;max_edit_distance&nbsp;is&nbsp;nonzero,&nbsp;it&nbsp;will&nbsp;also&nbsp;try&nbsp;to&nbsp;match&nbsp;barcodes&nbsp;that&nbsp;differ<br>
+in&nbsp;less&nbsp;that&nbsp;or&nbsp;equal&nbsp;to&nbsp;that&nbsp;many&nbsp;bases.</tt></dd></dl>
+ <dl><dt><a name="-match_barcodes_nn"><strong>match_barcodes_nn</strong></a>(reads, counts, library, max_edit_distance=0)</dt></dl>
+ <dl><dt><a name="-pack_barcodes"><strong>pack_barcodes</strong></a>(barcodes, dtype=None, out=None)</dt><dd><tt>Helper&nbsp;function&nbsp;that&nbsp;converts&nbsp;strings&nbsp;of&nbsp;'GTAC'&nbsp;into&nbsp;packed&nbsp;integers&nbsp;or&nbsp;byte&nbsp;strings.<br>
+Because&nbsp;there&nbsp;are&nbsp;only&nbsp;4&nbsp;possibilities&nbsp;for&nbsp;each&nbsp;character,&nbsp;we&nbsp;can&nbsp;use&nbsp;two&nbsp;bits&nbsp;to&nbsp;represent<br>
+them&nbsp;and&nbsp;allow&nbsp;for&nbsp;much&nbsp;faster&nbsp;comparisons&nbsp;and&nbsp;edit&nbsp;distance&nbsp;computation.<br>
+dtype&nbsp;can&nbsp;be&nbsp;an&nbsp;unsigned&nbsp;integer&nbsp;type&nbsp;or&nbsp;bytes,&nbsp;if&nbsp;it&nbsp;is&nbsp;None&nbsp;it&nbsp;will&nbsp;default&nbsp;to&nbsp;uint64&nbsp;unless<br>
+the&nbsp;barcodes&nbsp;are&nbsp;longer&nbsp;than&nbsp;32&nbsp;characters</tt></dd></dl>
+ <dl><dt><a name="-unpack_barcodes"><strong>unpack_barcodes</strong></a>(barcodes, length=None, out=None)</dt><dd><tt>Reverse&nbsp;function&nbsp;to&nbsp;utils.pack_barcodes&nbsp;that&nbsp;converts&nbsp;the&nbsp;packed&nbsp;integer&nbsp;values&nbsp;back&nbsp;to&nbsp;sequences.<br>
+Importantly,&nbsp;this&nbsp;function&nbsp;will&nbsp;not&nbsp;give&nbsp;the&nbsp;exact&nbsp;same&nbsp;sequence&nbsp;given&nbsp;into&nbsp;pack_barcodes.&nbsp;The<br>
+length&nbsp;of&nbsp;the&nbsp;barcode&nbsp;is&nbsp;not&nbsp;stored,&nbsp;so&nbsp;if&nbsp;not&nbsp;specified&nbsp;it&nbsp;will&nbsp;decode&nbsp;as&nbsp;many&nbsp;bases&nbsp;as&nbsp;the&nbsp;underlying<br>
+dtype&nbsp;can&nbsp;hold.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>plot_counter</strong> = 0</td></tr></table>
+</body></html>

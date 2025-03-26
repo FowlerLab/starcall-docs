@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module constitch.solving</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="constitch.html"><font color="#ffffff">constitch</font></a>.solving</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/nicho/starcall-docs/constitch/solving.py">/home/nicho/starcall-docs/constitch/solving.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+<a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="scipy.html">scipy</a><br>
+<a href="skimage.html">skimage</a><br>
+</td><td width="25%" valign=top><a href="sklearn.html">sklearn</a><br>
+<a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="constitch.solving.html#Solver">Solver</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="constitch.solving.html#LinearSolver">LinearSolver</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="constitch.solving.html#OptimalSolver">OptimalSolver</a>
+</font></dt><dt><font face="helvetica, arial"><a href="constitch.solving.html#QuantileSolver">QuantileSolver</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="constitch.solving.html#NeighborOutlierSolver">NeighborOutlierSolver</a>
+</font></dt><dt><font face="helvetica, arial"><a href="constitch.solving.html#OutlierSolver">OutlierSolver</a>
+</font></dt></dl>
+</dd>
+</dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="LinearSolver">class <strong>LinearSolver</strong></a>(<a href="constitch.solving.html#Solver">Solver</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#LinearSolver">LinearSolver</a>(model=None)<br>
+&nbsp;<br>
+<a href="#Solver">Solver</a>&nbsp;that&nbsp;represents&nbsp;the&nbsp;constraints&nbsp;as&nbsp;an&nbsp;overconstrained&nbsp;system&nbsp;of&nbsp;equations,&nbsp;and<br>
+solves&nbsp;it&nbsp;using&nbsp;least&nbsp;squares.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="constitch.solving.html#LinearSolver">LinearSolver</a></dd>
+<dd><a href="constitch.solving.html#Solver">Solver</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="LinearSolver-__init__"><strong>__init__</strong></a>(self, model=None)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="LinearSolver-make_constraint_matrix"><strong>make_constraint_matrix</strong></a>(self, constraints, initial_poses)</dt></dl>
+
+<dl><dt><a name="LinearSolver-make_positions"><strong>make_positions</strong></a>(self, initial_poses, poses)</dt></dl>
+
+<dl><dt><a name="LinearSolver-score_func"><strong>score_func</strong></a>(self, constraint)</dt></dl>
+
+<dl><dt><a name="LinearSolver-solve"><strong>solve</strong></a>(self, constraints, initial_poses)</dt><dd><tt>Solve&nbsp;the&nbsp;global&nbsp;positions&nbsp;for&nbsp;images&nbsp;given&nbsp;the&nbsp;constraints&nbsp;and&nbsp;estimated&nbsp;positions.<br>
+returns&nbsp;the&nbsp;xy&nbsp;position&nbsp;for&nbsp;each&nbsp;image,&nbsp;mapping&nbsp;the&nbsp;image&nbsp;index&nbsp;to&nbsp;the&nbsp;position<br>
+with&nbsp;a&nbsp;dictionary.<br>
+Additionally&nbsp;the&nbsp;constraints&nbsp;dictionary&nbsp;can&nbsp;be&nbsp;returned&nbsp;as&nbsp;the&nbsp;second&nbsp;return&nbsp;value,&nbsp;which<br>
+will&nbsp;replace&nbsp;the&nbsp;constraints&nbsp;in&nbsp;the&nbsp;composite&nbsp;with&nbsp;the&nbsp;ones&nbsp;returned,&nbsp;filtering&nbsp;outliers.</tt></dd></dl>
+
+<dl><dt><a name="LinearSolver-solve_matrix"><strong>solve_matrix</strong></a>(self, solution_mat, solution_vals, initial_values)</dt></dl>
+
+<hr>
+Data descriptors inherited from <a href="constitch.solving.html#Solver">Solver</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="NeighborOutlierSolver">class <strong>NeighborOutlierSolver</strong></a>(<a href="constitch.solving.html#Solver">Solver</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#NeighborOutlierSolver">NeighborOutlierSolver</a>(solver=None,&nbsp;testing_radius=3)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="constitch.solving.html#NeighborOutlierSolver">NeighborOutlierSolver</a></dd>
+<dd><a href="constitch.solving.html#Solver">Solver</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="NeighborOutlierSolver-__init__"><strong>__init__</strong></a>(self, solver=None, testing_radius=3)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="NeighborOutlierSolver-get_touching"><strong>get_touching</strong></a>(self, constraints, start_pair, max_dist)</dt><dd><tt>returns&nbsp;a&nbsp;new&nbsp;constraints&nbsp;dict&nbsp;with&nbsp;only&nbsp;constraints&nbsp;within&nbsp;max_dist&nbsp;to&nbsp;the&nbsp;start&nbsp;pair<br>
+basically&nbsp;bfs</tt></dd></dl>
+
+<dl><dt><a name="NeighborOutlierSolver-solve"><strong>solve</strong></a>(self, constraints, initial_poses)</dt><dd><tt>Solve&nbsp;the&nbsp;global&nbsp;positions&nbsp;for&nbsp;images&nbsp;given&nbsp;the&nbsp;constraints&nbsp;and&nbsp;estimated&nbsp;positions.<br>
+returns&nbsp;the&nbsp;xy&nbsp;position&nbsp;for&nbsp;each&nbsp;image,&nbsp;mapping&nbsp;the&nbsp;image&nbsp;index&nbsp;to&nbsp;the&nbsp;position<br>
+with&nbsp;a&nbsp;dictionary.<br>
+Additionally&nbsp;the&nbsp;constraints&nbsp;dictionary&nbsp;can&nbsp;be&nbsp;returned&nbsp;as&nbsp;the&nbsp;second&nbsp;return&nbsp;value,&nbsp;which<br>
+will&nbsp;replace&nbsp;the&nbsp;constraints&nbsp;in&nbsp;the&nbsp;composite&nbsp;with&nbsp;the&nbsp;ones&nbsp;returned,&nbsp;filtering&nbsp;outliers.</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="constitch.solving.html#Solver">Solver</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="OptimalSolver">class <strong>OptimalSolver</strong></a>(<a href="constitch.solving.html#LinearSolver">LinearSolver</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#OptimalSolver">OptimalSolver</a>(model=None,&nbsp;loss_func=None)<br>
+&nbsp;<br>
+<a href="#Solver">Solver</a>&nbsp;that&nbsp;solves&nbsp;the&nbsp;system&nbsp;of&nbsp;equations&nbsp;generated&nbsp;by&nbsp;<a href="#LinearSolver">LinearSolver</a>&nbsp;by<br>
+minimizing&nbsp;an&nbsp;arbitrary&nbsp;loss&nbsp;function.<br>
+This&nbsp;solver&nbsp;uses&nbsp;the&nbsp;provided&nbsp;linear&nbsp;model,&nbsp;default&nbsp;LinearRegression,<br>
+to&nbsp;get&nbsp;initial&nbsp;positions&nbsp;then&nbsp;uses&nbsp;scipy.optimize.minimize&nbsp;to&nbsp;find&nbsp;the&nbsp;final<br>
+solution&nbsp;that&nbsp;minimizes&nbsp;the&nbsp;loss&nbsp;function.<br>
+By&nbsp;default&nbsp;the&nbsp;loss&nbsp;function&nbsp;used&nbsp;is&nbsp;mean&nbsp;absolute&nbsp;error,&nbsp;however&nbsp;if&nbsp;you&nbsp;are<br>
+looking&nbsp;to&nbsp;minimize&nbsp;on&nbsp;MAE&nbsp;you&nbsp;should&nbsp;use&nbsp;<a href="#QuantileSolver">QuantileSolver</a>&nbsp;as&nbsp;it&nbsp;is&nbsp;equivalent<br>
+and&nbsp;more&nbsp;efficient.&nbsp;Only&nbsp;use&nbsp;this&nbsp;model&nbsp;when&nbsp;there&nbsp;is&nbsp;not&nbsp;a&nbsp;dedicated<br>
+sklearn.linear_model&nbsp;or&nbsp;similar&nbsp;regressor&nbsp;that&nbsp;can&nbsp;be&nbsp;utilized&nbsp;with&nbsp;<a href="#LinearSolver">LinearSolver</a><br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="constitch.solving.html#OptimalSolver">OptimalSolver</a></dd>
+<dd><a href="constitch.solving.html#LinearSolver">LinearSolver</a></dd>
+<dd><a href="constitch.solving.html#Solver">Solver</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="OptimalSolver-__init__"><strong>__init__</strong></a>(self, model=None, loss_func=None)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="OptimalSolver-loss"><strong>loss</strong></a>(self, values, solution_mat, solution_vals)</dt></dl>
+
+<dl><dt><a name="OptimalSolver-solve_matrix"><strong>solve_matrix</strong></a>(self, solution_mat, solution_vals, initial_values)</dt></dl>
+
+<hr>
+Methods inherited from <a href="constitch.solving.html#LinearSolver">LinearSolver</a>:<br>
+<dl><dt><a name="OptimalSolver-make_constraint_matrix"><strong>make_constraint_matrix</strong></a>(self, constraints, initial_poses)</dt></dl>
+
+<dl><dt><a name="OptimalSolver-make_positions"><strong>make_positions</strong></a>(self, initial_poses, poses)</dt></dl>
+
+<dl><dt><a name="OptimalSolver-score_func"><strong>score_func</strong></a>(self, constraint)</dt></dl>
+
+<dl><dt><a name="OptimalSolver-solve"><strong>solve</strong></a>(self, constraints, initial_poses)</dt><dd><tt>Solve&nbsp;the&nbsp;global&nbsp;positions&nbsp;for&nbsp;images&nbsp;given&nbsp;the&nbsp;constraints&nbsp;and&nbsp;estimated&nbsp;positions.<br>
+returns&nbsp;the&nbsp;xy&nbsp;position&nbsp;for&nbsp;each&nbsp;image,&nbsp;mapping&nbsp;the&nbsp;image&nbsp;index&nbsp;to&nbsp;the&nbsp;position<br>
+with&nbsp;a&nbsp;dictionary.<br>
+Additionally&nbsp;the&nbsp;constraints&nbsp;dictionary&nbsp;can&nbsp;be&nbsp;returned&nbsp;as&nbsp;the&nbsp;second&nbsp;return&nbsp;value,&nbsp;which<br>
+will&nbsp;replace&nbsp;the&nbsp;constraints&nbsp;in&nbsp;the&nbsp;composite&nbsp;with&nbsp;the&nbsp;ones&nbsp;returned,&nbsp;filtering&nbsp;outliers.</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="constitch.solving.html#Solver">Solver</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="OutlierSolver">class <strong>OutlierSolver</strong></a>(<a href="constitch.solving.html#Solver">Solver</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#OutlierSolver">OutlierSolver</a>(solver=None,&nbsp;outlier_threshold=1.5)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="constitch.solving.html#OutlierSolver">OutlierSolver</a></dd>
+<dd><a href="constitch.solving.html#Solver">Solver</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="OutlierSolver-__init__"><strong>__init__</strong></a>(self, solver=None, outlier_threshold=1.5)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="OutlierSolver-solve"><strong>solve</strong></a>(self, constraints, initial_poses)</dt><dd><tt>Solve&nbsp;the&nbsp;global&nbsp;positions&nbsp;for&nbsp;images&nbsp;given&nbsp;the&nbsp;constraints&nbsp;and&nbsp;estimated&nbsp;positions.<br>
+returns&nbsp;the&nbsp;xy&nbsp;position&nbsp;for&nbsp;each&nbsp;image,&nbsp;mapping&nbsp;the&nbsp;image&nbsp;index&nbsp;to&nbsp;the&nbsp;position<br>
+with&nbsp;a&nbsp;dictionary.<br>
+Additionally&nbsp;the&nbsp;constraints&nbsp;dictionary&nbsp;can&nbsp;be&nbsp;returned&nbsp;as&nbsp;the&nbsp;second&nbsp;return&nbsp;value,&nbsp;which<br>
+will&nbsp;replace&nbsp;the&nbsp;constraints&nbsp;in&nbsp;the&nbsp;composite&nbsp;with&nbsp;the&nbsp;ones&nbsp;returned,&nbsp;filtering&nbsp;outliers.</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="constitch.solving.html#Solver">Solver</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="QuantileSolver">class <strong>QuantileSolver</strong></a>(<a href="constitch.solving.html#LinearSolver">LinearSolver</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#QuantileSolver">QuantileSolver</a>(**kwargs)<br>
+&nbsp;<br>
+<a href="#Solver">Solver</a>&nbsp;that&nbsp;performs&nbsp;quantile&nbsp;regression&nbsp;instead&nbsp;of&nbsp;ordinary&nbsp;least&nbsp;squares<br>
+to&nbsp;solve&nbsp;the&nbsp;system&nbsp;of&nbsp;equations&nbsp;described&nbsp;by&nbsp;constraints.&nbsp;Equivalent&nbsp;to&nbsp;minimizing<br>
+the&nbsp;mean&nbsp;absolute&nbsp;error,&nbsp;this&nbsp;is&nbsp;much&nbsp;more&nbsp;outlier&nbsp;resistant&nbsp;that&nbsp;minimizing&nbsp;MSE<br>
+and&nbsp;should&nbsp;provide&nbsp;better&nbsp;results&nbsp;when&nbsp;there&nbsp;are&nbsp;erroneous&nbsp;constraints&nbsp;present.<br>
+This&nbsp;is&nbsp;identical&nbsp;to&nbsp;<a href="#LinearSolver">LinearSolver</a>&nbsp;except&nbsp;that&nbsp;the&nbsp;linear&nbsp;model&nbsp;used&nbsp;is&nbsp;QuantileRegressor.<br>
+Any&nbsp;parameters&nbsp;passed&nbsp;to&nbsp;the&nbsp;constructor&nbsp;are&nbsp;forwared&nbsp;to&nbsp;the&nbsp;constructor&nbsp;of<br>
+sklearn.linear_model.QuantileRegressor.&nbsp;By&nbsp;default&nbsp;the&nbsp;L1&nbsp;regularization&nbsp;constant<br>
+alpha=0&nbsp;and&nbsp;fit_intercept=False,&nbsp;unless&nbsp;specified&nbsp;in&nbsp;the&nbsp;constructor.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="constitch.solving.html#QuantileSolver">QuantileSolver</a></dd>
+<dd><a href="constitch.solving.html#LinearSolver">LinearSolver</a></dd>
+<dd><a href="constitch.solving.html#Solver">Solver</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="QuantileSolver-__init__"><strong>__init__</strong></a>(self, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="constitch.solving.html#LinearSolver">LinearSolver</a>:<br>
+<dl><dt><a name="QuantileSolver-make_constraint_matrix"><strong>make_constraint_matrix</strong></a>(self, constraints, initial_poses)</dt></dl>
+
+<dl><dt><a name="QuantileSolver-make_positions"><strong>make_positions</strong></a>(self, initial_poses, poses)</dt></dl>
+
+<dl><dt><a name="QuantileSolver-score_func"><strong>score_func</strong></a>(self, constraint)</dt></dl>
+
+<dl><dt><a name="QuantileSolver-solve"><strong>solve</strong></a>(self, constraints, initial_poses)</dt><dd><tt>Solve&nbsp;the&nbsp;global&nbsp;positions&nbsp;for&nbsp;images&nbsp;given&nbsp;the&nbsp;constraints&nbsp;and&nbsp;estimated&nbsp;positions.<br>
+returns&nbsp;the&nbsp;xy&nbsp;position&nbsp;for&nbsp;each&nbsp;image,&nbsp;mapping&nbsp;the&nbsp;image&nbsp;index&nbsp;to&nbsp;the&nbsp;position<br>
+with&nbsp;a&nbsp;dictionary.<br>
+Additionally&nbsp;the&nbsp;constraints&nbsp;dictionary&nbsp;can&nbsp;be&nbsp;returned&nbsp;as&nbsp;the&nbsp;second&nbsp;return&nbsp;value,&nbsp;which<br>
+will&nbsp;replace&nbsp;the&nbsp;constraints&nbsp;in&nbsp;the&nbsp;composite&nbsp;with&nbsp;the&nbsp;ones&nbsp;returned,&nbsp;filtering&nbsp;outliers.</tt></dd></dl>
+
+<dl><dt><a name="QuantileSolver-solve_matrix"><strong>solve_matrix</strong></a>(self, solution_mat, solution_vals, initial_values)</dt></dl>
+
+<hr>
+Data descriptors inherited from <a href="constitch.solving.html#Solver">Solver</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Solver">class <strong>Solver</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Base&nbsp;class&nbsp;that&nbsp;takes&nbsp;in&nbsp;all&nbsp;the&nbsp;constraints&nbsp;of&nbsp;a&nbsp;composite<br>
+and&nbsp;solves&nbsp;them&nbsp;into&nbsp;global&nbsp;positions<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Solver-solve"><strong>solve</strong></a>(self, constraints, initial_poses)</dt><dd><tt>Solve&nbsp;the&nbsp;global&nbsp;positions&nbsp;for&nbsp;images&nbsp;given&nbsp;the&nbsp;constraints&nbsp;and&nbsp;estimated&nbsp;positions.<br>
+returns&nbsp;the&nbsp;xy&nbsp;position&nbsp;for&nbsp;each&nbsp;image,&nbsp;mapping&nbsp;the&nbsp;image&nbsp;index&nbsp;to&nbsp;the&nbsp;position<br>
+with&nbsp;a&nbsp;dictionary.<br>
+Additionally&nbsp;the&nbsp;constraints&nbsp;dictionary&nbsp;can&nbsp;be&nbsp;returned&nbsp;as&nbsp;the&nbsp;second&nbsp;return&nbsp;value,&nbsp;which<br>
+will&nbsp;replace&nbsp;the&nbsp;constraints&nbsp;in&nbsp;the&nbsp;composite&nbsp;with&nbsp;the&nbsp;ones&nbsp;returned,&nbsp;filtering&nbsp;outliers.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-SelectionSolver"><strong>SelectionSolver</strong></a>(Solver)</dt><dd><tt><a href="#Solver">Solver</a>&nbsp;that&nbsp;finds&nbsp;the&nbsp;maximal&nbsp;set&nbsp;of&nbsp;constraints&nbsp;that&nbsp;all&nbsp;align&nbsp;with&nbsp;each&nbsp;other</tt></dd></dl>
+</td></tr></table>
+</body></html>

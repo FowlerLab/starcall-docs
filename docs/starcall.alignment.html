@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module starcall.alignment</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="starcall.html"><font color="#ffffff">starcall</font></a>.alignment</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/nicho/starcall-docs/starcall/alignment.py">/home/nicho/starcall-docs/starcall/alignment.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+<a href="numba.html">numba</a><br>
+</td><td width="25%" valign=top><a href="matplotlib.pyplot.html">matplotlib.pyplot</a><br>
+<a href="scipy.html">scipy</a><br>
+</td><td width="25%" valign=top><a href="skimage.html">skimage</a><br>
+<a href="sklearn.html">sklearn</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="starcall.alignment.html#DistanceMatrix">DistanceMatrix</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="DistanceMatrix">class <strong>DistanceMatrix</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#DistanceMatrix">DistanceMatrix</a>(size1,&nbsp;size2=None,&nbsp;dtype=&amp;lt;class&nbsp;'numpy.float32'&amp;gt;,&nbsp;value=None)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="DistanceMatrix-__getitem__"><strong>__getitem__</strong></a>(self, indices)</dt></dl>
+
+<dl><dt><a name="DistanceMatrix-__init__"><strong>__init__</strong></a>(self, size1, size2=None, dtype=&lt;class 'numpy.float32'&gt;, value=None)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="DistanceMatrix-__setitem__"><strong>__setitem__</strong></a>(self, indices, item)</dt></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-fastnorm"><strong>fastnorm</strong></a>(x)</dt></dl>
+ <dl><dt><a name="-fastnorm_overload"><strong>fastnorm_overload</strong></a>(x)</dt></dl>
+ <dl><dt><a name="-filter_pairs1"><strong>filter_pairs1</strong></a>(poses1, poses2, matches, n_neighbors=25)</dt></dl>
+ <dl><dt><a name="-float_string_dist"><strong>float_string_dist</strong></a>(vec1, vec2, penalty=10)</dt></dl>
+ <dl><dt><a name="-match_dots"><strong>match_dots</strong></a>(position_list, min_dots=2, pair_dots_func=&lt;function pair_dots2 at 0x7f2e1f003f40&gt;, **kwargs)</dt><dd><tt>Matches&nbsp;groups&nbsp;of&nbsp;points&nbsp;between&nbsp;the&nbsp;sets&nbsp;given&nbsp;in&nbsp;position_list<br>
+Uses&nbsp;the&nbsp;provided&nbsp;pair_dots_func&nbsp;to&nbsp;match&nbsp;dots&nbsp;into&nbsp;pairs<br>
+between&nbsp;each&nbsp;set,&nbsp;then&nbsp;combines&nbsp;these&nbsp;pairs&nbsp;into&nbsp;larger&nbsp;groups</tt></dd></dl>
+ <dl><dt><a name="-pair_dots1"><strong>pair_dots1</strong></a>(poses1, poses2)</dt></dl>
+ <dl><dt><a name="-pair_dots2"><strong>pair_dots2</strong></a>(poses1, poses2, n_neighbors=10, penalty=5, progress=False, debug=True, max_distance=None)</dt></dl>
+ <dl><dt><a name="-pair_dots3"><strong>pair_dots3</strong></a>(poses1, poses2, n_neighbors=50)</dt></dl>
+ <dl><dt><a name="-pair_dots4"><strong>pair_dots4</strong></a>(poses1, poses2)</dt></dl>
+ <dl><dt><a name="-pair_dots_func"><strong>pair_dots_func</strong></a>(poses1, poses2, dist_func, pass_indices=False, progress=False, debug=True)</dt><dd><tt>Finds&nbsp;pairs&nbsp;of&nbsp;dots&nbsp;where&nbsp;each&nbsp;one&nbsp;is&nbsp;the&nbsp;closest&nbsp;to&nbsp;the&nbsp;other,&nbsp;based&nbsp;on&nbsp;the&nbsp;given<br>
+distance&nbsp;function.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;poses1,&nbsp;poses2:&nbsp;numpy&nbsp;arrays&nbsp;of&nbsp;positions&nbsp;that&nbsp;will&nbsp;be&nbsp;passed&nbsp;to&nbsp;the&nbsp;dist_func<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dist_func:&nbsp;a&nbsp;function&nbsp;that&nbsp;accepts&nbsp;either&nbsp;two&nbsp;poses&nbsp;from&nbsp;poses1&nbsp;and&nbsp;poses2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or&nbsp;two&nbsp;indices&nbsp;(see&nbsp;pass_indices)&nbsp;and&nbsp;returns&nbsp;a&nbsp;single&nbsp;float,&nbsp;the&nbsp;distance&nbsp;score<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pass_indices:&nbsp;if&nbsp;true,&nbsp;the&nbsp;indices&nbsp;into&nbsp;poses1,&nbsp;poses2&nbsp;are&nbsp;passed&nbsp;to&nbsp;dist_func<br>
+&nbsp;&nbsp;&nbsp;&nbsp;progress:&nbsp;if&nbsp;true,&nbsp;a&nbsp;progress&nbsp;bar&nbsp;is&nbsp;displayed<br>
+&nbsp;&nbsp;&nbsp;&nbsp;debug:&nbsp;if&nbsp;true,&nbsp;debug&nbsp;info&nbsp;is&nbsp;printed&nbsp;to&nbsp;the&nbsp;console</tt></dd></dl>
+ <dl><dt><a name="-pair_dots_nn_func"><strong>pair_dots_nn_func</strong></a>(poses1, poses2, dist_func, neighbors=100, pass_indices=False, progress=False, debug=True)</dt><dd><tt>Finds&nbsp;pairs&nbsp;of&nbsp;dots&nbsp;where&nbsp;each&nbsp;one&nbsp;is&nbsp;the&nbsp;closest&nbsp;to&nbsp;the&nbsp;other,&nbsp;based&nbsp;on&nbsp;the&nbsp;given<br>
+distance&nbsp;function.&nbsp;Only&nbsp;considers&nbsp;matches&nbsp;in&nbsp;the&nbsp;n&nbsp;nearest&nbsp;neighbors&nbsp;of&nbsp;each&nbsp;point,<br>
+where&nbsp;n&nbsp;is&nbsp;the&nbsp;argument&nbsp;neighbors.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;neighbors:&nbsp;number&nbsp;of&nbsp;nearest&nbsp;neighbors&nbsp;to&nbsp;consider&nbsp;when&nbsp;searching&nbsp;for&nbsp;pairs.&nbsp;This<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;can&nbsp;also&nbsp;be&nbsp;the&nbsp;actual&nbsp;neighbors&nbsp;already&nbsp;calculated,&nbsp;in&nbsp;this&nbsp;case&nbsp;it&nbsp;would&nbsp;be<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a&nbsp;numpy&nbsp;array&nbsp;of&nbsp;shape&nbsp;(len(poses1),&nbsp;n_neighbors)&nbsp;of&nbsp;indices&nbsp;into&nbsp;poses2.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;See&nbsp;pair_dots_func&nbsp;for&nbsp;documentation&nbsp;of&nbsp;other&nbsp;args.</tt></dd></dl>
+ <dl><dt><a name="-prepare_dists"><strong>prepare_dists</strong></a>(poses)</dt></dl>
+</td></tr></table>
+</body></html>

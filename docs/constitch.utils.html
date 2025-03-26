@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module constitch.utils</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="constitch.html"><font color="#ffffff">constitch</font></a>.utils</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/nicho/starcall-docs/constitch/utils.py">/home/nicho/starcall-docs/constitch/utils.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="io.html">io</a><br>
+<a href="json.html">json</a><br>
+</td><td width="25%" valign=top><a href="math.html">math</a><br>
+<a href="numpy.html">numpy</a><br>
+</td><td width="25%" valign=top><a href="pickle.html">pickle</a><br>
+<a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-format_time"><strong>format_time</strong></a>(secs)</dt></dl>
+ <dl><dt><a name="-human_readable"><strong>human_readable</strong></a>(number)</dt></dl>
+ <dl><dt><a name="-lfsr"><strong>lfsr</strong></a>(value, bounds)</dt></dl>
+ <dl><dt><a name="-load"><strong>load</strong></a>(path, composite=None, constraints=True, images_file=None, **kwargs)</dt><dd><tt>Loads&nbsp;a&nbsp;CompositeImage&nbsp;instance&nbsp;and&nbsp;any&nbsp;additional&nbsp;CompositeSet&nbsp;instances<br>
+saved&nbsp;to&nbsp;a&nbsp;json&nbsp;file&nbsp;with&nbsp;<a href="#-load">load</a>()<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;(str&nbsp;or&nbsp;io.IOBase):&nbsp;The&nbsp;path&nbsp;or&nbsp;file&nbsp;object&nbsp;to&nbsp;read&nbsp;the&nbsp;json&nbsp;from<br>
+&nbsp;&nbsp;&nbsp;&nbsp;constraints&nbsp;(bool,&nbsp;default&nbsp;True):&nbsp;Whether&nbsp;to&nbsp;load&nbsp;any&nbsp;ConstraintSet&nbsp;instances<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;False,&nbsp;any&nbsp;constraint&nbsp;sets&nbsp;saved&nbsp;in&nbsp;the&nbsp;file&nbsp;are&nbsp;ignored<br>
+&nbsp;&nbsp;&nbsp;&nbsp;images_file&nbsp;(str&nbsp;or&nbsp;io.IOBase):&nbsp;path&nbsp;or&nbsp;file&nbsp;object&nbsp;to&nbsp;load&nbsp;images&nbsp;from<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Where&nbsp;images&nbsp;will&nbsp;be&nbsp;read&nbsp;from,&nbsp;using&nbsp;tifffile.imread<br>
+&nbsp;&nbsp;&nbsp;&nbsp;**kwargs:&nbsp;Extra&nbsp;arguments&nbsp;that&nbsp;are&nbsp;passed&nbsp;to&nbsp;CompositeImage()<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;composite&nbsp;(CompositeImage):&nbsp;The&nbsp;composite&nbsp;read&nbsp;from&nbsp;the&nbsp;file<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*constraints&nbsp;(ConstraintSet):&nbsp;Any&nbsp;ConstraintSet&nbsp;instances&nbsp;that<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;were&nbsp;saved&nbsp;with&nbsp;the&nbsp;composite.</tt></dd></dl>
+ <dl><dt><a name="-log_env"><strong>log_env</strong></a>(debug, progress)</dt></dl>
+ <dl><dt><a name="-memory_report"><strong>memory_report</strong></a>()</dt></dl>
+ <dl><dt><a name="-parity"><strong>parity</strong></a>(x)</dt></dl>
+ <dl><dt><a name="-percent_normalize"><strong>percent_normalize</strong></a>(image, percent=0.1)</dt></dl>
+ <dl><dt><a name="-save"><strong>save</strong></a>(path, composite, *constraint_sets, save_images=False, images_file=None)</dt><dd><tt>Saves&nbsp;a&nbsp;CompositeImage&nbsp;and&nbsp;any&nbsp;number&nbsp;of&nbsp;ConstraintSet&nbsp;instances<br>
+containing&nbsp;constraints&nbsp;from&nbsp;the&nbsp;composite&nbsp;to&nbsp;a&nbsp;json&nbsp;file.&nbsp;All&nbsp;objects&nbsp;passed&nbsp;to&nbsp;this&nbsp;method<br>
+can&nbsp;be&nbsp;restored&nbsp;with&nbsp;a&nbsp;call&nbsp;to&nbsp;<a href="#-load">load</a>()<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;(str&nbsp;or&nbsp;io.IOBase):&nbsp;The&nbsp;path&nbsp;or&nbsp;file&nbsp;object&nbsp;to&nbsp;save&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;composite&nbsp;(CompositeImage):&nbsp;The&nbsp;composite&nbsp;to&nbsp;be&nbsp;saved<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*constraint_sets&nbsp;(ConstraintSet):&nbsp;Any&nbsp;ConstraintSets&nbsp;to&nbsp;be&nbsp;saved&nbsp;along&nbsp;with&nbsp;the&nbsp;composite.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;These&nbsp;sets&nbsp;must&nbsp;contain&nbsp;constraints&nbsp;from&nbsp;the&nbsp;passed&nbsp;in&nbsp;composite.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;save_images&nbsp;(bool):&nbsp;If&nbsp;True,&nbsp;or&nbsp;if&nbsp;images_file&nbsp;is&nbsp;specified,&nbsp;the&nbsp;images&nbsp;in&nbsp;the&nbsp;composite&nbsp;are&nbsp;saved&nbsp;using&nbsp;tifffile.imwrite<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;the&nbsp;path&nbsp;or&nbsp;file&nbsp;object&nbsp;images_file<br>
+&nbsp;&nbsp;&nbsp;&nbsp;images_file&nbsp;(str&nbsp;or&nbsp;io.IOBase):&nbsp;The&nbsp;path&nbsp;or&nbsp;file&nbsp;object&nbsp;to&nbsp;save&nbsp;the&nbsp;composite&nbsp;images&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;defaults&nbsp;to&nbsp;path&nbsp;+&nbsp;'.tif'.</tt></dd></dl>
+ <dl><dt><a name="-simple_progress"><strong>simple_progress</strong></a>(iterable, total=None)</dt></dl>
+ <dl><dt><a name="-standardize_format"><strong>standardize_format</strong></a>(image, expected_dims)</dt><dd><tt>Converts&nbsp;an&nbsp;input&nbsp;image&nbsp;into&nbsp;the&nbsp;format<br>
+expected,&nbsp;this&nbsp;being:<br>
+(width,&nbsp;height),&nbsp;(channels,&nbsp;width,&nbsp;height),&nbsp;(cycle,&nbsp;channels,&nbsp;width,&nbsp;height)<br>
+depending&nbsp;on&nbsp;the&nbsp;expected_dims.</tt></dd></dl>
+ <dl><dt><a name="-to_rgb8"><strong>to_rgb8</strong></a>(image, percent_norm=0.1, colormap=None)</dt></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>lfsr_table</strong> = [3, 6, 12, 20, 48, 96, 184, 272, 576, 1280, 3592, 7296, 14338, 24576, 53256, 73728, 132096, 466944, 589824, 1310720, ...]</td></tr></table>
+</body></html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module starcall.correction</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="starcall.html"><font color="#ffffff">starcall</font></a>.correction</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/nicho/starcall-docs/starcall/correction.py">/home/nicho/starcall-docs/starcall/correction.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+</td><td width="25%" valign=top><a href="skimage.html">skimage</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="starcall.correction.html#ResponseCurve">ResponseCurve</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ResponseCurve">class <strong>ResponseCurve</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#ResponseCurve">ResponseCurve</a>(*args)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="ResponseCurve-__init__"><strong>__init__</strong></a>(self, *args)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-calculate_dye_matrix"><strong>calculate_dye_matrix</strong></a>(excitation_wavelengths, dyes, filter_wavelengths)</dt><dd><tt>Calculates&nbsp;the&nbsp;dye&nbsp;response&nbsp;matrix&nbsp;given&nbsp;the&nbsp;parameters&nbsp;used&nbsp;to&nbsp;image.<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;excitation_wavelengths:&nbsp;array&nbsp;like&nbsp;of&nbsp;integers,&nbsp;shape&nbsp;(channels,)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;specifies&nbsp;the&nbsp;wavelengths&nbsp;used&nbsp;to&nbsp;exite&nbsp;the&nbsp;dyes<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dyes:&nbsp;array&nbsp;like&nbsp;of&nbsp;strings,&nbsp;shape&nbsp;(channels,)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;specifies&nbsp;which&nbsp;dyes&nbsp;are&nbsp;being&nbsp;used,&nbsp;the&nbsp;valid&nbsp;names&nbsp;are&nbsp;(case&nbsp;insensitive):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DAPI,&nbsp;G,&nbsp;T,&nbsp;A,&nbsp;C,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dye_responses:&nbsp;array&nbsp;like&nbsp;of&nbsp;numbers,&nbsp;shape&nbsp;(channels,)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;wavelengths</tt></dd></dl>
+ <dl><dt><a name="-color_correct"><strong>color_correct</strong></a>(image, dye_matrix=None)</dt><dd><tt>Takes&nbsp;an&nbsp;image&nbsp;taken&nbsp;and&nbsp;estimates<br>
+the&nbsp;dye&nbsp;present&nbsp;by&nbsp;using&nbsp;the&nbsp;given&nbsp;dye&nbsp;response&nbsp;matrix.<br>
+This&nbsp;corrects&nbsp;for&nbsp;crosstalk&nbsp;between&nbsp;different&nbsp;channels<br>
+and&nbsp;dyes.<br>
+&nbsp;<br>
+Params:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;image&nbsp;:&nbsp;np.ndarray,&nbsp;shape&nbsp;(num_channels,&nbsp;width,&nbsp;height)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dye_matrix&nbsp;:&nbsp;np.ndarray,&nbsp;shape&nbsp;(num_dyes,&nbsp;num_channels)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;not&nbsp;provided&nbsp;this&nbsp;matrix&nbsp;is&nbsp;estimated&nbsp;by&nbsp;the&nbsp;function&nbsp;estimate_dye_matrix<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;new_image&nbsp;:&nbsp;np.ndarray,&nbsp;shape&nbsp;(num_dyes,&nbsp;width,&nbsp;height)</tt></dd></dl>
+ <dl><dt><a name="-crosstalk_plot"><strong>crosstalk_plot</strong></a>(image, corrected, dye_matrix, name='image')</dt></dl>
+ <dl><dt><a name="-estimate_background"><strong>estimate_background</strong></a>(images, percent=5, gaussian=8)</dt></dl>
+ <dl><dt><a name="-estimate_crosstalk"><strong>estimate_crosstalk</strong></a>(chan, chanref, percent=0.1, bins=8)</dt><dd><tt>Calculates&nbsp;the&nbsp;estimated&nbsp;crosstalk&nbsp;between&nbsp;the&nbsp;two&nbsp;channels,<br>
+returns&nbsp;the&nbsp;crosstalk&nbsp;from&nbsp;chanref&nbsp;to&nbsp;chan,&nbsp;or&nbsp;how&nbsp;much&nbsp;chan&nbsp;is&nbsp;dependant<br>
+on&nbsp;chanref.</tt></dd></dl>
+ <dl><dt><a name="-estimate_dye_matrix"><strong>estimate_dye_matrix</strong></a>(image)</dt><dd><tt>Estimates&nbsp;the&nbsp;dye&nbsp;response&nbsp;matrix&nbsp;given&nbsp;an&nbsp;image.<br>
+This&nbsp;assumes&nbsp;that&nbsp;each&nbsp;dye&nbsp;corresponds&nbsp;to&nbsp;one&nbsp;channel,<br>
+and&nbsp;that&nbsp;the&nbsp;majority&nbsp;of&nbsp;the&nbsp;response&nbsp;to&nbsp;the&nbsp;dye&nbsp;is&nbsp;that<br>
+channel.</tt></dd></dl>
+ <dl><dt><a name="-illumination_correction"><strong>illumination_correction</strong></a>(images, out=None, background=None)</dt></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>example_matrix</strong> = array([[0.89 , 0.048, 0.028, 0.034],
+       [0.1...89, 0.323],
+       [0.092, 0.068, 0.162, 0.679]])</td></tr></table>
+</body></html>
