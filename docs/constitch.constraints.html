@@ -69,7 +69,7 @@ The&nbsp;<a href="#Constraint">Constraint</a>&nbsp;is&nbsp;an&nbsp;important&nbs
 from&nbsp;global&nbsp;positions&nbsp;of&nbsp;images&nbsp;to&nbsp;a&nbsp;set&nbsp;of&nbsp;constraints&nbsp;between&nbsp;images&nbsp;and&nbsp;back<br>
 is&nbsp;the&nbsp;main&nbsp;algorithm&nbsp;used&nbsp;to&nbsp;stitch&nbsp;image&nbsp;sets.<br>
 &nbsp;<br>
-It&nbsp;is&nbsp;not&nbsp;normally&nbsp;necesarry&nbsp;to&nbsp;instantiate&nbsp;<a href="#Constraint">Constraint</a>&nbsp;objects&nbsp;directly,&nbsp;instead<br>
+It&nbsp;is&nbsp;not&nbsp;normally&nbsp;necessary&nbsp;to&nbsp;instantiate&nbsp;<a href="#Constraint">Constraint</a>&nbsp;objects&nbsp;directly,&nbsp;instead<br>
 they&nbsp;are&nbsp;created&nbsp;from&nbsp;the&nbsp;existing&nbsp;image&nbsp;positions&nbsp;with&nbsp;CompositeImage.constraints<br>
 or&nbsp;by&nbsp;calculating&nbsp;new&nbsp;constraints&nbsp;with&nbsp;the&nbsp;<a href="#Constraint">Constraint</a>.calculate&nbsp;or&nbsp;<a href="#ConstraintSet">ConstraintSet</a>.calculate<br>
 functions.<br>
@@ -474,13 +474,22 @@ Args:<br>
 Raises:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;KeyError:&nbsp;The&nbsp;specified&nbsp;constraint&nbsp;does&nbsp;not&nbsp;exist</tt></dd></dl>
 
-<dl><dt><a name="ConstraintSet-solve"><strong>solve</strong></a>(self, solver=None)</dt><dd><tt>Solve&nbsp;the&nbsp;constraints&nbsp;to&nbsp;get&nbsp;a&nbsp;global&nbsp;position&nbsp;for&nbsp;each&nbsp;image<br>
+<dl><dt><a name="ConstraintSet-solve"><strong>solve</strong></a>(self, solver='mse', **kwargs)</dt><dd><tt>Solve&nbsp;the&nbsp;constraints&nbsp;to&nbsp;get&nbsp;a&nbsp;global&nbsp;position&nbsp;for&nbsp;each&nbsp;image<br>
 &nbsp;<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;solver&nbsp;(constitch.Solver):&nbsp;default&nbsp;constitch.LinearSolver()<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;solver&nbsp;class&nbsp;that&nbsp;is&nbsp;used&nbsp;to&nbsp;combine&nbsp;the&nbsp;overconstrainted<br>
+&nbsp;&nbsp;&nbsp;&nbsp;solver&nbsp;(constitch.Solver&nbsp;or&nbsp;str):&nbsp;default&nbsp;constitch.LinearSolver()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;solver&nbsp;method&nbsp;that&nbsp;is&nbsp;used&nbsp;to&nbsp;combine&nbsp;the&nbsp;overconstrainted<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;system&nbsp;of&nbsp;constraints&nbsp;and&nbsp;optimize&nbsp;for&nbsp;the&nbsp;best&nbsp;global&nbsp;positions.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Options&nbsp;include&nbsp;'mse'&nbsp;for&nbsp;standard&nbsp;least&nbsp;squares&nbsp;solving,&nbsp;'mae'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;solving&nbsp;while&nbsp;minimizing&nbsp;mean&nbsp;absolute&nbsp;error,&nbsp;'huber'&nbsp;for<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;minimizing&nbsp;the&nbsp;huber&nbsp;loss,&nbsp;or&nbsp;any&nbsp;subclass&nbsp;of&nbsp;constitch.Solver.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;More&nbsp;info&nbsp;can&nbsp;be&nbsp;found&nbsp;in&nbsp;constitch.solving<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**kwargs:&nbsp;Arguments&nbsp;passed&nbsp;to&nbsp;the&nbsp;constructor&nbsp;of&nbsp;the&nbsp;solver.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Any&nbsp;arguments&nbsp;specified&nbsp;here&nbsp;are&nbsp;passed&nbsp;to&nbsp;the&nbsp;constructor<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;the&nbsp;solver,&nbsp;for&nbsp;example&nbsp;if&nbsp;solver='huber'&nbsp;epsilon=5&nbsp;could<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;be&nbsp;included&nbsp;to&nbsp;change&nbsp;the&nbsp;default&nbsp;epsilon&nbsp;parameter&nbsp;for&nbsp;huber&nbsp;loss.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cannot&nbsp;be&nbsp;specified&nbsp;if&nbsp;solver&nbsp;is&nbsp;an&nbsp;already&nbsp;instantiated&nbsp;constitch.Solver<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;instance.<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;solver&nbsp;instance,&nbsp;with&nbsp;an&nbsp;attribute&nbsp;positions&nbsp;containing&nbsp;a&nbsp;<a href="builtins.html#dict">dict</a><br>

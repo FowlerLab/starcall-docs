@@ -17,14 +17,13 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
     
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="cv2.html">cv2</a><br>
-<a href="itertools.html">itertools</a><br>
-</td><td width="25%" valign=top><a href="math.html">math</a><br>
-<a href="numpy.html">numpy</a><br>
-</td><td width="25%" valign=top><a href="numba.html">numba</a><br>
-<a href="skimage.html">skimage</a><br>
-</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
-<a href="time.html">time</a><br>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="itertools.html">itertools</a><br>
+<a href="math.html">math</a><br>
+</td><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+<a href="numba.html">numba</a><br>
+</td><td width="25%" valign=top><a href="skimage.html">skimage</a><br>
+<a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
 </td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
@@ -94,7 +93,7 @@ Data descriptors defined here:<br>
 <font color="#000000" face="helvetica, arial"><a name="FFTAligner">class <strong>FFTAligner</strong></a>(<a href="constitch.alignment.html#Aligner">Aligner</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt><a href="#FFTAligner">FFTAligner</a>(num_peaks=2,&nbsp;precalculate_fft=True,&nbsp;downscale_factor=None)<br>
+<td colspan=2><tt><a href="#FFTAligner">FFTAligner</a>(num_peaks=2,&nbsp;precalculate_fft=True,&nbsp;downscale_factor=None,&nbsp;upscale_factor=1)<br>
 &nbsp;<br>
 An&nbsp;aligner&nbsp;that&nbsp;uses&nbsp;the&nbsp;phase&nbsp;cross&nbsp;correlation&nbsp;algorithm&nbsp;to&nbsp;estimate&nbsp;the&nbsp;proper&nbsp;alignment&nbsp;of&nbsp;two&nbsp;images.<br>
 The&nbsp;algorithm&nbsp;is&nbsp;the&nbsp;same&nbsp;as&nbsp;described&nbsp;in&nbsp;Kuglin,&nbsp;Charles&nbsp;D.&nbsp;"The&nbsp;phase&nbsp;correlation&nbsp;image&nbsp;alignment&nbsp;method."<br>
@@ -107,7 +106,7 @@ The&nbsp;algorithm&nbsp;is&nbsp;the&nbsp;same&nbsp;as&nbsp;described&nbsp;in&nbs
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="FFTAligner-__init__"><strong>__init__</strong></a>(self, num_peaks=2, precalculate_fft=True, downscale_factor=None)</dt><dd><tt>num_peaks:&nbsp;int&nbsp;default&nbsp;2<br>
+<dl><dt><a name="FFTAligner-__init__"><strong>__init__</strong></a>(self, num_peaks=2, precalculate_fft=True, downscale_factor=None, upscale_factor=1)</dt><dd><tt>num_peaks:&nbsp;int&nbsp;default&nbsp;2<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Sets&nbsp;the&nbsp;number&nbsp;of&nbsp;peaks&nbsp;in&nbsp;the&nbsp;resulting&nbsp;phase&nbsp;cross&nbsp;correlation&nbsp;image&nbsp;to&nbsp;be&nbsp;checked.&nbsp;Sometimes&nbsp;the&nbsp;highest<br>
 &nbsp;&nbsp;&nbsp;&nbsp;peak&nbsp;is&nbsp;not&nbsp;actually&nbsp;the&nbsp;best&nbsp;offset&nbsp;for&nbsp;alignment&nbsp;so&nbsp;checking&nbsp;multiple&nbsp;peaks&nbsp;can&nbsp;help&nbsp;find&nbsp;the&nbsp;one&nbsp;that<br>
 &nbsp;&nbsp;&nbsp;&nbsp;has&nbsp;the&nbsp;highest&nbsp;ncc&nbsp;score.&nbsp;Increasing&nbsp;this&nbsp;will&nbsp;also&nbsp;increase&nbsp;processing&nbsp;time,&nbsp;possibly&nbsp;dramatically.<br>
@@ -253,7 +252,7 @@ Data descriptors inherited from <a href="constitch.alignment.html#Aligner">Align
 <font color="#000000" face="helvetica, arial"><a name="PaddedFFTAligner">class <strong>PaddedFFTAligner</strong></a>(<a href="constitch.alignment.html#FFTAligner">FFTAligner</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt><a href="#PaddedFFTAligner">PaddedFFTAligner</a>(num_peaks=2,&nbsp;precalculate_fft=True,&nbsp;downscale_factor=None)<br>
+<td colspan=2><tt><a href="#PaddedFFTAligner">PaddedFFTAligner</a>(num_peaks=2,&nbsp;precalculate_fft=True,&nbsp;downscale_factor=None,&nbsp;upscale_factor=1)<br>
 &nbsp;<br>
 <br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
@@ -280,7 +279,7 @@ this&nbsp;function&nbsp;will&nbsp;be&nbsp;passed&nbsp;to&nbsp;the&nbsp;align&nbs
 
 <hr>
 Methods inherited from <a href="constitch.alignment.html#FFTAligner">FFTAligner</a>:<br>
-<dl><dt><a name="PaddedFFTAligner-__init__"><strong>__init__</strong></a>(self, num_peaks=2, precalculate_fft=True, downscale_factor=None)</dt><dd><tt>num_peaks:&nbsp;int&nbsp;default&nbsp;2<br>
+<dl><dt><a name="PaddedFFTAligner-__init__"><strong>__init__</strong></a>(self, num_peaks=2, precalculate_fft=True, downscale_factor=None, upscale_factor=1)</dt><dd><tt>num_peaks:&nbsp;int&nbsp;default&nbsp;2<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Sets&nbsp;the&nbsp;number&nbsp;of&nbsp;peaks&nbsp;in&nbsp;the&nbsp;resulting&nbsp;phase&nbsp;cross&nbsp;correlation&nbsp;image&nbsp;to&nbsp;be&nbsp;checked.&nbsp;Sometimes&nbsp;the&nbsp;highest<br>
 &nbsp;&nbsp;&nbsp;&nbsp;peak&nbsp;is&nbsp;not&nbsp;actually&nbsp;the&nbsp;best&nbsp;offset&nbsp;for&nbsp;alignment&nbsp;so&nbsp;checking&nbsp;multiple&nbsp;peaks&nbsp;can&nbsp;help&nbsp;find&nbsp;the&nbsp;one&nbsp;that<br>
 &nbsp;&nbsp;&nbsp;&nbsp;has&nbsp;the&nbsp;highest&nbsp;ncc&nbsp;score.&nbsp;Increasing&nbsp;this&nbsp;will&nbsp;also&nbsp;increase&nbsp;processing&nbsp;time,&nbsp;possibly&nbsp;dramatically.<br>
@@ -385,6 +384,7 @@ values&nbsp;:&nbsp;np.ndarray<br>
  <dl><dt><a name="-ncc_slow"><strong>ncc_slow</strong></a>(image1, image2)</dt><dd><tt>Compute&nbsp;the&nbsp;normalized&nbsp;cross&nbsp;correlation&nbsp;for&nbsp;two&nbsp;images.</tt></dd></dl>
  <dl><dt><a name="-pcm"><strong>pcm</strong></a>(image1, image2)</dt><dd><tt>Compute&nbsp;peak&nbsp;correlation&nbsp;matrix&nbsp;for&nbsp;two&nbsp;images.</tt></dd></dl>
  <dl><dt><a name="-pcm_fft"><strong>pcm_fft</strong></a>(F1, F2)</dt><dd><tt>Compute&nbsp;peak&nbsp;correlation&nbsp;matrix&nbsp;for&nbsp;two&nbsp;images,&nbsp;with&nbsp;the&nbsp;fft&nbsp;already&nbsp;applied</tt></dd></dl>
+ <dl><dt><a name="-refine_peak"><strong>refine_peak</strong></a>(image_product, upsample_factor, shift)</dt></dl>
  <dl><dt><a name="-score_offset"><strong>score_offset</strong></a>(image1, image2, dx, dy)</dt></dl>
 </td></tr></table>
 </body></html>

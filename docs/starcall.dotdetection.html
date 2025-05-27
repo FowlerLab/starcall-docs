@@ -21,7 +21,8 @@
 <a href="numba.html">numba</a><br>
 </td><td width="25%" valign=top><a href="matplotlib.pyplot.html">matplotlib.pyplot</a><br>
 <a href="skimage.html">skimage</a><br>
-</td><td width="25%" valign=top><a href="starcall.utils.html">starcall.utils</a><br>
+</td><td width="25%" valign=top><a href="tifffile.html">tifffile</a><br>
+<a href="starcall.utils.html">starcall.utils</a><br>
 </td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#eeaa77">
@@ -30,12 +31,49 @@
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl><dt><a name="-call_dots"><strong>call_dots</strong></a>(values)</dt></dl>
- <dl><dt><a name="-detect_dots"><strong>detect_dots</strong></a>(image, min_sigma=1, max_sigma=2, num_sigma=7, sigma_cutoff=1, return_sigmas=False, threshold_rel=None, median_index=None, copy=True)</dt></dl>
- <dl><dt><a name="-detect_dots3"><strong>detect_dots3</strong></a>(image, min_sigma=1, max_sigma=2, num_sigma=7, sigma_cutoff=1, large_sigma=4, return_sigmas=False, threshold_rel=None, median_index=None, copy=True)</dt></dl>
+ <dl><dt><a name="-detect_dots"><strong>detect_dots</strong></a>(image, min_sigma=1, max_sigma=2, num_sigma=7, return_sigmas=False, channels=None, copy=True)</dt><dd><tt>Takes&nbsp;a&nbsp;raw&nbsp;sequencing&nbsp;image&nbsp;set&nbsp;and&nbsp;identifies&nbsp;and&nbsp;extracts&nbsp;all&nbsp;sequencing&nbsp;reads<br>
+from&nbsp;the&nbsp;image,&nbsp;filtering&nbsp;out&nbsp;cell&nbsp;background&nbsp;and&nbsp;debris.&nbsp;This&nbsp;is&nbsp;done&nbsp;by&nbsp;calling<br>
+dot_filter&nbsp;to&nbsp;filter&nbsp;out&nbsp;any&nbsp;background&nbsp;in&nbsp;the&nbsp;image,&nbsp;then&nbsp;calling&nbsp;highlight_dots<br>
+to&nbsp;create&nbsp;a&nbsp;single&nbsp;grayscale&nbsp;image,&nbsp;which&nbsp;is&nbsp;then&nbsp;passed&nbsp;to&nbsp;skimage.feature.blob_log.<br>
+The&nbsp;values&nbsp;at&nbsp;these&nbsp;positions&nbsp;in&nbsp;the&nbsp;filtered&nbsp;image&nbsp;are&nbsp;extracted,&nbsp;and&nbsp;returned&nbsp;along<br>
+with&nbsp;the&nbsp;positions.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;image&nbsp;(ndarray&nbsp;of&nbsp;shape&nbsp;(n_cycles,&nbsp;n_channels,&nbsp;width,&nbsp;height)):&nbsp;The&nbsp;input&nbsp;image<br>
+&nbsp;&nbsp;&nbsp;&nbsp;min_sigma,&nbsp;max_sigma,&nbsp;num_sigma&nbsp;(float):&nbsp;Parameters&nbsp;passed&nbsp;to&nbsp;skimage.feature.blob_log<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return_sigmas&nbsp;(bool,&nbsp;default&nbsp;False):&nbsp;Whether&nbsp;to&nbsp;return&nbsp;the&nbsp;sigma&nbsp;values&nbsp;returned&nbsp;from&nbsp;skimage.feature.blob_log<br>
+&nbsp;&nbsp;&nbsp;&nbsp;copy&nbsp;(bool&nbsp;default&nbsp;True):&nbsp;Whether&nbsp;the&nbsp;image&nbsp;should&nbsp;be&nbsp;copied&nbsp;or&nbsp;modified&nbsp;in&nbsp;place.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;reads&nbsp;(ReadSet):&nbsp;The&nbsp;reads&nbsp;detected&nbsp;in&nbsp;the&nbsp;image,&nbsp;each&nbsp;with&nbsp;a&nbsp;position&nbsp;and&nbsp;read&nbsp;values.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;return_sigmas&nbsp;is&nbsp;specified:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;sigmas&nbsp;(ndarray&nbsp;of&nbsp;shape&nbsp;(n_dots,)):&nbsp;The&nbsp;estimated&nbsp;sigma&nbsp;of&nbsp;all&nbsp;dots&nbsp;detected&nbsp;in&nbsp;the&nbsp;image</tt></dd></dl>
  <dl><dt><a name="-detect_dots_debug"><strong>detect_dots_debug</strong></a>(image, min_sigma=1, max_sigma=2, num_sigma=7, sigma_cutoff=1, return_sigmas=False, threshold_rel=None, median_index=None)</dt></dl>
- <dl><dt><a name="-dot_filter"><strong>dot_filter</strong></a>(image, large_sigma=4, copy=True)</dt></dl>
+ <dl><dt><a name="-detect_dots_old"><strong>detect_dots_old</strong></a>(image, min_sigma=1, max_sigma=2, num_sigma=7, sigma_cutoff=1, return_sigmas=False, threshold_rel=None, median_index=None, copy=True)</dt></dl>
+ <dl><dt><a name="-dot_filter"><strong>dot_filter</strong></a>(image, major_axis=4, minor_axis=0.5, copy=True)</dt><dd><tt>Filter&nbsp;that&nbsp;removes&nbsp;any&nbsp;background&nbsp;in&nbsp;the&nbsp;sequencing&nbsp;images,<br>
+leaving&nbsp;only&nbsp;the&nbsp;dots&nbsp;from&nbsp;sequencing&nbsp;colonies.&nbsp;This&nbsp;is&nbsp;done&nbsp;using<br>
+top&nbsp;hat&nbsp;filter,&nbsp;subtracting&nbsp;the&nbsp;morphological&nbsp;opening&nbsp;of&nbsp;the&nbsp;image&nbsp;from<br>
+itself.&nbsp;This&nbsp;leaves&nbsp;only&nbsp;features&nbsp;smaller&nbsp;than&nbsp;the&nbsp;footprint,&nbsp;whose&nbsp;size<br>
+is&nbsp;specified&nbsp;by&nbsp;the&nbsp;parameters&nbsp;major_axis&nbsp;and&nbsp;minor_axis.&nbsp;To&nbsp;further<br>
+amplify&nbsp;only&nbsp;features&nbsp;that&nbsp;are&nbsp;circular,&nbsp;a&nbsp;series&nbsp;of&nbsp;filters&nbsp;are&nbsp;applied<br>
+with&nbsp;ellipses&nbsp;at&nbsp;different&nbsp;angles.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;major_axis&nbsp;(float):&nbsp;the&nbsp;major&nbsp;axis&nbsp;of&nbsp;the&nbsp;ellipse&nbsp;used&nbsp;as&nbsp;a&nbsp;footprint<br>
+&nbsp;&nbsp;&nbsp;&nbsp;minor_axis&nbsp;(float):&nbsp;the&nbsp;minor&nbsp;axis&nbsp;of&nbsp;the&nbsp;ellipse&nbsp;used&nbsp;as&nbsp;a&nbsp;footprint<br>
+&nbsp;&nbsp;&nbsp;&nbsp;copy&nbsp;(bool&nbsp;default&nbsp;True):&nbsp;Whether&nbsp;the&nbsp;input&nbsp;image&nbsp;should&nbsp;be&nbsp;copied&nbsp;or&nbsp;modified&nbsp;in&nbsp;place</tt></dd></dl>
  <dl><dt><a name="-dot_filter2"><strong>dot_filter2</strong></a>(image, kernel_size=10)</dt></dl>
+ <dl><dt><a name="-dot_filter_old"><strong>dot_filter_old</strong></a>(image, large_sigma=4, copy=True)</dt></dl>
  <dl><dt><a name="-gaussian_kernel"><strong>gaussian_kernel</strong></a>(radius, sigma)</dt></dl>
- <dl><dt><a name="-highlight_dots"><strong>highlight_dots</strong></a>(image, gaussian_blur=None)</dt></dl>
+ <dl><dt><a name="-highlight_dots"><strong>highlight_dots</strong></a>(image, gaussian_blur=None)</dt><dd><tt>Combine&nbsp;an&nbsp;image&nbsp;containing&nbsp;multiple&nbsp;sequencing&nbsp;cycles&nbsp;into&nbsp;a&nbsp;single<br>
+grayscale&nbsp;image,&nbsp;containing&nbsp;only&nbsp;the&nbsp;dots&nbsp;from&nbsp;sequencing&nbsp;colonies.<br>
+To&nbsp;filter&nbsp;for&nbsp;sequencing&nbsp;dots,&nbsp;we&nbsp;subtract&nbsp;the&nbsp;second&nbsp;maximal&nbsp;channel,&nbsp;then<br>
+take&nbsp;the&nbsp;standard&nbsp;deviation&nbsp;across&nbsp;cycles&nbsp;and&nbsp;sum&nbsp;along&nbsp;channels.&nbsp;This<br>
+means&nbsp;only&nbsp;features&nbsp;that&nbsp;are&nbsp;bright&nbsp;in&nbsp;a&nbsp;single&nbsp;channel&nbsp;and&nbsp;changing&nbsp;frequently<br>
+are&nbsp;conserved&nbsp;in&nbsp;the&nbsp;final&nbsp;image.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;image&nbsp;(ndarray&nbsp;of&nbsp;shape&nbsp;(num_cycles,&nbsp;num_channels,&nbsp;width,&nbsp;height)):&nbsp;Input&nbsp;image&nbsp;to&nbsp;filter<br>
+&nbsp;&nbsp;&nbsp;&nbsp;gaussian_blur&nbsp;(float,&nbsp;optional):&nbsp;if&nbsp;specified&nbsp;a&nbsp;gaussian&nbsp;blur&nbsp;is&nbsp;applied&nbsp;before&nbsp;combining</tt></dd></dl>
 </td></tr></table>
 </body></html>

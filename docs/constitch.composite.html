@@ -400,13 +400,22 @@ Args:<br>
 Raises:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;KeyError:&nbsp;The&nbsp;specified&nbsp;constraint&nbsp;does&nbsp;not&nbsp;exist</tt></dd></dl>
 
-<dl><dt><a name="CompositeConstraintSet-solve"><strong>solve</strong></a>(self, solver=None)</dt><dd><tt>Solve&nbsp;the&nbsp;constraints&nbsp;to&nbsp;get&nbsp;a&nbsp;global&nbsp;position&nbsp;for&nbsp;each&nbsp;image<br>
+<dl><dt><a name="CompositeConstraintSet-solve"><strong>solve</strong></a>(self, solver='mse', **kwargs)</dt><dd><tt>Solve&nbsp;the&nbsp;constraints&nbsp;to&nbsp;get&nbsp;a&nbsp;global&nbsp;position&nbsp;for&nbsp;each&nbsp;image<br>
 &nbsp;<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;solver&nbsp;(constitch.Solver):&nbsp;default&nbsp;constitch.LinearSolver()<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;solver&nbsp;class&nbsp;that&nbsp;is&nbsp;used&nbsp;to&nbsp;combine&nbsp;the&nbsp;overconstrainted<br>
+&nbsp;&nbsp;&nbsp;&nbsp;solver&nbsp;(constitch.Solver&nbsp;or&nbsp;str):&nbsp;default&nbsp;constitch.LinearSolver()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;solver&nbsp;method&nbsp;that&nbsp;is&nbsp;used&nbsp;to&nbsp;combine&nbsp;the&nbsp;overconstrainted<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;system&nbsp;of&nbsp;constraints&nbsp;and&nbsp;optimize&nbsp;for&nbsp;the&nbsp;best&nbsp;global&nbsp;positions.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Options&nbsp;include&nbsp;'mse'&nbsp;for&nbsp;standard&nbsp;least&nbsp;squares&nbsp;solving,&nbsp;'mae'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;solving&nbsp;while&nbsp;minimizing&nbsp;mean&nbsp;absolute&nbsp;error,&nbsp;'huber'&nbsp;for<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;minimizing&nbsp;the&nbsp;huber&nbsp;loss,&nbsp;or&nbsp;any&nbsp;subclass&nbsp;of&nbsp;constitch.Solver.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;More&nbsp;info&nbsp;can&nbsp;be&nbsp;found&nbsp;in&nbsp;constitch.solving<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**kwargs:&nbsp;Arguments&nbsp;passed&nbsp;to&nbsp;the&nbsp;constructor&nbsp;of&nbsp;the&nbsp;solver.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Any&nbsp;arguments&nbsp;specified&nbsp;here&nbsp;are&nbsp;passed&nbsp;to&nbsp;the&nbsp;constructor<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;the&nbsp;solver,&nbsp;for&nbsp;example&nbsp;if&nbsp;solver='huber'&nbsp;epsilon=5&nbsp;could<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;be&nbsp;included&nbsp;to&nbsp;change&nbsp;the&nbsp;default&nbsp;epsilon&nbsp;parameter&nbsp;for&nbsp;huber&nbsp;loss.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cannot&nbsp;be&nbsp;specified&nbsp;if&nbsp;solver&nbsp;is&nbsp;an&nbsp;already&nbsp;instantiated&nbsp;constitch.Solver<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;instance.<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;solver&nbsp;instance,&nbsp;with&nbsp;an&nbsp;attribute&nbsp;positions&nbsp;containing&nbsp;a&nbsp;dict<br>
@@ -445,7 +454,7 @@ Data and other attributes inherited from <a href="constitch.constraints.html#Con
 This&nbsp;class&nbsp;encapsulates&nbsp;the&nbsp;whole&nbsp;stitching&nbsp;process,&nbsp;the&nbsp;smallest&nbsp;example&nbsp;of&nbsp;stitching&nbsp;is<br>
 shown&nbsp;below:<br>
 &nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;composite&nbsp;=&nbsp;fisseq.stitching.<a href="#CompositeImage">CompositeImage</a>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;composite&nbsp;=&nbsp;constitch.<a href="#CompositeImage">CompositeImage</a>()<br>
 &nbsp;&nbsp;&nbsp;&nbsp;composite.<a href="#CompositeImage-add_images">add_images</a>(images)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;composite.calc_constraints()<br>
 &nbsp;&nbsp;&nbsp;&nbsp;composite.filter_constraints()<br>
@@ -492,29 +501,6 @@ with&nbsp;concurrent.futures.ThreadPoolExecutor(max_workers=32)&nbsp;as&nbsp;exe
 &nbsp;&nbsp;&nbsp;&nbsp;composite&nbsp;=&nbsp;constitch.<a href="#CompositeImage">CompositeImage</a>(executor=executor,&nbsp;debug=True,&nbsp;progress=tqdm.tqdm)<br>
 &nbsp;<br>
 &nbsp;<br>
-Setting&nbsp;the&nbsp;aligner<br>
-&nbsp;<br>
-The&nbsp;aligner&nbsp;of&nbsp;the&nbsp;composite&nbsp;is&nbsp;a&nbsp;class&nbsp;that&nbsp;encapsulates&nbsp;the&nbsp;algorithm&nbsp;used&nbsp;to&nbsp;align&nbsp;two&nbsp;images&nbsp;onto<br>
-each&nbsp;other.&nbsp;The&nbsp;base&nbsp;class&nbsp;Aligner&nbsp;and&nbsp;the&nbsp;fisseq.alignment&nbsp;module&nbsp;have&nbsp;more&nbsp;information&nbsp;on&nbsp;the&nbsp;specifics&nbsp;but&nbsp;basically<br>
-an&nbsp;aligner&nbsp;has&nbsp;a&nbsp;function&nbsp;that&nbsp;takes&nbsp;two&nbsp;images&nbsp;and&nbsp;returns&nbsp;the&nbsp;offset&nbsp;from&nbsp;one&nbsp;image&nbsp;to&nbsp;another<br>
-that&nbsp;has&nbsp;the&nbsp;best&nbsp;overlap.&nbsp;This&nbsp;is&nbsp;normally&nbsp;measured&nbsp;using&nbsp;the&nbsp;normalized&nbsp;cross&nbsp;correlation<br>
-of&nbsp;the&nbsp;overlapping&nbsp;regions,&nbsp;using&nbsp;the&nbsp;function&nbsp;alignment.ncc,&nbsp;but&nbsp;different&nbsp;aligner&nbsp;classes<br>
-can&nbsp;use&nbsp;different&nbsp;ways&nbsp;to&nbsp;find&nbsp;and&nbsp;score&nbsp;overlapping&nbsp;regions.<br>
-&nbsp;<br>
-The&nbsp;main&nbsp;aligner&nbsp;provided&nbsp;is&nbsp;the&nbsp;FFTAligner,&nbsp;which&nbsp;uses&nbsp;the&nbsp;phase&nbsp;cross&nbsp;correlation&nbsp;algorithm<br>
-to&nbsp;find&nbsp;the&nbsp;best&nbsp;overlapping&nbsp;region.&nbsp;By&nbsp;default&nbsp;this&nbsp;one&nbsp;is&nbsp;used,&nbsp;however&nbsp;if&nbsp;you&nbsp;want&nbsp;to&nbsp;modify<br>
-the&nbsp;parameters&nbsp;you&nbsp;can&nbsp;set&nbsp;the&nbsp;aligner&nbsp;to&nbsp;a&nbsp;new&nbsp;instance&nbsp;of&nbsp;it.&nbsp;For&nbsp;example:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;composite.<a href="#CompositeImage-set_aligner">set_aligner</a>(fisseq.stitching.FFTAligner(num_peaks=5,&nbsp;precalculate_fft=False))<br>
-&nbsp;<br>
-The&nbsp;other&nbsp;aligner&nbsp;provided&nbsp;is&nbsp;the&nbsp;FeatureAligner,&nbsp;which&nbsp;uses&nbsp;feature&nbsp;based&nbsp;methods&nbsp;to&nbsp;align&nbsp;the&nbsp;images.<br>
-This&nbsp;is&nbsp;quite&nbsp;a&nbsp;bit&nbsp;faster&nbsp;than&nbsp;the&nbsp;FFTAligner,&nbsp;but&nbsp;it&nbsp;is&nbsp;not&nbsp;as&nbsp;accurate&nbsp;or&nbsp;reliable,&nbsp;so&nbsp;be&nbsp;aware&nbsp;that<br>
-results&nbsp;might&nbsp;not&nbsp;be&nbsp;as&nbsp;good.<br>
-&nbsp;<br>
-As&nbsp;with&nbsp;many&nbsp;of&nbsp;the&nbsp;classes&nbsp;used&nbsp;for&nbsp;stitching,&nbsp;the&nbsp;aligner&nbsp;is&nbsp;meant&nbsp;to&nbsp;be&nbsp;customized&nbsp;and&nbsp;you&nbsp;are<br>
-encouraged&nbsp;to&nbsp;subclass&nbsp;the&nbsp;Aligner&nbsp;class&nbsp;and&nbsp;make&nbsp;your&nbsp;own&nbsp;method.&nbsp;The&nbsp;two&nbsp;methods&nbsp;needed&nbsp;for&nbsp;an<br>
-Aligner&nbsp;class&nbsp;are&nbsp;described&nbsp;in&nbsp;constitch.alignment.<br>
-&nbsp;<br>
-&nbsp;<br>
 Adding&nbsp;the&nbsp;images<br>
 &nbsp;<br>
 Once&nbsp;the&nbsp;composite&nbsp;is&nbsp;set&nbsp;up&nbsp;we&nbsp;can&nbsp;add&nbsp;the&nbsp;images,&nbsp;and&nbsp;this&nbsp;is&nbsp;done&nbsp;through&nbsp;the&nbsp;<a href="#CompositeImage-add_images">add_images</a>()<br>
@@ -551,6 +537,7 @@ you&nbsp;can&nbsp;add&nbsp;the&nbsp;cycle&nbsp;index&nbsp;as&nbsp;the&nbsp;z&nbs
 &nbsp;<br>
 &nbsp;<br>
 Calculating&nbsp;constraints<br>
+&nbsp;<br>
 Once&nbsp;images&nbsp;have&nbsp;been&nbsp;added&nbsp;we&nbsp;need&nbsp;to&nbsp;calculate&nbsp;the&nbsp;constraints&nbsp;between&nbsp;overlapping&nbsp;images.<br>
 Creating,&nbsp;calculating,&nbsp;filtering,&nbsp;and&nbsp;solving&nbsp;constraints&nbsp;is&nbsp;an&nbsp;integral&nbsp;part&nbsp;of&nbsp;the&nbsp;stitching<br>
 algorithm,&nbsp;and&nbsp;a&nbsp;subpackage&nbsp;is&nbsp;dedicated&nbsp;to&nbsp;them,&nbsp;constitch.constraints.&nbsp;This&nbsp;module&nbsp;contains&nbsp;the<br>
@@ -576,92 +563,52 @@ them&nbsp;to&nbsp;an&nbsp;alignment&nbsp;algorithm&nbsp;to&nbsp;refine&nbsp;them
 method,&nbsp;like&nbsp;so:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;constraints&nbsp;=&nbsp;overlapping.calculate()<br>
 &nbsp;<br>
-This&nbsp;creates&nbsp;a&nbsp;new&nbsp;<a href="constitch.constraints.html#ConstraintSet">ConstraintSet</a>&nbsp;constraints,&nbsp;which&nbsp;holds&nbsp;all&nbsp;our&nbsp;new&nbsp;constraints.<br>
-&nbsp;<br>
-&nbsp;<br>
-&nbsp;<br>
-with&nbsp;the&nbsp;calc_constraints()&nbsp;function.&nbsp;For&nbsp;usual&nbsp;usage&nbsp;you&nbsp;can&nbsp;run&nbsp;it&nbsp;with&nbsp;no&nbsp;parameters,<br>
-but&nbsp;if&nbsp;you&nbsp;want&nbsp;to&nbsp;be&nbsp;specific&nbsp;about&nbsp;which&nbsp;images&nbsp;are&nbsp;overlapping&nbsp;it&nbsp;takes&nbsp;in&nbsp;an&nbsp;argument&nbsp;called&nbsp;pairs,<br>
-which&nbsp;should&nbsp;be&nbsp;a&nbsp;sequence&nbsp;of&nbsp;tuples,&nbsp;each&nbsp;being&nbsp;a&nbsp;pair&nbsp;of&nbsp;image&nbsp;indices&nbsp;that&nbsp;should&nbsp;be&nbsp;checked&nbsp;for&nbsp;overlap.<br>
-If&nbsp;pairs&nbsp;is&nbsp;not&nbsp;specified&nbsp;it&nbsp;defaults&nbsp;to&nbsp;find_unconstrained_pairs(),&nbsp;which&nbsp;finds&nbsp;all&nbsp;image<br>
-pairs&nbsp;that&nbsp;have&nbsp;overlap&nbsp;but&nbsp;don't&nbsp;have&nbsp;a&nbsp;constraint&nbsp;between&nbsp;them.&nbsp;The&nbsp;two&nbsp;lines&nbsp;below&nbsp;both&nbsp;work&nbsp;to&nbsp;calculate<br>
-constraints:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;composite.calc_constraints()<br>
-&nbsp;&nbsp;&nbsp;&nbsp;composite.calc_constraints(composite.find_unconstrained_pairs())<br>
-&nbsp;<br>
-One&nbsp;important&nbsp;parameter&nbsp;is&nbsp;precalculate,&nbsp;if&nbsp;True&nbsp;the&nbsp;results&nbsp;of&nbsp;the&nbsp;precalculation&nbsp;step&nbsp;will&nbsp;be&nbsp;cached<br>
-for&nbsp;each&nbsp;image,&nbsp;saving&nbsp;on&nbsp;computation&nbsp;time&nbsp;but&nbsp;increasing&nbsp;memory&nbsp;usage.<br>
-&nbsp;<br>
-The&nbsp;find_unconstrained_pairs&nbsp;function&nbsp;also&nbsp;has&nbsp;some&nbsp;parameters&nbsp;that&nbsp;affect&nbsp;how&nbsp;it&nbsp;looks&nbsp;for&nbsp;overlap,<br>
-the&nbsp;most&nbsp;useful&nbsp;one&nbsp;being&nbsp;overlap_threshold.&nbsp;This&nbsp;is&nbsp;a&nbsp;value&nbsp;in&nbsp;pixels&nbsp;that&nbsp;specifies&nbsp;how&nbsp;far&nbsp;images<br>
-have&nbsp;to&nbsp;overlap&nbsp;to&nbsp;be&nbsp;considered&nbsp;overlapping.&nbsp;This&nbsp;can&nbsp;also&nbsp;be&nbsp;negative,&nbsp;meaning&nbsp;images&nbsp;that&nbsp;are&nbsp;within<br>
-a&nbsp;certain&nbsp;pixel&nbsp;distance&nbsp;to&nbsp;touching&nbsp;will&nbsp;be&nbsp;considered&nbsp;overlapping.&nbsp;This&nbsp;is&nbsp;useful&nbsp;if&nbsp;you&nbsp;want&nbsp;to&nbsp;make&nbsp;sure<br>
-that&nbsp;you&nbsp;find&nbsp;all&nbsp;overlapping&nbsp;images,&nbsp;even&nbsp;if&nbsp;your&nbsp;original&nbsp;positions&nbsp;are&nbsp;not&nbsp;very&nbsp;accurate.&nbsp;For&nbsp;example,<br>
-the&nbsp;line&nbsp;below&nbsp;will&nbsp;expand&nbsp;the&nbsp;search&nbsp;by&nbsp;2000&nbsp;pixels&nbsp;and&nbsp;hopefully&nbsp;find&nbsp;more&nbsp;overlap<br>
-&nbsp;&nbsp;&nbsp;&nbsp;composite.calc_constraints(composite.find_unconstrained_pairs(overlap_threshold=(-2000,&nbsp;-2000)))<br>
-&nbsp;<br>
-Another&nbsp;use&nbsp;would&nbsp;be&nbsp;for&nbsp;fisseq,&nbsp;where&nbsp;you&nbsp;want&nbsp;to&nbsp;calculate&nbsp;constraints&nbsp;across&nbsp;all&nbsp;cycles&nbsp;and&nbsp;not&nbsp;just<br>
-adjacent&nbsp;cycles.&nbsp;As&nbsp;described&nbsp;before&nbsp;fisseq&nbsp;cycles&nbsp;can&nbsp;be&nbsp;represented&nbsp;using&nbsp;the&nbsp;z&nbsp;axis,&nbsp;so&nbsp;we&nbsp;can&nbsp;expand<br>
-the&nbsp;search&nbsp;in&nbsp;that&nbsp;z&nbsp;axis&nbsp;and&nbsp;calculate&nbsp;constraints&nbsp;between&nbsp;all&nbsp;cycles:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;composite.calc_constraints(composite.find_unconstrained_pairs(overlap_threshold=(0,&nbsp;0,&nbsp;-12))<br>
+This&nbsp;creates&nbsp;a&nbsp;new&nbsp;<a href="constitch.constraints.html#ConstraintSet">ConstraintSet</a>&nbsp;constraints,&nbsp;which&nbsp;holds&nbsp;all&nbsp;our&nbsp;new&nbsp;constraints&nbsp;generated&nbsp;by&nbsp;the&nbsp;Aligner&nbsp;class<br>
+passed&nbsp;to&nbsp;calculate.&nbsp;By&nbsp;default&nbsp;constitch.FFTAligner()&nbsp;is&nbsp;used,&nbsp;which&nbsp;runs&nbsp;the&nbsp;phase&nbsp;correlation&nbsp;algorithm&nbsp;to<br>
+find&nbsp;the&nbsp;offset&nbsp;with&nbsp;the&nbsp;maximum&nbsp;correlation.<br>
 &nbsp;<br>
 &nbsp;<br>
 Filtering&nbsp;constraints<br>
 &nbsp;<br>
-After&nbsp;calculating&nbsp;constraints&nbsp;for&nbsp;all&nbsp;overlapping&nbsp;images,&nbsp;we&nbsp;have&nbsp;to&nbsp;filter&nbsp;out&nbsp;constraints&nbsp;that&nbsp;aren't&nbsp;accurate.<br>
-Unfortunately&nbsp;the&nbsp;alignment&nbsp;algorithms&nbsp;are&nbsp;not&nbsp;perfect&nbsp;and&nbsp;sometimes&nbsp;they&nbsp;miss&nbsp;overlap,&nbsp;so&nbsp;we&nbsp;need&nbsp;to&nbsp;filter&nbsp;out<br>
-constraints&nbsp;that&nbsp;have&nbsp;low&nbsp;scores&nbsp;or&nbsp;don't&nbsp;fit&nbsp;in&nbsp;with&nbsp;the&nbsp;other&nbsp;constraints.&nbsp;There&nbsp;are&nbsp;a&nbsp;couple&nbsp;steps&nbsp;of&nbsp;this,<br>
-the&nbsp;first&nbsp;being&nbsp;filtering&nbsp;based&nbsp;on&nbsp;scores:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;composite.filter_constraints()<br>
-This&nbsp;method,&nbsp;filter_constraints(),&nbsp;looks&nbsp;at&nbsp;the&nbsp;scores&nbsp;of&nbsp;all&nbsp;constraints&nbsp;and&nbsp;calculates&nbsp;a&nbsp;random<br>
-set&nbsp;of&nbsp;bad&nbsp;constraints&nbsp;to&nbsp;find&nbsp;a&nbsp;good&nbsp;score&nbsp;threshold&nbsp;to&nbsp;eliminate&nbsp;any&nbsp;constraints&nbsp;that&nbsp;are&nbsp;not&nbsp;accurate.&nbsp;This<br>
-is&nbsp;necessary&nbsp;because&nbsp;the&nbsp;scores&nbsp;returned&nbsp;by&nbsp;the&nbsp;alignment&nbsp;algorithms&nbsp;depend&nbsp;on&nbsp;the&nbsp;features&nbsp;present&nbsp;in&nbsp;the&nbsp;images,<br>
-and&nbsp;using&nbsp;a&nbsp;fixed&nbsp;threshold&nbsp;would&nbsp;not&nbsp;work&nbsp;for&nbsp;all&nbsp;image&nbsp;types.<br>
+With&nbsp;the&nbsp;constraints&nbsp;calculated&nbsp;we&nbsp;can&nbsp;filter&nbsp;out&nbsp;any&nbsp;erroneous&nbsp;constraints&nbsp;using&nbsp;the&nbsp;constraint&nbsp;scores:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;constraints&nbsp;=&nbsp;constraints.filter(min_score=0.5)<br>
 &nbsp;<br>
-An&nbsp;optional&nbsp;secondary&nbsp;filtering&nbsp;step&nbsp;that&nbsp;can&nbsp;be&nbsp;used&nbsp;is&nbsp;the&nbsp;solve_constraints()&nbsp;method.&nbsp;Normally<br>
-we&nbsp;call&nbsp;this&nbsp;method&nbsp;when&nbsp;we&nbsp;want&nbsp;to&nbsp;solve&nbsp;for&nbsp;the&nbsp;global&nbsp;position&nbsp;of&nbsp;the&nbsp;images,&nbsp;but&nbsp;we&nbsp;can&nbsp;also&nbsp;call&nbsp;this&nbsp;method<br>
-to&nbsp;attempt&nbsp;to&nbsp;solve&nbsp;the&nbsp;constraints,&nbsp;and&nbsp;remove&nbsp;any&nbsp;that&nbsp;don't&nbsp;seem&nbsp;to&nbsp;fit&nbsp;with&nbsp;the&nbsp;other&nbsp;constraints&nbsp;present.<br>
-To&nbsp;do&nbsp;this&nbsp;we&nbsp;pass&nbsp;in&nbsp;the&nbsp;arguments&nbsp;as&nbsp;shown:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;composite.solve_constraints(apply_positions=False,&nbsp;filter_outliers=True)<br>
+This&nbsp;will&nbsp;only&nbsp;keep&nbsp;constraints&nbsp;with&nbsp;a&nbsp;score&nbsp;&gt;=&nbsp;0.5,&nbsp;which&nbsp;should&nbsp;eliminate&nbsp;almost&nbsp;all&nbsp;of&nbsp;the&nbsp;constraints<br>
+that&nbsp;are&nbsp;not&nbsp;accurate.&nbsp;To&nbsp;futher&nbsp;filter&nbsp;the&nbsp;constraints&nbsp;we&nbsp;can&nbsp;fit&nbsp;a&nbsp;linear&nbsp;model&nbsp;to&nbsp;the&nbsp;constraints&nbsp;that&nbsp;remain:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stage_model&nbsp;=&nbsp;constraints.fit_model(outliers=True)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;constraints&nbsp;=&nbsp;stage_model.inliers<br>
 &nbsp;<br>
+When&nbsp;fitting&nbsp;a&nbsp;linear&nbsp;model&nbsp;to&nbsp;the&nbsp;constraints,&nbsp;we&nbsp;can&nbsp;use&nbsp;an&nbsp;outlier&nbsp;resistant&nbsp;model&nbsp;by&nbsp;specifying&nbsp;outliers=True,<br>
+which&nbsp;uses&nbsp;RANSAC&nbsp;to&nbsp;classify&nbsp;some&nbsp;constraints&nbsp;as&nbsp;outliers.&nbsp;We&nbsp;can&nbsp;additionally&nbsp;use&nbsp;the&nbsp;stage&nbsp;model&nbsp;to&nbsp;estimate<br>
+constrains&nbsp;that&nbsp;were&nbsp;filtered&nbsp;out&nbsp;before:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;model_constraints&nbsp;=&nbsp;overlapping.calculate(stage_model)<br>
 &nbsp;<br>
-Estimating&nbsp;missing&nbsp;constraints<br>
-&nbsp;<br>
-After&nbsp;filtering&nbsp;out&nbsp;all&nbsp;the&nbsp;inaccurate&nbsp;constraints,&nbsp;we&nbsp;may&nbsp;be&nbsp;left&nbsp;with&nbsp;images&nbsp;that&nbsp;don't&nbsp;have&nbsp;any&nbsp;constraints<br>
-to&nbsp;other&nbsp;images.&nbsp;This&nbsp;is&nbsp;especially&nbsp;common&nbsp;when&nbsp;there&nbsp;are&nbsp;not&nbsp;enough&nbsp;features&nbsp;in&nbsp;some&nbsp;areas&nbsp;of&nbsp;the&nbsp;image&nbsp;to<br>
-successfully&nbsp;line&nbsp;up&nbsp;the&nbsp;images.&nbsp;To&nbsp;account&nbsp;for&nbsp;this,&nbsp;we&nbsp;can&nbsp;use&nbsp;a&nbsp;stage&nbsp;model&nbsp;to&nbsp;learn&nbsp;the&nbsp;movement&nbsp;of&nbsp;the&nbsp;microscope,<br>
-and&nbsp;estimate&nbsp;where&nbsp;images&nbsp;that&nbsp;weren't&nbsp;able&nbsp;to&nbsp;be&nbsp;aligned&nbsp;should&nbsp;be.&nbsp;Importantly&nbsp;this&nbsp;only&nbsp;will&nbsp;work&nbsp;if&nbsp;the&nbsp;movement<br>
-of&nbsp;your&nbsp;microscope&nbsp;is&nbsp;predictable,&nbsp;ie&nbsp;it&nbsp;scans&nbsp;in&nbsp;a&nbsp;grid&nbsp;pattern,&nbsp;and&nbsp;you&nbsp;have&nbsp;the&nbsp;positions&nbsp;or&nbsp;grid&nbsp;positions&nbsp;for<br>
-images.&nbsp;To&nbsp;estimate&nbsp;these&nbsp;constraints&nbsp;we&nbsp;use&nbsp;the&nbsp;methods&nbsp;estimate_stage_model()&nbsp;and&nbsp;model_constraints().<br>
-&nbsp;&nbsp;&nbsp;&nbsp;composite.estimate_stage_model()<br>
-&nbsp;&nbsp;&nbsp;&nbsp;composite.model_constraints()<br>
-More&nbsp;information&nbsp;can&nbsp;be&nbsp;found&nbsp;in&nbsp;the&nbsp;docs&nbsp;for&nbsp;each&nbsp;function,&nbsp;and&nbsp;about&nbsp;the&nbsp;different&nbsp;possible&nbsp;stage&nbsp;models&nbsp;at&nbsp;fisseq.stage_model<br>
+As&nbsp;you&nbsp;can&nbsp;see&nbsp;here,&nbsp;the&nbsp;stage_model&nbsp;is&nbsp;an&nbsp;Aligner&nbsp;class&nbsp;that&nbsp;can&nbsp;be&nbsp;used&nbsp;to&nbsp;calculate&nbsp;new&nbsp;constraints,<br>
+with&nbsp;the&nbsp;same&nbsp;interface&nbsp;as&nbsp;the&nbsp;FFTAligner.&nbsp;We&nbsp;can&nbsp;merge&nbsp;these&nbsp;two&nbsp;constraint&nbsp;sets&nbsp;together&nbsp;to&nbsp;replace&nbsp;any<br>
+constraints&nbsp;that&nbsp;were&nbsp;filtered&nbsp;out&nbsp;with&nbsp;the&nbsp;modeled&nbsp;constraints:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;constraints&nbsp;=&nbsp;constraints.<a href="#CompositeImage-merge">merge</a>(model_constraints)<br>
 &nbsp;<br>
 &nbsp;<br>
 Solving&nbsp;constraints<br>
 &nbsp;<br>
-After&nbsp;all&nbsp;the&nbsp;constraints&nbsp;are&nbsp;ready,&nbsp;we&nbsp;can&nbsp;solve&nbsp;them&nbsp;all&nbsp;globally&nbsp;to&nbsp;get&nbsp;the&nbsp;positions<br>
-for&nbsp;each&nbsp;image.&nbsp;This&nbsp;is&nbsp;done&nbsp;by&nbsp;representing&nbsp;the&nbsp;whole&nbsp;composite&nbsp;as&nbsp;an&nbsp;overconstrained&nbsp;linear&nbsp;system,<br>
-where&nbsp;each&nbsp;constraint&nbsp;is&nbsp;two&nbsp;equations&nbsp;linking&nbsp;the&nbsp;x&nbsp;and&nbsp;y&nbsp;coordinates&nbsp;of&nbsp;two&nbsp;images.<br>
-This&nbsp;is&nbsp;all&nbsp;done&nbsp;in&nbsp;the&nbsp;solve_constraints()&nbsp;function,&nbsp;and&nbsp;calling&nbsp;it&nbsp;will&nbsp;globally&nbsp;solve<br>
-all&nbsp;the&nbsp;constraints&nbsp;and&nbsp;apply&nbsp;the&nbsp;new&nbsp;positions&nbsp;to&nbsp;all&nbsp;images.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;composite.solve_constraints()<br>
-Sometimes&nbsp;the&nbsp;solver&nbsp;can&nbsp;have&nbsp;trouble&nbsp;solving&nbsp;the&nbsp;constraints,&nbsp;especially&nbsp;if&nbsp;inaccurate&nbsp;constraints&nbsp;are&nbsp;still<br>
-present&nbsp;when&nbsp;solving.&nbsp;If&nbsp;this&nbsp;happens&nbsp;and&nbsp;it&nbsp;isn't&nbsp;able&nbsp;to&nbsp;find&nbsp;a&nbsp;good&nbsp;solution,&nbsp;it&nbsp;will&nbsp;throw&nbsp;an&nbsp;error.<br>
-A&nbsp;simple&nbsp;way&nbsp;to&nbsp;try&nbsp;to&nbsp;solve&nbsp;this&nbsp;is&nbsp;by&nbsp;passing&nbsp;the&nbsp;filter_outliers=True&nbsp;argument,&nbsp;which&nbsp;will&nbsp;tell&nbsp;it&nbsp;to&nbsp;try<br>
-to&nbsp;remove&nbsp;constraints&nbsp;that&nbsp;do&nbsp;not&nbsp;align&nbsp;with&nbsp;others&nbsp;around&nbsp;them.&nbsp;However&nbsp;this&nbsp;doesn't&nbsp;always&nbsp;work,&nbsp;if&nbsp;the&nbsp;error<br>
-persists&nbsp;a&nbsp;larger&nbsp;change&nbsp;may&nbsp;be&nbsp;needed&nbsp;to&nbsp;help.&nbsp;See&nbsp;the&nbsp;troubleshooting&nbsp;section&nbsp;for&nbsp;more&nbsp;information.<br>
+The&nbsp;final&nbsp;step&nbsp;is&nbsp;to&nbsp;solve&nbsp;the&nbsp;constraints&nbsp;that&nbsp;have&nbsp;been&nbsp;calculated,&nbsp;which&nbsp;we&nbsp;can&nbsp;do&nbsp;with&nbsp;the&nbsp;<a href="constitch.constraints.html#ConstraintSet">ConstraintSet</a>.solve()<br>
+method.&nbsp;This&nbsp;converts&nbsp;each&nbsp;constraint&nbsp;into&nbsp;two&nbsp;linear&nbsp;equations,&nbsp;and&nbsp;solves&nbsp;the&nbsp;system&nbsp;of&nbsp;equations&nbsp;to&nbsp;find&nbsp;the<br>
+image&nbsp;positions&nbsp;that&nbsp;minimize&nbsp;alignment&nbsp;error.&nbsp;We&nbsp;can&nbsp;then&nbsp;apply&nbsp;these&nbsp;positions&nbsp;to&nbsp;the&nbsp;composite&nbsp;with&nbsp;<a href="#CompositeImage">CompositeImage</a>.<a href="#CompositeImage-setpositions">setpositions</a>():<br>
+&nbsp;&nbsp;&nbsp;&nbsp;solution&nbsp;=&nbsp;constraints.solve()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;composite.<a href="#CompositeImage-setpositions">setpositions</a>(solution)<br>
 &nbsp;<br>
+Creating&nbsp;the&nbsp;final&nbsp;image<br>
 &nbsp;<br>
-Stitching&nbsp;images<br>
-&nbsp;<br>
-The&nbsp;final&nbsp;step&nbsp;left&nbsp;is&nbsp;to&nbsp;stitch&nbsp;the&nbsp;images&nbsp;together&nbsp;into&nbsp;a&nbsp;single&nbsp;composite&nbsp;image.&nbsp;This&nbsp;is&nbsp;done<br>
-with&nbsp;the&nbsp;stitch_images()&nbsp;function.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;full_image&nbsp;=&nbsp;composite.stitch_images()<br>
+To&nbsp;get&nbsp;the&nbsp;final&nbsp;merged&nbsp;composite&nbsp;image&nbsp;we&nbsp;can&nbsp;call&nbsp;the&nbsp;<a href="#CompositeImage">CompositeImage</a>.<a href="#CompositeImage-stitch">stitch</a>()&nbsp;function,&nbsp;which&nbsp;combines&nbsp;all&nbsp;individual&nbsp;images<br>
+based&nbsp;on&nbsp;the&nbsp;current&nbsp;image&nbsp;positions:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;final_image&nbsp;=&nbsp;composite.<a href="#CompositeImage-stitch">stitch</a>()<br>
 &nbsp;<br>
 The&nbsp;method&nbsp;that&nbsp;this&nbsp;function&nbsp;merges&nbsp;the&nbsp;images&nbsp;together&nbsp;can&nbsp;be&nbsp;configured&nbsp;by&nbsp;passing&nbsp;a&nbsp;Merger&nbsp;instance,<br>
-by&nbsp;default&nbsp;it&nbsp;will&nbsp;use&nbsp;MeanMerger.&nbsp;More&nbsp;information&nbsp;on&nbsp;mergers&nbsp;can&nbsp;be&nbsp;found&nbsp;in&nbsp;the&nbsp;docs&nbsp;of&nbsp;the&nbsp;Merger&nbsp;class<br>
-and&nbsp;the&nbsp;fisseq.stitching.merging&nbsp;module.<br>&nbsp;</tt></td></tr>
+by&nbsp;default&nbsp;it&nbsp;will&nbsp;use&nbsp;MeanMerger.&nbsp;More&nbsp;information&nbsp;on&nbsp;mergers&nbsp;can&nbsp;be&nbsp;found&nbsp;in&nbsp;the&nbsp;docs&nbsp;of&nbsp;the&nbsp;constitch.Merger&nbsp;class<br>
+and&nbsp;the&nbsp;constitch.merging&nbsp;module.<br>
+&nbsp;<br>
+For&nbsp;each&nbsp;of&nbsp;these&nbsp;steps&nbsp;there&nbsp;are&nbsp;many&nbsp;different&nbsp;parameters&nbsp;to&nbsp;configure&nbsp;the&nbsp;behaviour,&nbsp;make&nbsp;sure&nbsp;to&nbsp;check&nbsp;out&nbsp;the&nbsp;documentation<br>
+for&nbsp;each&nbsp;method&nbsp;to&nbsp;see&nbsp;the&nbsp;details&nbsp;on&nbsp;how&nbsp;they&nbsp;work.<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="CompositeImage-__init__"><strong>__init__</strong></a>(self, images=None, positions=None, boxes=None, scale='pixel', channel_axis=None, grid_size=None, tile_shape=None, overlap=0.1, aligner=None, precalculate=False, debug=True, progress=False, executor=None)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
@@ -811,7 +758,16 @@ images&nbsp;(sequence&nbsp;or&nbsp;dict):&nbsp;The&nbsp;new&nbsp;images&nbsp;to&
 mapping&nbsp;image&nbsp;indices&nbsp;to&nbsp;new&nbsp;positions,&nbsp;a&nbsp;sequence&nbsp;of&nbsp;new&nbsp;positions,&nbsp;or&nbsp;a&nbsp;constitch.Solver<br>
 class&nbsp;that&nbsp;has&nbsp;had&nbsp;solve()&nbsp;run&nbsp;on&nbsp;it,&nbsp;usually&nbsp;from&nbsp;<a href="constitch.constraints.html#ConstraintSet">ConstraintSet</a>.solve</tt></dd></dl>
 
-<dl><dt><a name="CompositeImage-stitch"><strong>stitch</strong></a>(self, indices=None, real_images=None, out=None, bg_value=None, return_bg_mask=False, mins=None, maxes=None, keep_zero=False, merger=None)</dt><dd><tt>Combines&nbsp;images&nbsp;in&nbsp;the&nbsp;composite&nbsp;into&nbsp;a&nbsp;single&nbsp;image<br>
+<dl><dt><a name="CompositeImage-stitch"><strong>stitch</strong></a>(self, merger='mean', indices=None, real_images=None, out=None, bg_value=None, return_bg_mask=False, mins=None, maxes=None, keep_zero=False)</dt><dd><tt>Combines&nbsp;images&nbsp;in&nbsp;the&nbsp;composite&nbsp;into&nbsp;a&nbsp;single&nbsp;image<br>
+&nbsp;<br>
+merger:&nbsp;str&nbsp;or&nbsp;merging.Merger&nbsp;instance<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;merger&nbsp;used&nbsp;to&nbsp;combine&nbsp;overlapping&nbsp;regions&nbsp;of&nbsp;images.&nbsp;If&nbsp;a&nbsp;string&nbsp;it&nbsp;is&nbsp;mapped&nbsp;to&nbsp;a&nbsp;Merger<br>
+&nbsp;&nbsp;&nbsp;&nbsp;class&nbsp;as&nbsp;follows:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"mean":&nbsp;merging.MeanMerger,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"efficient_mean":&nbsp;merging.EfficientMeanMerger,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"last":&nbsp;merging.LastMerger,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"nearest":&nbsp;merging.NearestMerger,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"efficient_nearest":&nbsp;merging.EfficientNearestMerger,<br>
 &nbsp;<br>
 indices:&nbsp;sequence&nbsp;of&nbsp;int<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Indices&nbsp;of&nbsp;images&nbsp;in&nbsp;the&nbsp;composite&nbsp;to&nbsp;be&nbsp;stitched&nbsp;together<br>
@@ -981,6 +937,8 @@ Methods defined here:<br>
 this,&nbsp;instead&nbsp;add&nbsp;images&nbsp;through&nbsp;the&nbsp;<a href="#CompositeImage">CompositeImage</a>.add_images&nbsp;and&nbsp;similar<br>
 methods</tt></dd></dl>
 
+<dl><dt><a name="SubCompositeBBoxList-copy"><strong>copy</strong></a>(self)</dt></dl>
+
 <hr>
 Readonly properties defined here:<br>
 <dl><dt><strong>points2</strong></dt>
@@ -1015,8 +973,6 @@ Methods inherited from <a href="constitch.composite.html#BBoxList">BBoxList</a>:
 <dl><dt><a name="SubCompositeBBoxList-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>Return&nbsp;repr(self).</tt></dd></dl>
 
 <dl><dt><a name="SubCompositeBBoxList-__str__"><strong>__str__</strong></a>(self)</dt><dd><tt>Return&nbsp;str(self).</tt></dd></dl>
-
-<dl><dt><a name="SubCompositeBBoxList-copy"><strong>copy</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="SubCompositeBBoxList-index"><strong>index</strong></a>(self, box)</dt></dl>
 
@@ -1206,13 +1162,22 @@ Args:<br>
 Raises:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;KeyError:&nbsp;The&nbsp;specified&nbsp;constraint&nbsp;does&nbsp;not&nbsp;exist</tt></dd></dl>
 
-<dl><dt><a name="SubCompositeConstraintSet-solve"><strong>solve</strong></a>(self, solver=None)</dt><dd><tt>Solve&nbsp;the&nbsp;constraints&nbsp;to&nbsp;get&nbsp;a&nbsp;global&nbsp;position&nbsp;for&nbsp;each&nbsp;image<br>
+<dl><dt><a name="SubCompositeConstraintSet-solve"><strong>solve</strong></a>(self, solver='mse', **kwargs)</dt><dd><tt>Solve&nbsp;the&nbsp;constraints&nbsp;to&nbsp;get&nbsp;a&nbsp;global&nbsp;position&nbsp;for&nbsp;each&nbsp;image<br>
 &nbsp;<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;solver&nbsp;(constitch.Solver):&nbsp;default&nbsp;constitch.LinearSolver()<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;solver&nbsp;class&nbsp;that&nbsp;is&nbsp;used&nbsp;to&nbsp;combine&nbsp;the&nbsp;overconstrainted<br>
+&nbsp;&nbsp;&nbsp;&nbsp;solver&nbsp;(constitch.Solver&nbsp;or&nbsp;str):&nbsp;default&nbsp;constitch.LinearSolver()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;solver&nbsp;method&nbsp;that&nbsp;is&nbsp;used&nbsp;to&nbsp;combine&nbsp;the&nbsp;overconstrainted<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;system&nbsp;of&nbsp;constraints&nbsp;and&nbsp;optimize&nbsp;for&nbsp;the&nbsp;best&nbsp;global&nbsp;positions.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Options&nbsp;include&nbsp;'mse'&nbsp;for&nbsp;standard&nbsp;least&nbsp;squares&nbsp;solving,&nbsp;'mae'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;solving&nbsp;while&nbsp;minimizing&nbsp;mean&nbsp;absolute&nbsp;error,&nbsp;'huber'&nbsp;for<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;minimizing&nbsp;the&nbsp;huber&nbsp;loss,&nbsp;or&nbsp;any&nbsp;subclass&nbsp;of&nbsp;constitch.Solver.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;More&nbsp;info&nbsp;can&nbsp;be&nbsp;found&nbsp;in&nbsp;constitch.solving<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**kwargs:&nbsp;Arguments&nbsp;passed&nbsp;to&nbsp;the&nbsp;constructor&nbsp;of&nbsp;the&nbsp;solver.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Any&nbsp;arguments&nbsp;specified&nbsp;here&nbsp;are&nbsp;passed&nbsp;to&nbsp;the&nbsp;constructor<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;the&nbsp;solver,&nbsp;for&nbsp;example&nbsp;if&nbsp;solver='huber'&nbsp;epsilon=5&nbsp;could<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;be&nbsp;included&nbsp;to&nbsp;change&nbsp;the&nbsp;default&nbsp;epsilon&nbsp;parameter&nbsp;for&nbsp;huber&nbsp;loss.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cannot&nbsp;be&nbsp;specified&nbsp;if&nbsp;solver&nbsp;is&nbsp;an&nbsp;already&nbsp;instantiated&nbsp;constitch.Solver<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;instance.<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;solver&nbsp;instance,&nbsp;with&nbsp;an&nbsp;attribute&nbsp;positions&nbsp;containing&nbsp;a&nbsp;dict<br>
@@ -1248,7 +1213,11 @@ Data and other attributes inherited from <a href="constitch.constraints.html#Con
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt><a href="#SubCompositeImage">SubCompositeImage</a>(composite,&nbsp;mapping,&nbsp;layer=None,&nbsp;debug=True,&nbsp;progress=False,&nbsp;executor=None,&nbsp;aligner=None)<br>
 &nbsp;<br>
-<br>&nbsp;</tt></td></tr>
+A&nbsp;<a href="#CompositeImage">CompositeImage</a>&nbsp;made&nbsp;from&nbsp;a&nbsp;subset&nbsp;of&nbsp;the&nbsp;images&nbsp;in&nbsp;another&nbsp;<a href="#CompositeImage">CompositeImage</a>&nbsp;instance.<br>
+Typically&nbsp;returned&nbsp;from&nbsp;<a href="#CompositeImage">CompositeImage</a>.<a href="#SubCompositeImage-layer">layer</a>()&nbsp;or&nbsp;<a href="#CompositeImage">CompositeImage</a>.<a href="#SubCompositeImage-subcomposite">subcomposite</a>().<br>
+<a href="#SubCompositeImage">SubCompositeImage</a>&nbsp;instances&nbsp;share&nbsp;data&nbsp;with&nbsp;the&nbsp;<a href="#CompositeImage">CompositeImage</a>&nbsp;they&nbsp;were&nbsp;created&nbsp;from.&nbsp;If<br>
+<a href="#SubCompositeImage">SubCompositeImage</a>.boxes&nbsp;or&nbsp;<a href="#SubCompositeImage">SubCompositeImage</a>.images&nbsp;are&nbsp;modified,&nbsp;the&nbsp;changes&nbsp;will<br>
+be&nbsp;reflected&nbsp;in&nbsp;the&nbsp;other&nbsp;composite,&nbsp;and&nbsp;vice&nbsp;versa.<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="constitch.composite.html#SubCompositeImage">SubCompositeImage</a></dd>
@@ -1262,6 +1231,9 @@ Methods defined here:<br>
 <dl><dt><a name="SubCompositeImage-contains"><strong>contains</strong></a>(self, index)</dt></dl>
 
 <dl><dt><a name="SubCompositeImage-convert"><strong>convert</strong></a>(self, constraints)</dt></dl>
+
+<dl><dt><a name="SubCompositeImage-copy"><strong>copy</strong></a>(self, **kwargs)</dt><dd><tt>Creates&nbsp;a&nbsp;full&nbsp;copy&nbsp;of&nbsp;this&nbsp;composite.&nbsp;The&nbsp;only&nbsp;thing&nbsp;shared&nbsp;between&nbsp;this&nbsp;composite<br>
+and&nbsp;the&nbsp;new&nbsp;copy&nbsp;is&nbsp;the&nbsp;raw&nbsp;image&nbsp;data.</tt></dd></dl>
 
 <dl><dt><a name="SubCompositeImage-layer"><strong>layer</strong></a>(self, index)</dt><dd><tt>Returns&nbsp;a&nbsp;SubComposite&nbsp;with&nbsp;only&nbsp;images&nbsp;that&nbsp;are&nbsp;on&nbsp;the&nbsp;specified&nbsp;layer,&nbsp;that&nbsp;is<br>
 all&nbsp;images&nbsp;where&nbsp;box.position[2]&nbsp;==&nbsp;index.<br>
@@ -1386,9 +1358,6 @@ Returns&nbsp;(float):<br>
 
 <dl><dt><a name="SubCompositeImage-constraint_error"><strong>constraint_error</strong></a>(self, i, j, constraint)</dt></dl>
 
-<dl><dt><a name="SubCompositeImage-copy"><strong>copy</strong></a>(self, **kwargs)</dt><dd><tt>Creates&nbsp;a&nbsp;full&nbsp;copy&nbsp;of&nbsp;this&nbsp;composite.&nbsp;The&nbsp;only&nbsp;thing&nbsp;shared&nbsp;between&nbsp;this&nbsp;composite<br>
-and&nbsp;the&nbsp;new&nbsp;copy&nbsp;is&nbsp;the&nbsp;raw&nbsp;image&nbsp;data.</tt></dd></dl>
-
 <dl><dt><a name="SubCompositeImage-html_summary"><strong>html_summary</strong></a>(self, path, score_func=None)</dt></dl>
 
 <dl><dt><a name="SubCompositeImage-plot_scores"><strong>plot_scores</strong></a>(self, path, constraints=None, score_func=None, axis_size=12)</dt></dl>
@@ -1433,7 +1402,16 @@ images&nbsp;(sequence&nbsp;or&nbsp;dict):&nbsp;The&nbsp;new&nbsp;images&nbsp;to&
 mapping&nbsp;image&nbsp;indices&nbsp;to&nbsp;new&nbsp;positions,&nbsp;a&nbsp;sequence&nbsp;of&nbsp;new&nbsp;positions,&nbsp;or&nbsp;a&nbsp;constitch.Solver<br>
 class&nbsp;that&nbsp;has&nbsp;had&nbsp;solve()&nbsp;run&nbsp;on&nbsp;it,&nbsp;usually&nbsp;from&nbsp;<a href="constitch.constraints.html#ConstraintSet">ConstraintSet</a>.solve</tt></dd></dl>
 
-<dl><dt><a name="SubCompositeImage-stitch"><strong>stitch</strong></a>(self, indices=None, real_images=None, out=None, bg_value=None, return_bg_mask=False, mins=None, maxes=None, keep_zero=False, merger=None)</dt><dd><tt>Combines&nbsp;images&nbsp;in&nbsp;the&nbsp;composite&nbsp;into&nbsp;a&nbsp;single&nbsp;image<br>
+<dl><dt><a name="SubCompositeImage-stitch"><strong>stitch</strong></a>(self, merger='mean', indices=None, real_images=None, out=None, bg_value=None, return_bg_mask=False, mins=None, maxes=None, keep_zero=False)</dt><dd><tt>Combines&nbsp;images&nbsp;in&nbsp;the&nbsp;composite&nbsp;into&nbsp;a&nbsp;single&nbsp;image<br>
+&nbsp;<br>
+merger:&nbsp;str&nbsp;or&nbsp;merging.Merger&nbsp;instance<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;merger&nbsp;used&nbsp;to&nbsp;combine&nbsp;overlapping&nbsp;regions&nbsp;of&nbsp;images.&nbsp;If&nbsp;a&nbsp;string&nbsp;it&nbsp;is&nbsp;mapped&nbsp;to&nbsp;a&nbsp;Merger<br>
+&nbsp;&nbsp;&nbsp;&nbsp;class&nbsp;as&nbsp;follows:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"mean":&nbsp;merging.MeanMerger,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"efficient_mean":&nbsp;merging.EfficientMeanMerger,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"last":&nbsp;merging.LastMerger,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"nearest":&nbsp;merging.NearestMerger,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"efficient_nearest":&nbsp;merging.EfficientNearestMerger,<br>
 &nbsp;<br>
 indices:&nbsp;sequence&nbsp;of&nbsp;int<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Indices&nbsp;of&nbsp;images&nbsp;in&nbsp;the&nbsp;composite&nbsp;to&nbsp;be&nbsp;stitched&nbsp;together<br>
