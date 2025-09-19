@@ -9,40 +9,82 @@
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>constitch</strong></big></big></font></td
 ><td align=right valign=bottom
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/nicho/starcall-docs/constitch/__init__.py">/home/nicho/starcall-docs/constitch/__init__.py</a></font></td></tr></table>
-    <p><tt>ConStitch:&nbsp;A&nbsp;stitching&nbsp;library&nbsp;that&nbsp;solves&nbsp;the&nbsp;global&nbsp;alignment&nbsp;of&nbsp;images&nbsp;using<br>
-a&nbsp;graph&nbsp;of&nbsp;pairwise&nbsp;constraints&nbsp;between&nbsp;images.<br>
+    <p><tt>ConStitch&nbsp;-&nbsp;A&nbsp;microscopy&nbsp;stitching&nbsp;library&nbsp;made&nbsp;for&nbsp;complex&nbsp;imaging&nbsp;experiments<br>
 &nbsp;<br>
-Stitching&nbsp;is&nbsp;a&nbsp;vital&nbsp;step&nbsp;in&nbsp;the&nbsp;fisseq&nbsp;pipeline,&nbsp;as&nbsp;it&nbsp;is&nbsp;in&nbsp;any&nbsp;microscopy<br>
-data&nbsp;pipeline,&nbsp;however&nbsp;fisseq&nbsp;has&nbsp;some&nbsp;requirements&nbsp;that&nbsp;make&nbsp;stitching&nbsp;even<br>
-more&nbsp;important&nbsp;than&nbsp;in&nbsp;other&nbsp;experimental&nbsp;procedures.&nbsp;This&nbsp;is&nbsp;mainly&nbsp;because<br>
-the&nbsp;features&nbsp;we&nbsp;need&nbsp;to&nbsp;detect&nbsp;in&nbsp;cells&nbsp;are&nbsp;quite&nbsp;small,&nbsp;and&nbsp;they&nbsp;need&nbsp;to&nbsp;line<br>
-up&nbsp;with&nbsp;each&nbsp;other&nbsp;between&nbsp;cycles&nbsp;in&nbsp;order&nbsp;to&nbsp;detect&nbsp;and&nbsp;read&nbsp;them.&nbsp;To<br>
-accomplish&nbsp;this,&nbsp;the&nbsp;stitching&nbsp;package&nbsp;is&nbsp;basically&nbsp;a&nbsp;full&nbsp;stitching&nbsp;library,<br>
-capable&nbsp;of&nbsp;stitching&nbsp;any&nbsp;group&nbsp;of&nbsp;images&nbsp;into&nbsp;one&nbsp;contiguous&nbsp;image&nbsp;or<br>
-stack&nbsp;of&nbsp;images.<br>
+ConStitch&nbsp;performs&nbsp;robust,&nbsp;high&nbsp;quality&nbsp;stitching&nbsp;of&nbsp;microscopy&nbsp;images.&nbsp;It&nbsp;is<br>
+specifically&nbsp;designed&nbsp;to&nbsp;stitch&nbsp;and&nbsp;align&nbsp;microscopy&nbsp;image&nbsp;sets&nbsp;with&nbsp;multiple<br>
+rounds&nbsp;of&nbsp;imaging,&nbsp;where&nbsp;each&nbsp;round&nbsp;needs&nbsp;to&nbsp;be&nbsp;aligned&nbsp;to&nbsp;each&nbsp;other&nbsp;as&nbsp;well<br>
+as&nbsp;stitched&nbsp;together.<br>
 &nbsp;<br>
-This&nbsp;stitching&nbsp;library&nbsp;is&nbsp;based&nbsp;on&nbsp;building&nbsp;up&nbsp;a&nbsp;collection&nbsp;of&nbsp;pairwise<br>
-offsets&nbsp;between&nbsp;images,&nbsp;represented&nbsp;by&nbsp;the&nbsp;<a href="#Constraint">Constraint</a>&nbsp;class.&nbsp;Using<br>
-different&nbsp;algorithms&nbsp;these&nbsp;constraints&nbsp;can&nbsp;be&nbsp;calculated&nbsp;between&nbsp;all<br>
-overlapping&nbsp;images,&nbsp;then&nbsp;filtered&nbsp;and&nbsp;processed&nbsp;to&nbsp;improve&nbsp;the&nbsp;accuracy.<br>
-Finally,&nbsp;we&nbsp;can&nbsp;consider&nbsp;all&nbsp;constraints&nbsp;and&nbsp;globally&nbsp;solve&nbsp;the&nbsp;positions<br>
-of&nbsp;all&nbsp;the&nbsp;images.<br>
+Also&nbsp;see&nbsp;ASHLAR&nbsp;(&lt;github.com/labsyspharm/ashlar&gt;)&nbsp;for&nbsp;another&nbsp;package&nbsp;built&nbsp;to<br>
+stitch&nbsp;multi-cycle&nbsp;image&nbsp;sets,&nbsp;which&nbsp;also&nbsp;heavily&nbsp;inspired&nbsp;the&nbsp;design&nbsp;of&nbsp;this<br>
+package.<br>
 &nbsp;<br>
-The&nbsp;library&nbsp;is&nbsp;meant&nbsp;to&nbsp;be&nbsp;simple&nbsp;to&nbsp;use&nbsp;for&nbsp;simple&nbsp;use&nbsp;cases,&nbsp;but&nbsp;allow&nbsp;for&nbsp;customization<br>
-and&nbsp;fine&nbsp;tuning&nbsp;when&nbsp;you&nbsp;need&nbsp;more&nbsp;control.&nbsp;The&nbsp;whole&nbsp;stitching&nbsp;process&nbsp;is&nbsp;contained&nbsp;in&nbsp;the<br>
-<a href="#CompositeImage">CompositeImage</a>&nbsp;class,&nbsp;and&nbsp;the&nbsp;simplest&nbsp;working&nbsp;example&nbsp;is&nbsp;shown&nbsp;below,<br>
-it&nbsp;stitches&nbsp;together&nbsp;the&nbsp;provided&nbsp;images&nbsp;and&nbsp;creates&nbsp;a&nbsp;full&nbsp;composite&nbsp;image&nbsp;of&nbsp;them&nbsp;combined<br>
-together:<br>
+##&nbsp;Installation<br>
 &nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;composite&nbsp;=&nbsp;constitch.<a href="#CompositeImage">CompositeImage</a>(images,&nbsp;positions)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;constrants&nbsp;=&nbsp;composite.constraints(touching=True).calculate().filter(min_score=0.5)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;composite.setpositions(constraints.solve())<br>
-&nbsp;&nbsp;&nbsp;&nbsp;full_image&nbsp;=&nbsp;composite.stitch()<br>
+ConStitch&nbsp;can&nbsp;be&nbsp;installed&nbsp;by&nbsp;cloning&nbsp;the&nbsp;repository,&nbsp;then&nbsp;installing&nbsp;with&nbsp;pip.<br>
 &nbsp;<br>
-This&nbsp;will&nbsp;work&nbsp;with&nbsp;most&nbsp;smaller&nbsp;stitching&nbsp;problems,&nbsp;where&nbsp;images&nbsp;is&nbsp;a&nbsp;list&nbsp;of&nbsp;the&nbsp;images<br>
-in&nbsp;the&nbsp;form&nbsp;of&nbsp;numpy&nbsp;arrays,&nbsp;and&nbsp;positions&nbsp;is&nbsp;a&nbsp;numpy&nbsp;array&nbsp;of&nbsp;initial&nbsp;positions&nbsp;for&nbsp;each<br>
-image.&nbsp;A&nbsp;more&nbsp;in&nbsp;depth&nbsp;run&nbsp;through&nbsp;of&nbsp;the&nbsp;stitching&nbsp;process&nbsp;can&nbsp;be&nbsp;found&nbsp;in&nbsp;the<br>
-documentation&nbsp;of&nbsp;the&nbsp;<a href="#CompositeImage">CompositeImage</a>.</tt></p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;git&nbsp;clone&nbsp;<a href="https://github.com/FowlerLab/constitch">https://github.com/FowlerLab/constitch</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cd&nbsp;constitch<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pip3&nbsp;install&nbsp;./<br>
+&nbsp;<br>
+##&nbsp;Usage<br>
+&nbsp;<br>
+Example&nbsp;scripts&nbsp;are&nbsp;provided&nbsp;in&nbsp;examples/&nbsp;that&nbsp;can&nbsp;help&nbsp;you&nbsp;get&nbsp;started.&nbsp;More<br>
+examples&nbsp;are&nbsp;coming,&nbsp;as&nbsp;well&nbsp;as&nbsp;an&nbsp;example&nbsp;dataset&nbsp;that&nbsp;can&nbsp;be&nbsp;downloaded&nbsp;and&nbsp;run&nbsp;easily.<br>
+Additionally&nbsp;an&nbsp;example&nbsp;of&nbsp;a&nbsp;snakemake&nbsp;pipeline&nbsp;using&nbsp;constitch&nbsp;for&nbsp;stitching<br>
+is&nbsp;available&nbsp;at&nbsp;&lt;github.com/FowlerLab/starcall-workflow&gt;.<br>
+&nbsp;<br>
+A&nbsp;simple&nbsp;example&nbsp;of&nbsp;stitching&nbsp;a&nbsp;single&nbsp;cycle&nbsp;of&nbsp;imaging&nbsp;consists&nbsp;of&nbsp;these&nbsp;steps:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;constitch<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;numpy&nbsp;as&nbsp;np<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;tifffile<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;load&nbsp;in&nbsp;images&nbsp;and&nbsp;tile&nbsp;positions<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;images&nbsp;=&nbsp;tifffile.imread('images.tif')<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;positions&nbsp;=&nbsp;np.loadtxt('tile_positions.csv',&nbsp;delimiter=',',&nbsp;dtype=int)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;create&nbsp;composite&nbsp;image<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;composite&nbsp;=&nbsp;constitch.<a href="#CompositeImage">CompositeImage</a>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;composite.add_images(images,&nbsp;positions,&nbsp;scale='tile')<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;find&nbsp;all&nbsp;overlapping&nbsp;regions&nbsp;between&nbsp;images<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;overlapping&nbsp;=&nbsp;composite.constraints(touching=True)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;align&nbsp;each&nbsp;image&nbsp;pair<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;constraints&nbsp;=&nbsp;overlapping.calculate()<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;filter&nbsp;out&nbsp;erroneous&nbsp;constraints<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;constraints&nbsp;=&nbsp;constraints.filter(min_score=0.5)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;train&nbsp;a&nbsp;linear&nbsp;model&nbsp;on&nbsp;remaining&nbsp;constraints<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stage_model&nbsp;=&nbsp;constraints.fit_model(outliers=True)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;constraints&nbsp;=&nbsp;stage_model.inliers<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;and&nbsp;use&nbsp;it&nbsp;to&nbsp;estimate&nbsp;missing&nbsp;constraints<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modeled&nbsp;=&nbsp;overlapping.calculate(stage_model)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;solve&nbsp;for&nbsp;global&nbsp;positions&nbsp;of&nbsp;each&nbsp;tile<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;solution&nbsp;=&nbsp;modeled.merge(constraints).solve()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;composite.setpositions(solution)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;(optional)&nbsp;plot&nbsp;locations&nbsp;of&nbsp;tiles&nbsp;to&nbsp;ensure&nbsp;correct&nbsp;stitching<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;composite.plot_scores('plot.png',&nbsp;constraints)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;stitch&nbsp;images&nbsp;together<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;full_image&nbsp;=&nbsp;composite.stitch()<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tifffile.write('stitched.tif',&nbsp;full_image)<br>
+&nbsp;<br>
+In&nbsp;this&nbsp;example&nbsp;it&nbsp;is&nbsp;assumed&nbsp;all&nbsp;the&nbsp;images&nbsp;being&nbsp;stitched&nbsp;are&nbsp;saved&nbsp;in&nbsp;the&nbsp;file&nbsp;images.tif&nbsp;of&nbsp;shape&nbsp;(num_images,&nbsp;width,&nbsp;height).<br>
+The&nbsp;positions&nbsp;of&nbsp;each&nbsp;image&nbsp;are&nbsp;stored&nbsp;in&nbsp;'positions.csv',&nbsp;as&nbsp;the&nbsp;(row,&nbsp;col)&nbsp;position&nbsp;of&nbsp;each&nbsp;tile&nbsp;in&nbsp;the&nbsp;grid.&nbsp;You&nbsp;can<br>
+load&nbsp;in&nbsp;your&nbsp;data&nbsp;however&nbsp;you&nbsp;are&nbsp;able&nbsp;to,&nbsp;as&nbsp;long&nbsp;as&nbsp;your&nbsp;images&nbsp;are&nbsp;in&nbsp;the&nbsp;form&nbsp;of&nbsp;a&nbsp;numpy&nbsp;array&nbsp;of<br>
+shape&nbsp;(num_images,&nbsp;width,&nbsp;height),&nbsp;and&nbsp;you&nbsp;have&nbsp;positions&nbsp;for&nbsp;each&nbsp;image&nbsp;as&nbsp;a&nbsp;numpy&nbsp;array&nbsp;of&nbsp;shape&nbsp;(num_images,&nbsp;2).<br>
+If&nbsp;your&nbsp;images&nbsp;don't&nbsp;follow&nbsp;a&nbsp;regular&nbsp;grid&nbsp;or&nbsp;you&nbsp;have&nbsp;more&nbsp;exact&nbsp;image&nbsp;positions,&nbsp;you&nbsp;can&nbsp;specify&nbsp;them<br>
+as&nbsp;pixel&nbsp;values,&nbsp;see&nbsp;the&nbsp;documentation&nbsp;for&nbsp;the&nbsp;function&nbsp;[<a href="#CompositeImage">CompositeImage</a>.add_images](<a href="https://fowlerlab.github.io/starcall-docs/constitch.composite.html#CompositeImage-add_images">https://fowlerlab.github.io/starcall-docs/constitch.composite.html#CompositeImage-add_images</a>)<br>
+for&nbsp;more&nbsp;information.<br>
+&nbsp;<br>
+This&nbsp;example&nbsp;goes&nbsp;through&nbsp;the&nbsp;different&nbsp;steps&nbsp;needed&nbsp;to&nbsp;stitch&nbsp;a&nbsp;2d&nbsp;grid&nbsp;of&nbsp;images.&nbsp;Each&nbsp;of&nbsp;the&nbsp;functions<br>
+used&nbsp;has&nbsp;reference&nbsp;documentation&nbsp;available&nbsp;at&nbsp;&lt;fowlerlab.github.io/starcall-docs/constitch.html&gt;</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
@@ -181,6 +223,10 @@ from&nbsp;either.<br>&nbsp;</tt></td></tr>
 
 <dl><dt><a name="BBox-__str__"><strong>__str__</strong></a>(self)</dt><dd><tt>Return&nbsp;str(self).</tt></dd></dl>
 
+<dl><dt><a name="BBox-area"><strong>area</strong></a>(self)</dt><dd><tt>Returns&nbsp;the&nbsp;area&nbsp;of&nbsp;the&nbsp;box,&nbsp;basically&nbsp;self.<strong>size</strong>.prod()<br>
+However&nbsp;if&nbsp;the&nbsp;size&nbsp;of&nbsp;the&nbsp;rectangle&nbsp;is&nbsp;negative&nbsp;in&nbsp;either&nbsp;or&nbsp;both<br>
+dimentions&nbsp;the&nbsp;result&nbsp;will&nbsp;be&nbsp;negative,&nbsp;indicating&nbsp;an&nbsp;invalid&nbsp;rectangle</tt></dd></dl>
+
 <dl><dt><a name="BBox-as2d"><strong>as2d</strong></a>(self)</dt><dd><tt>Creates&nbsp;a&nbsp;copy&nbsp;of&nbsp;this&nbsp;box&nbsp;that&nbsp;only&nbsp;has&nbsp;two&nbsp;dimensions,<br>
 dropping&nbsp;extra&nbsp;values.</tt></dd></dl>
 
@@ -191,6 +237,9 @@ overlapping&nbsp;or&nbsp;sharing&nbsp;an&nbsp;edge</tt></dd></dl>
 box&nbsp;is&nbsp;also&nbsp;contained&nbsp;in&nbsp;this&nbsp;box</tt></dd></dl>
 
 <dl><dt><a name="BBox-copy"><strong>copy</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BBox-intersection"><strong>intersection</strong></a>(self, other)</dt><dd><tt>Returns&nbsp;the&nbsp;overlapping&nbsp;area&nbsp;between&nbsp;this&nbsp;box&nbsp;and&nbsp;the&nbsp;<a href="#BBox">BBox</a>&nbsp;other&nbsp;passed&nbsp;in<br>
+This&nbsp;may&nbsp;return&nbsp;boxes&nbsp;with&nbsp;negative&nbsp;size,&nbsp;which&nbsp;would&nbsp;indicate&nbsp;there&nbsp;is&nbsp;no&nbsp;overlap</tt></dd></dl>
 
 <dl><dt><a name="BBox-overlaps"><strong>overlaps</strong></a>(self, otherbox)</dt><dd><tt>Whether&nbsp;this&nbsp;box&nbsp;overlaps&nbsp;with&nbsp;the&nbsp;other&nbsp;box.&nbsp;This&nbsp;does&nbsp;not&nbsp;consider<br>
 sharing&nbsp;an&nbsp;edge&nbsp;as&nbsp;overlapping,&nbsp;to&nbsp;count&nbsp;as&nbsp;overlapping&nbsp;there&nbsp;must&nbsp;be&nbsp;at&nbsp;least<br>
@@ -592,7 +641,7 @@ Returns:&nbsp;list&nbsp;of&nbsp;indices<br>
 
 <dl><dt><a name="CompositeImage-pair_func"><strong>pair_func</strong></a>(self)</dt></dl>
 
-<dl><dt><a name="CompositeImage-plot_scores"><strong>plot_scores</strong></a>(self, path, constraints=None, score_func=None, axis_size=12)</dt></dl>
+<dl><dt><a name="CompositeImage-plot_scores"><strong>plot_scores</strong></a>(self, path, constraints=None, score_func=None, axis_size=12, constraint_multiplier=1)</dt></dl>
 
 <dl><dt><a name="CompositeImage-print_mem_usage"><strong>print_mem_usage</strong></a>(self)</dt></dl>
 
@@ -1117,7 +1166,7 @@ Args:<br>
 Raises:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;KeyError:&nbsp;The&nbsp;specified&nbsp;constraint&nbsp;does&nbsp;not&nbsp;exist</tt></dd></dl>
 
-<dl><dt><a name="ConstraintSet-solve"><strong>solve</strong></a>(self, solver='mse', **kwargs)</dt><dd><tt>Solve&nbsp;the&nbsp;constraints&nbsp;to&nbsp;get&nbsp;a&nbsp;global&nbsp;position&nbsp;for&nbsp;each&nbsp;image<br>
+<dl><dt><a name="ConstraintSet-solve"><strong>solve</strong></a>(self, solver='mae', **kwargs)</dt><dd><tt>Solve&nbsp;the&nbsp;constraints&nbsp;to&nbsp;get&nbsp;a&nbsp;global&nbsp;position&nbsp;for&nbsp;each&nbsp;image<br>
 &nbsp;<br>
 Args:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;solver&nbsp;(constitch.<a href="#Solver">Solver</a>&nbsp;or&nbsp;str):&nbsp;default&nbsp;constitch.<a href="#LinearSolver">LinearSolver</a>()<br>
@@ -1626,7 +1675,7 @@ Data descriptors inherited from <a href="constitch.solving.html#Solver">Solver</
 <font color="#000000" face="helvetica, arial"><a name="MaskMerger">class <strong>MaskMerger</strong></a>(<a href="constitch.merging.html#NearestMerger">NearestMerger</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt><a href="#MaskMerger">MaskMerger</a>(overlap_threshold=0.75)<br>
+<td colspan=2><tt><a href="#MaskMerger">MaskMerger</a>(overlap_threshold=0.75,&nbsp;dtype=&amp;lt;class&nbsp;'numpy.uint32'&amp;gt;)<br>
 &nbsp;<br>
 This&nbsp;merger&nbsp;is&nbsp;specifically&nbsp;for&nbsp;merging&nbsp;an&nbsp;image&nbsp;mask,&nbsp;where&nbsp;each&nbsp;integer&nbsp;represents<br>
 an&nbsp;independent&nbsp;class,&nbsp;for&nbsp;example&nbsp;cell&nbsp;segmentation&nbsp;masks.&nbsp;Other&nbsp;merging&nbsp;techniques&nbsp;won't<br>
@@ -1643,7 +1692,7 @@ of&nbsp;overlap&nbsp;needed&nbsp;to&nbsp;combine&nbsp;masks&nbsp;is&nbsp;the&nbs
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="MaskMerger-__init__"><strong>__init__</strong></a>(self, overlap_threshold=0.75)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+<dl><dt><a name="MaskMerger-__init__"><strong>__init__</strong></a>(self, overlap_threshold=0.75, dtype=&lt;class 'numpy.uint32'&gt;)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
 
 <dl><dt><a name="MaskMerger-add_image"><strong>add_image</strong></a>(self, image, location)</dt><dd><tt>Called&nbsp;to&nbsp;add&nbsp;an&nbsp;image.&nbsp;location&nbsp;is&nbsp;a&nbsp;tuple&nbsp;of&nbsp;slices&nbsp;used<br>
 to&nbsp;select&nbsp;the&nbsp;area&nbsp;for&nbsp;the&nbsp;image,&nbsp;it&nbsp;is&nbsp;guaranteed&nbsp;to&nbsp;be&nbsp;the<br>

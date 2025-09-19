@@ -18,11 +18,10 @@
     
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
-<a href="numba.html">numba</a><br>
-</td><td width="25%" valign=top><a href="matplotlib.pyplot.html">matplotlib.pyplot</a><br>
-<a href="skimage.html">skimage</a><br>
-</td><td width="25%" valign=top><a href="tifffile.html">tifffile</a><br>
-<a href="starcall.utils.html">starcall.utils</a><br>
+<a href="matplotlib.pyplot.html">matplotlib.pyplot</a><br>
+</td><td width="25%" valign=top><a href="skimage.html">skimage</a><br>
+<a href="tifffile.html">tifffile</a><br>
+</td><td width="25%" valign=top><a href="starcall.utils.html">starcall.utils</a><br>
 </td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#eeaa77">
@@ -42,10 +41,18 @@ Args:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;image&nbsp;(ndarray&nbsp;of&nbsp;shape&nbsp;(n_cycles,&nbsp;n_channels,&nbsp;width,&nbsp;height)):&nbsp;The&nbsp;input&nbsp;image<br>
 &nbsp;&nbsp;&nbsp;&nbsp;min_sigma,&nbsp;max_sigma,&nbsp;num_sigma&nbsp;(float):&nbsp;Parameters&nbsp;passed&nbsp;to&nbsp;skimage.feature.blob_log<br>
 &nbsp;&nbsp;&nbsp;&nbsp;return_sigmas&nbsp;(bool,&nbsp;default&nbsp;False):&nbsp;Whether&nbsp;to&nbsp;return&nbsp;the&nbsp;sigma&nbsp;values&nbsp;returned&nbsp;from&nbsp;skimage.feature.blob_log<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channels&nbsp;(tuple&nbsp;of&nbsp;str):&nbsp;The&nbsp;names&nbsp;of&nbsp;the&nbsp;sequencing&nbsp;channels&nbsp;in&nbsp;the&nbsp;image.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Defaults&nbsp;to&nbsp;('G',&nbsp;'T',&nbsp;'A',&nbsp;'C'),&nbsp;but&nbsp;if&nbsp;your&nbsp;sequencing&nbsp;channels&nbsp;are&nbsp;in&nbsp;a&nbsp;different<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;order&nbsp;make&nbsp;sure&nbsp;to&nbsp;specify&nbsp;it&nbsp;here.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;copy&nbsp;(bool&nbsp;default&nbsp;True):&nbsp;Whether&nbsp;the&nbsp;image&nbsp;should&nbsp;be&nbsp;copied&nbsp;or&nbsp;modified&nbsp;in&nbsp;place.<br>
 &nbsp;<br>
 Returns:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;reads&nbsp;(ReadSet):&nbsp;The&nbsp;reads&nbsp;detected&nbsp;in&nbsp;the&nbsp;image,&nbsp;each&nbsp;with&nbsp;a&nbsp;position&nbsp;and&nbsp;read&nbsp;values.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;reads&nbsp;(DataFrame):&nbsp;The&nbsp;reads&nbsp;detected&nbsp;in&nbsp;the&nbsp;image,&nbsp;each&nbsp;with&nbsp;a&nbsp;position&nbsp;and&nbsp;read&nbsp;values.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;columns&nbsp;in&nbsp;the&nbsp;table&nbsp;are:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'position_x',&nbsp;'position_y':&nbsp;the&nbsp;x&nbsp;and&nbsp;y&nbsp;position&nbsp;of&nbsp;the&nbsp;read&nbsp;colony<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'values_cycle{cycle}_{chan}':&nbsp;the&nbsp;values&nbsp;from&nbsp;the&nbsp;filtered&nbsp;sequencing&nbsp;images,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;each&nbsp;cycle&nbsp;and&nbsp;channel.&nbsp;The&nbsp;names&nbsp;of&nbsp;the&nbsp;channels&nbsp;are&nbsp;specified<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in&nbsp;the&nbsp;parameter&nbsp;'channels'<br>
 &nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;return_sigmas&nbsp;is&nbsp;specified:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;sigmas&nbsp;(ndarray&nbsp;of&nbsp;shape&nbsp;(n_dots,)):&nbsp;The&nbsp;estimated&nbsp;sigma&nbsp;of&nbsp;all&nbsp;dots&nbsp;detected&nbsp;in&nbsp;the&nbsp;image</tt></dd></dl>
  <dl><dt><a name="-detect_dots_debug"><strong>detect_dots_debug</strong></a>(image, min_sigma=1, max_sigma=2, num_sigma=7, sigma_cutoff=1, return_sigmas=False, threshold_rel=None, median_index=None)</dt></dl>
@@ -62,7 +69,17 @@ Args:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;major_axis&nbsp;(float):&nbsp;the&nbsp;major&nbsp;axis&nbsp;of&nbsp;the&nbsp;ellipse&nbsp;used&nbsp;as&nbsp;a&nbsp;footprint<br>
 &nbsp;&nbsp;&nbsp;&nbsp;minor_axis&nbsp;(float):&nbsp;the&nbsp;minor&nbsp;axis&nbsp;of&nbsp;the&nbsp;ellipse&nbsp;used&nbsp;as&nbsp;a&nbsp;footprint<br>
 &nbsp;&nbsp;&nbsp;&nbsp;copy&nbsp;(bool&nbsp;default&nbsp;True):&nbsp;Whether&nbsp;the&nbsp;input&nbsp;image&nbsp;should&nbsp;be&nbsp;copied&nbsp;or&nbsp;modified&nbsp;in&nbsp;place</tt></dd></dl>
- <dl><dt><a name="-dot_filter2"><strong>dot_filter2</strong></a>(image, kernel_size=10)</dt></dl>
+ <dl><dt><a name="-dot_filter2"><strong>dot_filter2</strong></a>(image, small_radius=2, large_radius=4, copy=True)</dt></dl>
+ <dl><dt><a name="-dot_filter2_old"><strong>dot_filter2_old</strong></a>(image, kernel_size=10)</dt></dl>
+ <dl><dt><a name="-dot_filter_new"><strong>dot_filter_new</strong></a>(image, large_sigma=4, copy=True)</dt><dd><tt>Filter&nbsp;that&nbsp;removes&nbsp;any&nbsp;background&nbsp;in&nbsp;the&nbsp;sequencing&nbsp;images,<br>
+leaving&nbsp;only&nbsp;the&nbsp;dots&nbsp;from&nbsp;sequencing&nbsp;colonies.&nbsp;Done&nbsp;using&nbsp;a&nbsp;difference<br>
+of&nbsp;gaussian&nbsp;filter,&nbsp;specified&nbsp;by&nbsp;the&nbsp;parameter&nbsp;large_sigma.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;image&nbsp;(np.ndarray&nbsp;of&nbsp;shape&nbsp;(num_cycles,&nbsp;num_channels,&nbsp;width,&nbsp;height)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;large_sigma&nbsp;(float):&nbsp;the&nbsp;gaussian&nbsp;sigma&nbsp;that&nbsp;should&nbsp;be&nbsp;subtracted&nbsp;from&nbsp;the&nbsp;sequencing<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;images.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;copy&nbsp;(bool&nbsp;default&nbsp;True):&nbsp;Whether&nbsp;the&nbsp;input&nbsp;image&nbsp;should&nbsp;be&nbsp;copied&nbsp;or&nbsp;modified&nbsp;in&nbsp;place</tt></dd></dl>
  <dl><dt><a name="-dot_filter_old"><strong>dot_filter_old</strong></a>(image, large_sigma=4, copy=True)</dt></dl>
  <dl><dt><a name="-gaussian_kernel"><strong>gaussian_kernel</strong></a>(radius, sigma)</dt></dl>
  <dl><dt><a name="-highlight_dots"><strong>highlight_dots</strong></a>(image, gaussian_blur=None)</dt><dd><tt>Combine&nbsp;an&nbsp;image&nbsp;containing&nbsp;multiple&nbsp;sequencing&nbsp;cycles&nbsp;into&nbsp;a&nbsp;single<br>

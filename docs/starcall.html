@@ -8,8 +8,54 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>starcall</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br>(built-in)</font></td></tr></table>
-    <p></p>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/nicho/starcall-docs/starcall/__init__.py">/home/nicho/starcall-docs/starcall/__init__.py</a></font></td></tr></table>
+    <p><tt>#&nbsp;STARCall:&nbsp;STitching&nbsp;Alignment&nbsp;and&nbsp;Read&nbsp;Calling&nbsp;for&nbsp;in-situ&nbsp;sequencing&nbsp;experiments<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;the&nbsp;a&nbsp;python&nbsp;package&nbsp;that&nbsp;holds&nbsp;code&nbsp;for&nbsp;the&nbsp;processing&nbsp;of&nbsp;in&nbsp;situ&nbsp;sequencing<br>
+experiments.&nbsp;It&nbsp;was&nbsp;developed&nbsp;with&nbsp;a&nbsp;SnakeMake&nbsp;pipeline&nbsp;at&nbsp;&lt;<a href="https://github.com/FowlerLab/starcall-workflow.git">https://github.com/FowlerLab/starcall-workflow.git</a>&gt;,<br>
+however&nbsp;it&nbsp;can&nbsp;also&nbsp;be&nbsp;used&nbsp;on&nbsp;its&nbsp;own&nbsp;to&nbsp;process&nbsp;image&nbsp;based&nbsp;sequencing&nbsp;experiments.<br>
+&nbsp;<br>
+##&nbsp;Installation<br>
+&nbsp;<br>
+STARCall&nbsp;can&nbsp;be&nbsp;installed&nbsp;by&nbsp;cloning&nbsp;the&nbsp;repository,&nbsp;then&nbsp;installing&nbsp;with&nbsp;pip.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;git&nbsp;clone&nbsp;<a href="https://github.com/FowlerLab/starcall">https://github.com/FowlerLab/starcall</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cd&nbsp;starcall<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pip3&nbsp;install&nbsp;./<br>
+&nbsp;<br>
+##&nbsp;Usage<br>
+&nbsp;<br>
+A&nbsp;full&nbsp;snakemake&nbsp;workflow&nbsp;using&nbsp;this&nbsp;package&nbsp;is&nbsp;available&nbsp;at&nbsp;&lt;<a href="https://github.com/FowlerLab/starcall-workflow.git">https://github.com/FowlerLab/starcall-workflow.git</a>&gt;<br>
+&nbsp;<br>
+The&nbsp;main&nbsp;improvements&nbsp;make&nbsp;in&nbsp;this&nbsp;package&nbsp;are&nbsp;filters&nbsp;and&nbsp;methods&nbsp;for&nbsp;the<br>
+detection&nbsp;of&nbsp;the&nbsp;amplicon&nbsp;colonies,&nbsp;which&nbsp;present&nbsp;as&nbsp;small&nbsp;dots&nbsp;in&nbsp;sequencing<br>
+images.&nbsp;This&nbsp;is&nbsp;encapsulated&nbsp;in&nbsp;the&nbsp;starcall.dotdetection.detect_dots()&nbsp;method,<br>
+which&nbsp;takes&nbsp;a&nbsp;sequence&nbsp;of&nbsp;images&nbsp;in&nbsp;the&nbsp;form&nbsp;of&nbsp;a&nbsp;numpy&nbsp;array,&nbsp;shape&nbsp;(num_cycles,&nbsp;num_channels,&nbsp;width,&nbsp;height).<br>
+Background&nbsp;is&nbsp;filtered&nbsp;out&nbsp;and&nbsp;bright&nbsp;areas&nbsp;are&nbsp;detected,&nbsp;and&nbsp;their&nbsp;sequences&nbsp;are&nbsp;read&nbsp;out.&nbsp;The&nbsp;result<br>
+is&nbsp;a&nbsp;pandas&nbsp;dataframe&nbsp;of&nbsp;reads,&nbsp;with&nbsp;the&nbsp;value&nbsp;in&nbsp;each&nbsp;channel&nbsp;for&nbsp;each&nbsp;cycle.<br>
+&nbsp;<br>
+Starcall&nbsp;also&nbsp;provides&nbsp;a&nbsp;custom&nbsp;pandas&nbsp;accessor&nbsp;to&nbsp;interact&nbsp;with&nbsp;these&nbsp;read&nbsp;tables,&nbsp;called&nbsp;'reads'.&nbsp;A&nbsp;dataframe<br>
+with&nbsp;the&nbsp;columns&nbsp;below&nbsp;can&nbsp;use&nbsp;the&nbsp;accessor:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'position_x',&nbsp;'position_y':&nbsp;The&nbsp;pixel&nbsp;location&nbsp;of&nbsp;the&nbsp;sequencing&nbsp;read<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'values_cycle00_G',&nbsp;'values_cycle00_T'&nbsp;...&nbsp;'values_cycle11_A',&nbsp;'values_cycle11_C':<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;sequencing&nbsp;values&nbsp;of&nbsp;the&nbsp;read,&nbsp;from&nbsp;the&nbsp;filtered&nbsp;sequencing&nbsp;images.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Values&nbsp;from&nbsp;every&nbsp;cycle&nbsp;and&nbsp;each&nbsp;channel&nbsp;are&nbsp;stored.<br>
+&nbsp;<br>
+The&nbsp;accessor&nbsp;provides&nbsp;custom&nbsp;properties&nbsp;listed&nbsp;below:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'positions':&nbsp;a&nbsp;numpy&nbsp;array&nbsp;of&nbsp;shape&nbsp;(num_reads,&nbsp;2).&nbsp;The&nbsp;positions&nbsp;of&nbsp;the&nbsp;reads,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'values':&nbsp;a&nbsp;numpy&nbsp;array&nbsp;of&nbsp;shape&nbsp;(num_reads,&nbsp;num_cycles,&nbsp;num_channels).&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;sequencing&nbsp;values&nbsp;for&nbsp;all&nbsp;reads<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'sequences':&nbsp;a&nbsp;numpy&nbsp;array&nbsp;of&nbsp;strings&nbsp;of&nbsp;shape&nbsp;(num_reads,).&nbsp;If&nbsp;there&nbsp;is&nbsp;a&nbsp;column<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;called&nbsp;'sequence'&nbsp;in&nbsp;the&nbsp;dataframe&nbsp;this&nbsp;is&nbsp;just&nbsp;the&nbsp;contents&nbsp;of&nbsp;that&nbsp;column.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Otherwise,&nbsp;the&nbsp;sequences&nbsp;are&nbsp;generated&nbsp;from&nbsp;the&nbsp;sequencing&nbsp;values,&nbsp;by&nbsp;selecting<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;maximum&nbsp;channel&nbsp;in&nbsp;each&nbsp;cycle&nbsp;to&nbsp;build&nbsp;up&nbsp;a&nbsp;sequence.<br>
+&nbsp;<br>
+Changes&nbsp;to&nbsp;positions&nbsp;and&nbsp;values&nbsp;will&nbsp;both&nbsp;propagate&nbsp;back&nbsp;to&nbsp;the&nbsp;underlying&nbsp;dataframe,&nbsp;so<br>
+you&nbsp;can&nbsp;do&nbsp;something&nbsp;like:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;table.reads.positions&nbsp;*=&nbsp;2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;table.reads.values&nbsp;/=&nbsp;np.linalg.norm(table.reads.values,&nbsp;axis=2)[:,:,None]<br>
+&nbsp;<br>
+Full&nbsp;reference&nbsp;documentation&nbsp;is&nbsp;available&nbsp;at&nbsp;&lt;<a href="https://fowlerlab.github.io/starcall-docs/starcall.html">https://fowlerlab.github.io/starcall-docs/starcall.html</a>&gt;</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">

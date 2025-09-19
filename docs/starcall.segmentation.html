@@ -32,9 +32,39 @@
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl><dt><a name="-estimate_cyto"><strong>estimate_cyto</strong></a>(image)</dt></dl>
  <dl><dt><a name="-image_log_scale"><strong>image_log_scale</strong></a>(data, bottom_percentile=10, floor_threshold=50, ignore_zero=True)</dt></dl>
- <dl><dt><a name="-match_segmentations"><strong>match_segmentations</strong></a>(cells, nuclei)</dt></dl>
- <dl><dt><a name="-segment_cyto_cellpose"><strong>segment_cyto_cellpose</strong></a>(cyto, dapi, diameter, gpu=False, cyto_model='cyto', reconcile=True, logscale=True, remove_edges=True)</dt></dl>
- <dl><dt><a name="-segment_nuclei"><strong>segment_nuclei</strong></a>(dapi)</dt></dl>
+ <dl><dt><a name="-match_segmentations"><strong>match_segmentations</strong></a>(cells, nuclei)</dt><dd><tt>Matches&nbsp;cellular&nbsp;and&nbsp;nuclear&nbsp;segmentation&nbsp;maps<br>
+&nbsp;<br>
+The&nbsp;provided&nbsp;cells&nbsp;and&nbsp;nuclei&nbsp;segmentation&nbsp;masks&nbsp;are&nbsp;matched,&nbsp;and&nbsp;any<br>
+cell&nbsp;or&nbsp;nucleus&nbsp;that&nbsp;does&nbsp;not&nbsp;overlap&nbsp;with&nbsp;a&nbsp;corresponding&nbsp;cell/nucleus<br>
+is&nbsp;removed.&nbsp;Matching&nbsp;is&nbsp;done&nbsp;by&nbsp;nuclei,&nbsp;as&nbsp;this&nbsp;is&nbsp;typically&nbsp;the&nbsp;more<br>
+consistent&nbsp;segmentation&nbsp;mask.&nbsp;For&nbsp;each&nbsp;nucleus,&nbsp;all&nbsp;cells&nbsp;that&nbsp;are&nbsp;overlapping<br>
+are&nbsp;scored&nbsp;by&nbsp;the&nbsp;percent&nbsp;overlap&nbsp;of&nbsp;the&nbsp;nucleus&nbsp;inside&nbsp;the&nbsp;cell,&nbsp;and&nbsp;the&nbsp;highest<br>
+scoring&nbsp;cell&nbsp;is&nbsp;chosen&nbsp;as&nbsp;the&nbsp;match.&nbsp;Any&nbsp;unmatched&nbsp;cells&nbsp;or&nbsp;nuclei&nbsp;are&nbsp;discarded,<br>
+and&nbsp;both&nbsp;masks&nbsp;are&nbsp;relabeled&nbsp;to&nbsp;share&nbsp;the&nbsp;same&nbsp;indices&nbsp;between&nbsp;them.</tt></dd></dl>
+ <dl><dt><a name="-segment_cells"><strong>segment_cells</strong></a>(cyto, dapi, gpu=False, **kwargs)</dt><dd><tt>Segments&nbsp;cells&nbsp;using&nbsp;a&nbsp;cytoplasm&nbsp;and&nbsp;nuclear&nbsp;channel.<br>
+&nbsp;<br>
+Params:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cyto:&nbsp;the&nbsp;cytoplasmic&nbsp;channel,&nbsp;numpy&nbsp;array&nbsp;of&nbsp;shape&nbsp;(width,&nbsp;height)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dapi:&nbsp;the&nbsp;nuclear&nbsp;channel,&nbsp;numpy&nbsp;array&nbsp;of&nbsp;shape&nbsp;(width,&nbsp;height)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;method:&nbsp;str,&nbsp;default&nbsp;'cellpose'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;method&nbsp;to&nbsp;use&nbsp;for&nbsp;cell&nbsp;segmentation.&nbsp;The&nbsp;available&nbsp;methods&nbsp;are:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'cellpose':&nbsp;Uses&nbsp;the&nbsp;'cyto'&nbsp;model&nbsp;of&nbsp;cellpose&nbsp;to&nbsp;segment&nbsp;cells.&nbsp;Expects&nbsp;the&nbsp;parameter&nbsp;'diameter'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'stardist':&nbsp;Uses&nbsp;stardist&nbsp;with&nbsp;only&nbsp;the&nbsp;cyto&nbsp;channel&nbsp;to&nbsp;segment&nbsp;cells<br>
+&nbsp;&nbsp;&nbsp;&nbsp;**kwargs:&nbsp;arguments&nbsp;are&nbsp;passed&nbsp;to&nbsp;the&nbsp;specified&nbsp;method<br>
+&nbsp;<br>
+Returns:&nbsp;numpy&nbsp;int&nbsp;array&nbsp;of&nbsp;shape&nbsp;(width,&nbsp;height),&nbsp;where&nbsp;0&nbsp;is&nbsp;background&nbsp;and&nbsp;nonzero&nbsp;integers&nbsp;are&nbsp;cell&nbsp;masks</tt></dd></dl>
+ <dl><dt><a name="-segment_cyto_cellpose"><strong>segment_cyto_cellpose</strong></a>(cyto, dapi, diameter, gpu=False, cyto_model='cyto', logscale=True)</dt></dl>
+ <dl><dt><a name="-segment_nuclei"><strong>segment_nuclei</strong></a>(dapi, method='stardist', **kwargs)</dt><dd><tt>Segments&nbsp;nuclei&nbsp;from&nbsp;a&nbsp;single&nbsp;channel,&nbsp;typically&nbsp;stained&nbsp;with&nbsp;DAPI&nbsp;or&nbsp;another&nbsp;nuclear&nbsp;dye<br>
+&nbsp;<br>
+Params:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dapi:&nbsp;numpy&nbsp;array&nbsp;of&nbsp;shape&nbsp;(width,&nbsp;height)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;method:&nbsp;str,&nbsp;default&nbsp;'stardist'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;method&nbsp;of&nbsp;nuclear&nbsp;segmentation&nbsp;that&nbsp;is&nbsp;used.&nbsp;Can&nbsp;be:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'otsu_threshold':&nbsp;uses&nbsp;a&nbsp;simple&nbsp;otsu&nbsp;threshold&nbsp;and&nbsp;segments&nbsp;connected&nbsp;regions<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'stardist':&nbsp;uses&nbsp;stardist&nbsp;to&nbsp;segment&nbsp;nuclei<br>
+&nbsp;&nbsp;&nbsp;&nbsp;**kwargs:&nbsp;arguments&nbsp;are&nbsp;passed&nbsp;onto&nbsp;the&nbsp;specific&nbsp;method&nbsp;selected<br>
+&nbsp;<br>
+Returns:&nbsp;numpy&nbsp;array&nbsp;of&nbsp;shape&nbsp;(width,&nbsp;height),&nbsp;dtype&nbsp;int,&nbsp;where&nbsp;0&nbsp;is&nbsp;background&nbsp;and&nbsp;nonzero&nbsp;integers&nbsp;are&nbsp;cell&nbsp;masks</tt></dd></dl>
  <dl><dt><a name="-segment_nuclei_stardist"><strong>segment_nuclei_stardist</strong></a>(dapi)</dt><dd><tt>#stardist_model&nbsp;=&nbsp;None</tt></dd></dl>
 </td></tr></table>
 </body></html>
