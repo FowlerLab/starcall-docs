@@ -130,6 +130,7 @@ packages = [
     #'starcall.qc',
     'starcall.segmentation',
     'starcall.sequencing',
+    'starcall.reads',
     #'starcall.stitching',
     'starcall.utils',
 ]
