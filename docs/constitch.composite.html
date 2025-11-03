@@ -461,11 +461,13 @@ This&nbsp;class&nbsp;encapsulates&nbsp;the&nbsp;whole&nbsp;stitching&nbsp;proces
 shown&nbsp;below:<br>
 &nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;composite&nbsp;=&nbsp;constitch.<a href="#CompositeImage">CompositeImage</a>()<br>
-&nbsp;&nbsp;&nbsp;&nbsp;composite.<a href="#CompositeImage-add_images">add_images</a>(images)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;composite.calc_constraints()<br>
-&nbsp;&nbsp;&nbsp;&nbsp;composite.filter_constraints()<br>
-&nbsp;&nbsp;&nbsp;&nbsp;composite.solve_constraints(filter_outliers=True)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;full_image&nbsp;=&nbsp;composite.stitch_images()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;composite.<a href="#CompositeImage-add_images">add_images</a>(images,&nbsp;initial_positions)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;overlapping&nbsp;=&nbsp;composite.constraints(touching=True)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;constraints&nbsp;=&nbsp;overlapping.calculate()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;constraints&nbsp;=&nbsp;constraints.filter(min_score=0.5)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;solution&nbsp;=&nbsp;constraints.solve()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;composite.<a href="#CompositeImage-setpositions">setpositions</a>(solution)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;full_image&nbsp;=&nbsp;composite.<a href="#CompositeImage-stitch">stitch</a>()<br>
 &nbsp;<br>
 This&nbsp;class&nbsp;is&nbsp;meant&nbsp;to&nbsp;be&nbsp;adaptable&nbsp;to&nbsp;many&nbsp;different&nbsp;stitching&nbsp;use&nbsp;cases,&nbsp;and&nbsp;each&nbsp;step<br>
 can&nbsp;be&nbsp;customized&nbsp;and&nbsp;configured.&nbsp;The&nbsp;general&nbsp;steps&nbsp;for&nbsp;the&nbsp;stitching&nbsp;of&nbsp;a&nbsp;group&nbsp;images&nbsp;are&nbsp;as&nbsp;follows:<br>
