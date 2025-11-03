@@ -685,7 +685,7 @@ images&nbsp;(sequence&nbsp;or&nbsp;dict):&nbsp;The&nbsp;new&nbsp;images&nbsp;to&
 mapping&nbsp;image&nbsp;indices&nbsp;to&nbsp;new&nbsp;positions,&nbsp;a&nbsp;sequence&nbsp;of&nbsp;new&nbsp;positions,&nbsp;or&nbsp;a&nbsp;constitch.<a href="#Solver">Solver</a><br>
 class&nbsp;that&nbsp;has&nbsp;had&nbsp;solve()&nbsp;run&nbsp;on&nbsp;it,&nbsp;usually&nbsp;from&nbsp;<a href="#ConstraintSet">ConstraintSet</a>.solve</tt></dd></dl>
 
-<dl><dt><a name="CompositeImage-stitch"><strong>stitch</strong></a>(self, merger='mean', indices=None, real_images=None, out=None, bg_value=None, return_bg_mask=False, mins=None, maxes=None, keep_zero=False)</dt><dd><tt>Combines&nbsp;images&nbsp;in&nbsp;the&nbsp;composite&nbsp;into&nbsp;a&nbsp;single&nbsp;image<br>
+<dl><dt><a name="CompositeImage-stitch"><strong>stitch</strong></a>(self, merger='mean', indices=None, real_images=None, out=None, bg_value=None, return_bg_mask=False, mins=None, maxes=None, keep_zero=False, use_executor=True, prevent_resize=False, **kwargs)</dt><dd><tt>Combines&nbsp;images&nbsp;in&nbsp;the&nbsp;composite&nbsp;into&nbsp;a&nbsp;single&nbsp;image<br>
 &nbsp;<br>
 merger:&nbsp;str&nbsp;or&nbsp;merging.<a href="#Merger">Merger</a>&nbsp;instance<br>
 &nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;merger&nbsp;used&nbsp;to&nbsp;combine&nbsp;overlapping&nbsp;regions&nbsp;of&nbsp;images.&nbsp;If&nbsp;a&nbsp;string&nbsp;it&nbsp;is&nbsp;mapped&nbsp;to&nbsp;a&nbsp;<a href="#Merger">Merger</a><br>
@@ -714,7 +714,17 @@ return_bg_mask:&nbsp;bool<br>
 keep_zero:&nbsp;bool<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Whether&nbsp;or&nbsp;not&nbsp;to&nbsp;keep&nbsp;the&nbsp;origin&nbsp;in&nbsp;the&nbsp;result.&nbsp;If&nbsp;true&nbsp;this&nbsp;could<br>
 &nbsp;&nbsp;&nbsp;&nbsp;result&nbsp;in&nbsp;extra&nbsp;blank&nbsp;space,&nbsp;which&nbsp;might&nbsp;be&nbsp;necessary&nbsp;when&nbsp;lining&nbsp;up<br>
-&nbsp;&nbsp;&nbsp;&nbsp;multiple&nbsp;images.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;multiple&nbsp;images.&nbsp;Similar&nbsp;to&nbsp;mins=[0,0],&nbsp;except&nbsp;if&nbsp;image&nbsp;positions<br>
+&nbsp;&nbsp;&nbsp;&nbsp;are&nbsp;negative&nbsp;they&nbsp;wont&nbsp;be&nbsp;cropped&nbsp;out<br>
+&nbsp;<br>
+use_executor:&nbsp;bool,&nbsp;default&nbsp;True<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Whether&nbsp;or&nbsp;not&nbsp;to&nbsp;use&nbsp;self.<strong>executor</strong>&nbsp;when&nbsp;adding&nbsp;tiles,&nbsp;which&nbsp;can&nbsp;allow<br>
+&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;multithreading.&nbsp;If&nbsp;true,&nbsp;multiple&nbsp;non&nbsp;overlapping&nbsp;tiles&nbsp;are&nbsp;added&nbsp;at&nbsp;once,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;speed&nbsp;up&nbsp;stitching.&nbsp;Multithreading&nbsp;may&nbsp;be&nbsp;disabled&nbsp;by&nbsp;the&nbsp;<a href="#Merger">Merger</a>&nbsp;class<br>
+&nbsp;&nbsp;&nbsp;&nbsp;being&nbsp;used,&nbsp;see&nbsp;merging.<a href="#Merger">Merger</a>&nbsp;for&nbsp;more&nbsp;info<br>
+&nbsp;<br>
+prevent_resize:&nbsp;bool,&nbsp;default&nbsp;False<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;true&nbsp;an&nbsp;error&nbsp;is&nbsp;raised&nbsp;when&nbsp;an&nbsp;image&nbsp;would&nbsp;be&nbsp;resized<br>
 &nbsp;<br>
 Returns:&nbsp;np.ndarray<br>
 &nbsp;&nbsp;&nbsp;&nbsp;image&nbsp;stitched&nbsp;together</tt></dd></dl>
@@ -1240,6 +1250,12 @@ the&nbsp;stored&nbsp;image.&nbsp;Returns&nbsp;the&nbsp;final&nbsp;image&nbsp;and
 had&nbsp;no&nbsp;images.</tt></dd></dl>
 
 <hr>
+Methods inherited from <a href="constitch.merging.html#Merger">Merger</a>:<br>
+<dl><dt><a name="EfficientMeanMerger-allow_multithreading"><strong>allow_multithreading</strong></a>(self)</dt><dd><tt>When&nbsp;stitching,&nbsp;multiple&nbsp;non-overlapping&nbsp;tiles&nbsp;may&nbsp;be&nbsp;added&nbsp;at&nbsp;the&nbsp;same&nbsp;time,<br>
+to&nbsp;improve&nbsp;stitching&nbsp;speed&nbsp;with&nbsp;multithreading.<br>
+To&nbsp;disable&nbsp;this&nbsp;return&nbsp;False&nbsp;here</tt></dd></dl>
+
+<hr>
 Data descriptors inherited from <a href="constitch.merging.html#Merger">Merger</a>:<br>
 <dl><dt><strong>__dict__</strong></dt>
 <dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
@@ -1278,6 +1294,12 @@ an&nbsp;image&nbsp;using&nbsp;this&nbsp;information.</tt></dd></dl>
 once&nbsp;when&nbsp;stitching,&nbsp;so&nbsp;final&nbsp;processing&nbsp;can&nbsp;take&nbsp;place&nbsp;and&nbsp;modify<br>
 the&nbsp;stored&nbsp;image.&nbsp;Returns&nbsp;the&nbsp;final&nbsp;image&nbsp;and&nbsp;a&nbsp;mask&nbsp;for&nbsp;pixels&nbsp;that<br>
 had&nbsp;no&nbsp;images.</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="constitch.merging.html#Merger">Merger</a>:<br>
+<dl><dt><a name="EfficientNearestMerger-allow_multithreading"><strong>allow_multithreading</strong></a>(self)</dt><dd><tt>When&nbsp;stitching,&nbsp;multiple&nbsp;non-overlapping&nbsp;tiles&nbsp;may&nbsp;be&nbsp;added&nbsp;at&nbsp;the&nbsp;same&nbsp;time,<br>
+to&nbsp;improve&nbsp;stitching&nbsp;speed&nbsp;with&nbsp;multithreading.<br>
+To&nbsp;disable&nbsp;this&nbsp;return&nbsp;False&nbsp;here</tt></dd></dl>
 
 <hr>
 Data descriptors inherited from <a href="constitch.merging.html#Merger">Merger</a>:<br>
@@ -1566,6 +1588,12 @@ the&nbsp;stored&nbsp;image.&nbsp;Returns&nbsp;the&nbsp;final&nbsp;image&nbsp;and
 had&nbsp;no&nbsp;images.</tt></dd></dl>
 
 <hr>
+Methods inherited from <a href="constitch.merging.html#Merger">Merger</a>:<br>
+<dl><dt><a name="LastMerger-allow_multithreading"><strong>allow_multithreading</strong></a>(self)</dt><dd><tt>When&nbsp;stitching,&nbsp;multiple&nbsp;non-overlapping&nbsp;tiles&nbsp;may&nbsp;be&nbsp;added&nbsp;at&nbsp;the&nbsp;same&nbsp;time,<br>
+to&nbsp;improve&nbsp;stitching&nbsp;speed&nbsp;with&nbsp;multithreading.<br>
+To&nbsp;disable&nbsp;this&nbsp;return&nbsp;False&nbsp;here</tt></dd></dl>
+
+<hr>
 Data descriptors inherited from <a href="constitch.merging.html#Merger">Merger</a>:<br>
 <dl><dt><strong>__dict__</strong></dt>
 <dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
@@ -1710,6 +1738,12 @@ the&nbsp;stored&nbsp;image.&nbsp;Returns&nbsp;the&nbsp;final&nbsp;image&nbsp;and
 had&nbsp;no&nbsp;images.</tt></dd></dl>
 
 <hr>
+Methods inherited from <a href="constitch.merging.html#Merger">Merger</a>:<br>
+<dl><dt><a name="MaskMerger-allow_multithreading"><strong>allow_multithreading</strong></a>(self)</dt><dd><tt>When&nbsp;stitching,&nbsp;multiple&nbsp;non-overlapping&nbsp;tiles&nbsp;may&nbsp;be&nbsp;added&nbsp;at&nbsp;the&nbsp;same&nbsp;time,<br>
+to&nbsp;improve&nbsp;stitching&nbsp;speed&nbsp;with&nbsp;multithreading.<br>
+To&nbsp;disable&nbsp;this&nbsp;return&nbsp;False&nbsp;here</tt></dd></dl>
+
+<hr>
 Data descriptors inherited from <a href="constitch.merging.html#Merger">Merger</a>:<br>
 <dl><dt><strong>__dict__</strong></dt>
 <dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
@@ -1753,6 +1787,12 @@ had&nbsp;no&nbsp;images.</tt></dd></dl>
 <dl><dt><a name="MeanMerger-promote_dtype"><strong>promote_dtype</strong></a>(self, dtype)</dt></dl>
 
 <hr>
+Methods inherited from <a href="constitch.merging.html#Merger">Merger</a>:<br>
+<dl><dt><a name="MeanMerger-allow_multithreading"><strong>allow_multithreading</strong></a>(self)</dt><dd><tt>When&nbsp;stitching,&nbsp;multiple&nbsp;non-overlapping&nbsp;tiles&nbsp;may&nbsp;be&nbsp;added&nbsp;at&nbsp;the&nbsp;same&nbsp;time,<br>
+to&nbsp;improve&nbsp;stitching&nbsp;speed&nbsp;with&nbsp;multithreading.<br>
+To&nbsp;disable&nbsp;this&nbsp;return&nbsp;False&nbsp;here</tt></dd></dl>
+
+<hr>
 Data descriptors inherited from <a href="constitch.merging.html#Merger">Merger</a>:<br>
 <dl><dt><strong>__dict__</strong></dt>
 <dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
@@ -1781,6 +1821,10 @@ this&nbsp;requires&nbsp;using&nbsp;more&nbsp;memory&nbsp;and&nbsp;processing.<br
 <dl><dt><a name="Merger-add_image"><strong>add_image</strong></a>(self, image, location)</dt><dd><tt>Called&nbsp;to&nbsp;add&nbsp;an&nbsp;image.&nbsp;location&nbsp;is&nbsp;a&nbsp;tuple&nbsp;of&nbsp;slices&nbsp;used<br>
 to&nbsp;select&nbsp;the&nbsp;area&nbsp;for&nbsp;the&nbsp;image,&nbsp;it&nbsp;is&nbsp;guaranteed&nbsp;to&nbsp;be&nbsp;the<br>
 same&nbsp;size&nbsp;as&nbsp;image.</tt></dd></dl>
+
+<dl><dt><a name="Merger-allow_multithreading"><strong>allow_multithreading</strong></a>(self)</dt><dd><tt>When&nbsp;stitching,&nbsp;multiple&nbsp;non-overlapping&nbsp;tiles&nbsp;may&nbsp;be&nbsp;added&nbsp;at&nbsp;the&nbsp;same&nbsp;time,<br>
+to&nbsp;improve&nbsp;stitching&nbsp;speed&nbsp;with&nbsp;multithreading.<br>
+To&nbsp;disable&nbsp;this&nbsp;return&nbsp;False&nbsp;here</tt></dd></dl>
 
 <dl><dt><a name="Merger-create_image"><strong>create_image</strong></a>(self, image_shape, image_dtype)</dt><dd><tt>Init&nbsp;is&nbsp;called&nbsp;with&nbsp;the&nbsp;shape&nbsp;of&nbsp;the&nbsp;final&nbsp;image&nbsp;(may&nbsp;be<br>
 more&nbsp;than&nbsp;2d)&nbsp;and&nbsp;the&nbsp;dtype.&nbsp;Normally&nbsp;a&nbsp;merger&nbsp;would&nbsp;create<br>
@@ -1830,6 +1874,12 @@ an&nbsp;image&nbsp;using&nbsp;this&nbsp;information.</tt></dd></dl>
 once&nbsp;when&nbsp;stitching,&nbsp;so&nbsp;final&nbsp;processing&nbsp;can&nbsp;take&nbsp;place&nbsp;and&nbsp;modify<br>
 the&nbsp;stored&nbsp;image.&nbsp;Returns&nbsp;the&nbsp;final&nbsp;image&nbsp;and&nbsp;a&nbsp;mask&nbsp;for&nbsp;pixels&nbsp;that<br>
 had&nbsp;no&nbsp;images.</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="constitch.merging.html#Merger">Merger</a>:<br>
+<dl><dt><a name="NearestMerger-allow_multithreading"><strong>allow_multithreading</strong></a>(self)</dt><dd><tt>When&nbsp;stitching,&nbsp;multiple&nbsp;non-overlapping&nbsp;tiles&nbsp;may&nbsp;be&nbsp;added&nbsp;at&nbsp;the&nbsp;same&nbsp;time,<br>
+to&nbsp;improve&nbsp;stitching&nbsp;speed&nbsp;with&nbsp;multithreading.<br>
+To&nbsp;disable&nbsp;this&nbsp;return&nbsp;False&nbsp;here</tt></dd></dl>
 
 <hr>
 Data descriptors inherited from <a href="constitch.merging.html#Merger">Merger</a>:<br>
@@ -2097,7 +2147,9 @@ Data descriptors defined here:<br>
 <font color="#000000" face="helvetica, arial"><a name="SpanningTreeSolver">class <strong>SpanningTreeSolver</strong></a>(<a href="constitch.solving.html#Solver">Solver</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt><a href="#Solver">Solver</a>&nbsp;that&nbsp;finds&nbsp;the&nbsp;maximum&nbsp;spanning&nbsp;tree,&nbsp;and&nbsp;uses&nbsp;it&nbsp;to&nbsp;solve&nbsp;for<br>
+<td colspan=2><tt><a href="#SpanningTreeSolver">SpanningTreeSolver</a>(score_func=None)<br>
+&nbsp;<br>
+<a href="#Solver">Solver</a>&nbsp;that&nbsp;finds&nbsp;the&nbsp;maximum&nbsp;spanning&nbsp;tree,&nbsp;and&nbsp;uses&nbsp;it&nbsp;to&nbsp;solve&nbsp;for<br>
 global&nbsp;positions&nbsp;of&nbsp;all&nbsp;images<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
@@ -2107,7 +2159,7 @@ global&nbsp;positions&nbsp;of&nbsp;all&nbsp;images<br>&nbsp;</tt></td></tr>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="SpanningTreeSolver-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+<dl><dt><a name="SpanningTreeSolver-__init__"><strong>__init__</strong></a>(self, score_func=None)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
 
 <dl><dt><a name="SpanningTreeSolver-solve"><strong>solve</strong></a>(self, constraints, initial_poses)</dt><dd><tt>Constructs&nbsp;a&nbsp;maximum&nbsp;spanning&nbsp;tree&nbsp;with&nbsp;Kruskals&nbsp;algorithm</tt></dd></dl>
 

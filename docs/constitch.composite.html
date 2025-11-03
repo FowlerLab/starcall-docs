@@ -764,7 +764,7 @@ images&nbsp;(sequence&nbsp;or&nbsp;dict):&nbsp;The&nbsp;new&nbsp;images&nbsp;to&
 mapping&nbsp;image&nbsp;indices&nbsp;to&nbsp;new&nbsp;positions,&nbsp;a&nbsp;sequence&nbsp;of&nbsp;new&nbsp;positions,&nbsp;or&nbsp;a&nbsp;constitch.Solver<br>
 class&nbsp;that&nbsp;has&nbsp;had&nbsp;solve()&nbsp;run&nbsp;on&nbsp;it,&nbsp;usually&nbsp;from&nbsp;<a href="constitch.constraints.html#ConstraintSet">ConstraintSet</a>.solve</tt></dd></dl>
 
-<dl><dt><a name="CompositeImage-stitch"><strong>stitch</strong></a>(self, merger='mean', indices=None, real_images=None, out=None, bg_value=None, return_bg_mask=False, mins=None, maxes=None, keep_zero=False)</dt><dd><tt>Combines&nbsp;images&nbsp;in&nbsp;the&nbsp;composite&nbsp;into&nbsp;a&nbsp;single&nbsp;image<br>
+<dl><dt><a name="CompositeImage-stitch"><strong>stitch</strong></a>(self, merger='mean', indices=None, real_images=None, out=None, bg_value=None, return_bg_mask=False, mins=None, maxes=None, keep_zero=False, use_executor=True, prevent_resize=False, **kwargs)</dt><dd><tt>Combines&nbsp;images&nbsp;in&nbsp;the&nbsp;composite&nbsp;into&nbsp;a&nbsp;single&nbsp;image<br>
 &nbsp;<br>
 merger:&nbsp;str&nbsp;or&nbsp;merging.Merger&nbsp;instance<br>
 &nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;merger&nbsp;used&nbsp;to&nbsp;combine&nbsp;overlapping&nbsp;regions&nbsp;of&nbsp;images.&nbsp;If&nbsp;a&nbsp;string&nbsp;it&nbsp;is&nbsp;mapped&nbsp;to&nbsp;a&nbsp;Merger<br>
@@ -793,7 +793,17 @@ return_bg_mask:&nbsp;bool<br>
 keep_zero:&nbsp;bool<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Whether&nbsp;or&nbsp;not&nbsp;to&nbsp;keep&nbsp;the&nbsp;origin&nbsp;in&nbsp;the&nbsp;result.&nbsp;If&nbsp;true&nbsp;this&nbsp;could<br>
 &nbsp;&nbsp;&nbsp;&nbsp;result&nbsp;in&nbsp;extra&nbsp;blank&nbsp;space,&nbsp;which&nbsp;might&nbsp;be&nbsp;necessary&nbsp;when&nbsp;lining&nbsp;up<br>
-&nbsp;&nbsp;&nbsp;&nbsp;multiple&nbsp;images.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;multiple&nbsp;images.&nbsp;Similar&nbsp;to&nbsp;mins=[0,0],&nbsp;except&nbsp;if&nbsp;image&nbsp;positions<br>
+&nbsp;&nbsp;&nbsp;&nbsp;are&nbsp;negative&nbsp;they&nbsp;wont&nbsp;be&nbsp;cropped&nbsp;out<br>
+&nbsp;<br>
+use_executor:&nbsp;bool,&nbsp;default&nbsp;True<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Whether&nbsp;or&nbsp;not&nbsp;to&nbsp;use&nbsp;self.<strong>executor</strong>&nbsp;when&nbsp;adding&nbsp;tiles,&nbsp;which&nbsp;can&nbsp;allow<br>
+&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;multithreading.&nbsp;If&nbsp;true,&nbsp;multiple&nbsp;non&nbsp;overlapping&nbsp;tiles&nbsp;are&nbsp;added&nbsp;at&nbsp;once,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;speed&nbsp;up&nbsp;stitching.&nbsp;Multithreading&nbsp;may&nbsp;be&nbsp;disabled&nbsp;by&nbsp;the&nbsp;Merger&nbsp;class<br>
+&nbsp;&nbsp;&nbsp;&nbsp;being&nbsp;used,&nbsp;see&nbsp;merging.Merger&nbsp;for&nbsp;more&nbsp;info<br>
+&nbsp;<br>
+prevent_resize:&nbsp;bool,&nbsp;default&nbsp;False<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;true&nbsp;an&nbsp;error&nbsp;is&nbsp;raised&nbsp;when&nbsp;an&nbsp;image&nbsp;would&nbsp;be&nbsp;resized<br>
 &nbsp;<br>
 Returns:&nbsp;np.ndarray<br>
 &nbsp;&nbsp;&nbsp;&nbsp;image&nbsp;stitched&nbsp;together</tt></dd></dl>
@@ -1408,7 +1418,7 @@ images&nbsp;(sequence&nbsp;or&nbsp;dict):&nbsp;The&nbsp;new&nbsp;images&nbsp;to&
 mapping&nbsp;image&nbsp;indices&nbsp;to&nbsp;new&nbsp;positions,&nbsp;a&nbsp;sequence&nbsp;of&nbsp;new&nbsp;positions,&nbsp;or&nbsp;a&nbsp;constitch.Solver<br>
 class&nbsp;that&nbsp;has&nbsp;had&nbsp;solve()&nbsp;run&nbsp;on&nbsp;it,&nbsp;usually&nbsp;from&nbsp;<a href="constitch.constraints.html#ConstraintSet">ConstraintSet</a>.solve</tt></dd></dl>
 
-<dl><dt><a name="SubCompositeImage-stitch"><strong>stitch</strong></a>(self, merger='mean', indices=None, real_images=None, out=None, bg_value=None, return_bg_mask=False, mins=None, maxes=None, keep_zero=False)</dt><dd><tt>Combines&nbsp;images&nbsp;in&nbsp;the&nbsp;composite&nbsp;into&nbsp;a&nbsp;single&nbsp;image<br>
+<dl><dt><a name="SubCompositeImage-stitch"><strong>stitch</strong></a>(self, merger='mean', indices=None, real_images=None, out=None, bg_value=None, return_bg_mask=False, mins=None, maxes=None, keep_zero=False, use_executor=True, prevent_resize=False, **kwargs)</dt><dd><tt>Combines&nbsp;images&nbsp;in&nbsp;the&nbsp;composite&nbsp;into&nbsp;a&nbsp;single&nbsp;image<br>
 &nbsp;<br>
 merger:&nbsp;str&nbsp;or&nbsp;merging.Merger&nbsp;instance<br>
 &nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;merger&nbsp;used&nbsp;to&nbsp;combine&nbsp;overlapping&nbsp;regions&nbsp;of&nbsp;images.&nbsp;If&nbsp;a&nbsp;string&nbsp;it&nbsp;is&nbsp;mapped&nbsp;to&nbsp;a&nbsp;Merger<br>
@@ -1437,7 +1447,17 @@ return_bg_mask:&nbsp;bool<br>
 keep_zero:&nbsp;bool<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Whether&nbsp;or&nbsp;not&nbsp;to&nbsp;keep&nbsp;the&nbsp;origin&nbsp;in&nbsp;the&nbsp;result.&nbsp;If&nbsp;true&nbsp;this&nbsp;could<br>
 &nbsp;&nbsp;&nbsp;&nbsp;result&nbsp;in&nbsp;extra&nbsp;blank&nbsp;space,&nbsp;which&nbsp;might&nbsp;be&nbsp;necessary&nbsp;when&nbsp;lining&nbsp;up<br>
-&nbsp;&nbsp;&nbsp;&nbsp;multiple&nbsp;images.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;multiple&nbsp;images.&nbsp;Similar&nbsp;to&nbsp;mins=[0,0],&nbsp;except&nbsp;if&nbsp;image&nbsp;positions<br>
+&nbsp;&nbsp;&nbsp;&nbsp;are&nbsp;negative&nbsp;they&nbsp;wont&nbsp;be&nbsp;cropped&nbsp;out<br>
+&nbsp;<br>
+use_executor:&nbsp;bool,&nbsp;default&nbsp;True<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Whether&nbsp;or&nbsp;not&nbsp;to&nbsp;use&nbsp;self.<strong>executor</strong>&nbsp;when&nbsp;adding&nbsp;tiles,&nbsp;which&nbsp;can&nbsp;allow<br>
+&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;multithreading.&nbsp;If&nbsp;true,&nbsp;multiple&nbsp;non&nbsp;overlapping&nbsp;tiles&nbsp;are&nbsp;added&nbsp;at&nbsp;once,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;speed&nbsp;up&nbsp;stitching.&nbsp;Multithreading&nbsp;may&nbsp;be&nbsp;disabled&nbsp;by&nbsp;the&nbsp;Merger&nbsp;class<br>
+&nbsp;&nbsp;&nbsp;&nbsp;being&nbsp;used,&nbsp;see&nbsp;merging.Merger&nbsp;for&nbsp;more&nbsp;info<br>
+&nbsp;<br>
+prevent_resize:&nbsp;bool,&nbsp;default&nbsp;False<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;true&nbsp;an&nbsp;error&nbsp;is&nbsp;raised&nbsp;when&nbsp;an&nbsp;image&nbsp;would&nbsp;be&nbsp;resized<br>
 &nbsp;<br>
 Returns:&nbsp;np.ndarray<br>
 &nbsp;&nbsp;&nbsp;&nbsp;image&nbsp;stitched&nbsp;together</tt></dd></dl>
